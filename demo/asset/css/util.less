@@ -1,0 +1,47 @@
+@img_path: '../../asset/img';
+
+@ease: 0.3s ease;
+
+.clearfix {
+    &:before {
+        content: "";
+        display: table;
+    }
+    &:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+}
+
+.opacity(@value) {
+    @ie: @value * 100;
+    opacity: @value;
+    filter: ~"alpha(opacity=@{ie})";
+}
+
+.linear-gradient(@startColor, @endColor) {
+    background-image: -moz-linear-gradient(top, @startColor, @endColor);
+    background-image: -ms-linear-gradient(top, @startColor, @endColor);
+    background-image: -ms-linear-gradient(top, @startColor, @endColor);
+    background-image: -o-linear-gradient(top, @startColor, @endColor);
+    background-image: -webkit-linear-gradient(top, @startColor, @endColor);
+    background-image: linear-gradient(top, @startColor, @endColor);
+
+    filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr='@{startColor}', endColorstr='@{endColor}')";
+    *filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr='@{startColor}', endColorstr='@{endColor}')";
+}
+
+// 背景色动画
+.background-color-ease {
+    -webkit-transition: background-color @ease;
+    -moz-transition: background-color @ease;
+    -o-transition: background-color @ease;
+    transition: background-color @ease;
+}
+
+.rotate(@deg) {
+    -moz-transform: rotate(~'@{deg}deg');
+    -o-transform: rotate(~'@{deg}deg');
+    -webkit-transform: rotate(~'@{deg}deg');
+}

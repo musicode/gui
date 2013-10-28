@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Popup - ZUI Demo</title>
+
+        <script src="asset/js/jquery.js"></script>
+        <script src="asset/js/esl.js"></script>
+        <script src="asset/js/config.js"></script>
+        <link rel="stylesheet" href="asset/css/demo.css" />
+        <link rel="stylesheet" href="asset/css/font-awesome/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="../src/css/main.less" />
+    </head>
+
+    <body>
+        <header>Popup</header>
+        <a id="trigger" href="http://baidu.com">click me</a>
+        <div id="ui-popup">Popup</div>
+
+        <script src="Popup.js"></script>
+        <script>
+            require(
+                [
+                    'gui/Popup'
+                ],
+                function (Popup) {
+
+                    var popup = new Popup({
+                        main: $('#ui-popup'),
+                        trigger: $('#trigger')
+                    });
+                    popup.render();
+                }
+            );
+        </script>
+    </body>
+
+</html>

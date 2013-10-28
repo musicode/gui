@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Dialog - ZUI Demo</title>
+
+        <script src="asset/js/jquery.js"></script>
+        <script src="asset/js/esl.js"></script>
+        <script src="asset/js/config.js"></script>
+        <link rel="stylesheet" href="asset/css/demo.css" />
+        <link rel="stylesheet" href="../src/css/main.less" />
+    </head>
+    <body>
+        <header>Dialog</header>
+
+        <div class="container">
+            <button id="ui-dialog">创建全新的Dialog</button>
+            <button id="btn2">Dialog.alert</button>
+            <button id="btn3">Dialog.confirm</button>
+        </div>
+
+        <script src="Dialog.js"></script>
+        <script>
+        require(
+            [
+                'gui/Dialog',
+                'gui/Button'
+            ],
+            function (Dialog, Button) {
+
+                var btn2 = new Button({
+                    main: $('#btn2')
+                });
+                btn2.render();
+                btn2.on('click', function () {
+                    Dialog.alert({
+                        title: '你妹啊',
+                        content: '你哥啊'
+                    });
+                });
+
+
+                var btn3 = new Button({
+                    main: $('#btn3')
+                });
+                btn3.render();
+                btn3.on('click', function () {
+                    Dialog.confirm({
+                        title: '你妹啊',
+                        content: '你哥啊'
+                    });
+                });
+            }
+        )
+        </script>
+    </body>
+</html>

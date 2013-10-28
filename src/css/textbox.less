@@ -1,0 +1,43 @@
+.@{ui-class-prefix}-textbox {
+
+    background-color: @textbox-bgcolor;
+
+    border-width: 1px;
+    border-style: solid;
+    border-color: @textbox-border-color;
+
+    color: @textbox-color;
+    font-size: @textbox-font-size;
+    font-family: @font-family-sans-serif;
+
+    margin: 0;
+    padding: @textbox-padding;
+
+    text-align: left;
+
+    box-sizing: border-box;
+    border-radius: @textbox-border-radius;
+    .box-shadow(@textbox-box-shadow);
+
+    &:focus {
+        outline: none;
+        background-color: @textbox-focus-bgcolor;
+        border-color: @textbox-focus-border-color;
+
+        .box-shadow(@textbox-focus-box-shadow);
+    }
+
+    .ui-status;
+
+    &[disabled] {
+        background-color: @textbox-disabled-bgcolor;
+        border-color: @textbox-disabled-border-color;
+        color: @textbox-disabled-color;
+
+        .box-shadow(@textbox-disabled-box-shadow);
+    }
+}
+
+.@{ui-class-prefix}-textbox-placeholder {
+    color: @textbox-placeholder-color;
+}

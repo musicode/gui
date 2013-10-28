@@ -1,0 +1,82 @@
+.@{ui-class-prefix}-button {
+
+    .inline-block;
+
+    border-width: 1px;
+    border-style: solid;
+    border-color: @button-border-color;
+    color: @button-color;
+    cursor: @cursor-clickable;
+
+    font-size: @font-size-base;
+    font-weight: normal;
+
+    margin: 0;
+    padding: 0 @button-horizontal-padding;
+
+    vertical-align: bottom;
+
+    text-align: center;
+    border-radius: @button-border-radius;
+    box-sizing: content-box;
+
+    .box-shadow(@button-box-shadow);
+    .gradient-vertical(
+        @button-start-bgcolor,
+        @button-end-bgcolor
+    );
+
+    .user-select;
+    .ui-status;
+
+    &:hover {
+        border-color: @button-hover-border-color;
+        color: @button-hover-color;
+
+        .box-shadow(@button-hover-box-shadow);
+        .gradient-vertical(
+            @button-hover-start-bgcolor,
+            @button-hover-end-bgcolor
+        );
+    }
+
+    &:active {
+        border-color: @button-active-border-color;
+        color: @button-active-color;
+
+        .box-shadow(@button-active-box-shadow);
+        .gradient-vertical(
+            @button-active-start-bgcolor,
+            @button-active-end-bgcolor
+        );
+    }
+
+    &:focus {
+        outline: none;
+    }
+
+    &[disabled="disabled"] {
+        border-color: @button-disabled-border-color;
+        color: @button-disabled-color;
+        cursor: @cursor-disabled;
+
+        .box-shadow(@button-disabled-box-shadow);
+        .gradient-vertical(
+            @button-disabled-start-bgcolor,
+            @button-disabled-end-bgcolor
+        );
+
+        &:hover {
+            .box-shadow(@button-disabled-hover-box-shadow);
+            .gradient-vertical(
+                @button-disabled-hover-start-bgcolor,
+                @button-disabled-hover-end-bgcolor
+            );
+        }
+    }
+
+    &[selected="selected"],
+    &[selected="selected"]:hover {
+        .box-shadow(@button-selected-box-shadow);
+    }
+}

@@ -1,0 +1,90 @@
+.@{ui-class-prefix}-uploader {
+
+    border: @uploader-border;
+    background-color: @uploader-bgcolor;
+    padding: @uploader-padding;
+
+    font-size: @font-size-base;
+    text-align: left;
+
+    border-radius: @uploader-border-radius;
+    .box-shadow(@uploader-box-shadow);
+    .ui-status;
+
+    input[type="file"],
+    object {
+        cursor: pointer;
+
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        .opacity(0);
+    }
+}
+
+.@{ui-class-prefix}-uploader-info {
+
+    border: @uploader-info-border;
+    background-color: @uploader-info-bgcolor;
+    color: @uploader-info-color;
+
+    height: @uploader-button-height;
+    .text-overflow;
+
+    position: relative;
+    box-sizing: border-box;
+    border-radius: @uploader-info-border-radius;
+    .box-shadow(@uploader-info-box-shadow);
+}
+
+.@{ui-class-prefix}-uploader-status-success {
+    border-color: @uploader-success-border-color;
+    background-color: @uploader-success-bgcolor;
+    color: @uploader-success-color;
+}
+
+.@{ui-class-prefix}-uploader-status-error {
+    border-color: @uploader-error-border-color;
+    background-color: @uploader-error-bgcolor;
+    color: @uploader-error-color;
+}
+
+.@{ui-class-prefix}-uploader-status-uploading {
+    border-color: @uploader-uploading-border-color;
+    color: @uploader-uploading-color;
+}
+
+.@{ui-class-prefix}-uploader-progress {
+    background-color: @uploader-uploading-bgcolor;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.@{ui-class-prefix}-uploader-text {
+
+    display: block;
+    line-height: @uploader-button-height;
+    padding: 0 @uploader-text-horizontal-padding;
+
+    position: relative;
+}
+
+.@{ui-class-prefix}-uploader-action {
+    float: right;
+    margin-left: @uploader-action-space;
+
+    .@{ui-class-prefix}-button {
+        overflow: hidden;
+        position: relative;
+        margin-left: @uploader-button-space;
+
+        &:first-child {
+            margin-left: 0;
+        }
+    }
+}

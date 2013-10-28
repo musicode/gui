@@ -1,0 +1,74 @@
+.@{ui-class-prefix}-dialog {
+
+    background-color: @dialog-bgcolor;
+
+    width: 300px;
+    position: absolute;
+
+    .border-top-radius(@dialog-border-top-radius);
+    .border-bottom-radius(@dialog-border-bottom-radius);
+    .box-shadow(@dialog-box-shadow);
+
+    .ui-status;
+
+    &[draggable="draggable"] {
+        .@{ui-class-prefix}-dialog-header {
+            cursor: move;
+        }
+    }
+}
+
+.@{ui-class-prefix}-dialog-header {
+    border-bottom: 1px solid @dialog-header-border-bottom-color;
+    background-color: @dialog-header-bgcolor;
+    font-size: @font-size-base;
+    position: relative;
+    padding: @dialog-header-padding;
+
+    .border-top-radius(@dialog-border-top-radius);
+}
+
+.@{ui-class-prefix}-dialog-title {
+    color: @dialog-title-color;
+    font-size: @dialog-title-font-size;
+    font-weight: @dialog-title-font-weight;
+    font-family: @font-family-serif;
+
+    margin: 0;
+    padding: 0;
+}
+
+.@{ui-class-prefix}-dialog-body {
+    padding: @dialog-body-padding;
+}
+
+.@{ui-class-prefix}-dialog-close {
+    font-style: normal;
+    font-weight: bold;
+    font-size: @dialog-close-font-size;
+    color: @dialog-close-color;
+
+    position: absolute;
+    top: @dialog-close-top;
+    right: @dialog-close-right;
+    cursor: pointer;
+}
+
+.@{ui-class-prefix}-dialog-footer {
+
+    background-color: @dialog-footer-bgcolor;
+    border-top: 1px solid @dialog-footer-border-top-color;
+
+    text-align: @dialog-footer-align;
+    padding: @dialog-footer-padding;
+
+    .border-bottom-radius(@dialog-border-bottom-radius);
+
+    .@{ui-class-prefix}-button {
+        margin-left: @dialog-footer-button-space;
+
+        &:first-child {
+            margin-left: 0;
+        }
+    }
+}

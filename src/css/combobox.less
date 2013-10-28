@@ -1,0 +1,71 @@
+.@{ui-class-prefix}-combobox {
+
+    .inline-block;
+
+    position: relative;
+    font-size: @font-size-base;
+
+    .ui-status;
+
+    .@{ui-class-prefix}-button {
+        text-align: left;
+        padding-right: @combobox-button-caret-size + 2 * @button-horizontal-padding;
+        .text-overflow;
+    }
+
+    .@{ui-class-prefix}-list {
+
+        background-color: @combobox-list-bgcolor;
+        border: @combobox-list-border;
+        font-size: @combobox-list-font-size;
+        padding: @combobox-list-padding;
+
+        min-width: 100%;
+        position: absolute;
+        left: 0;
+        top: @combobox-list-top;
+    }
+
+    .@{ui-class-prefix}-list-item {
+
+        border-top-color: transparent;
+
+        height: @combobox-list-item-height;
+        line-height: @combobox-list-item-height;
+
+        padding: 0 @combobox-list-item-horizontal-padding;
+        white-space: nowrap;
+
+        &:hover {
+            background-color: @combobox-list-item-hover-bgcolor;
+            color: @combobox-list-item-hover-color;
+        }
+    }
+
+    .@{ui-class-prefix}-list-item-selected,
+    .@{ui-class-prefix}-list-item-selected:hover {
+        background-color: @combobox-list-item-selected-bgcolor;
+        color: @combobox-list-item-selected-color;
+    }
+
+    .@{ui-class-prefix}-caret {
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        margin-top: -0.5 * @combobox-button-caret-size;
+
+        width: 0;
+        height: 0;
+        border-width: @combobox-button-caret-size;
+        border-style: solid;
+        border-color: @caret-color transparent transparent;
+    }
+
+    &.@{ui-class-prefix}-active .@{ui-class-prefix}-caret {
+        margin-top: -1.5 * @combobox-button-caret-size;
+        border-color: transparent transparent @caret-color;
+    }
+}
+
+
+

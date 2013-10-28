@@ -1,0 +1,65 @@
+.@{ui-class-prefix}-list {
+
+    display: block;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    background-color: @list-bgcolor;
+
+    border-width: 1px;
+    border-style: solid;
+    border-color: @list-border-color;
+
+    font-size: @font-size-base;
+    font-family: @font-family-sans-serif;
+    padding: @list-padding;
+    text-align: left;
+
+    box-sizing: border-box;
+    border-radius: @list-border-radius;
+
+    .ui-status;
+
+    &[overflow="overflow"] .@{ui-class-prefix}-list-item {
+        .text-overflow;
+    }
+}
+
+.@{ui-class-prefix}-list-group-header {
+    padding: 10px @list-item-horizontal-padding;
+    border-bottom: 1px solid #DDD;
+}
+.@{ui-class-prefix}-list-item {
+
+    border-top: @list-item-border-top;
+    color: @list-item-color;
+
+    height: @list-item-height;
+    line-height: @list-item-height;
+
+    padding: 0 @list-item-horizontal-padding;
+
+    box-sizing: border-box;
+    .box-shadow(@list-item-box-shadow);
+
+    &:hover {
+        background-color: @list-item-hover-bgcolor;
+        color: @list-item-hover-color;
+    }
+    &:first-child {
+        border-top: none;
+    }
+}
+
+.@{ui-class-prefix}-list-group-header,
+.@{ui-class-prefix}-list-item {
+    cursor: @cursor-clickable;
+    display: block;
+}
+
+.@{ui-class-prefix}-list-item-selected,
+.@{ui-class-prefix}-list-item-selected:hover {
+    background-color: @list-item-selected-bgcolor;
+    color: @list-item-selected-color;
+    font-weight: @list-item-selected-font-weight;
+}

@@ -1,0 +1,113 @@
+.@{ui-class-prefix}-table {
+
+    text-align: left;
+    font-size: @font-size-base;
+
+
+    .ui-status;
+
+    &[overflow="overflow"] {
+        .@{ui-class-prefix}-table-cell {
+            .text-overflow;
+        }
+    }
+
+    &[breakline="breakline"] {
+        .@{ui-class-prefix}-table-cell {
+            word-wrap: break-word;
+            word-break: break-all;
+            height: auto;
+        }
+    }
+}
+
+.@{ui-class-prefix}-table-header table,
+.@{ui-class-prefix}-table-row {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.@{ui-class-prefix}-table-header {
+    background-color: @table-header-bgcolor;
+
+    border-width: 1px;
+    border-style: solid;
+    border-color: @table-header-border-color;
+
+    color: @table-header-color;
+
+    th {
+        border-left-width: 1px;
+        border-left-style: solid;
+        border-left-color: @table-header-cell-border-color;
+
+        padding: @table-header-cell-padding;
+
+        box-sizing: border-box;
+
+        &:first-child {
+            border-left: none;
+        }
+    }
+}
+
+.@{ui-class-prefix}-table-body {
+    border-width: 1px;
+    border-style: solid;
+    border-color: @table-body-border-color;
+    border-top: none;
+
+    color: @table-body-color;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.@{ui-class-prefix}-table-row {
+    table-layout: fixed;
+
+    border-top-width: 1px;
+    border-top-style: solid;
+    border-top-color: @table-body-row-border-color;
+
+    &:first-child {
+        border-top: none;
+    }
+
+    &:hover {
+        background-color: @table-body-row-hover-bgcolor;
+        color: @table-body-row-hover-color;
+    }
+}
+
+.@{ui-class-prefix}-table-row-odd {
+    background-color: @table-body-row-odd-bgcolor;
+
+    &.@{ui-class-prefix}-table-row-selected {
+        background-color: @table-body-row-odd-selected-bgcolor;
+        color: @table-body-row-odd-selected-color;
+    }
+}
+
+.@{ui-class-prefix}-table-row-even {
+    background-color: @table-body-row-even-bgcolor;
+
+    &.@{ui-class-prefix}-table-row-selected {
+        background-color: @table-body-row-even-selected-bgcolor;
+        color: @table-body-row-even-selected-color;
+    }
+}
+
+.@{ui-class-prefix}-table-cell {
+    padding: @table-body-cell-padding;
+
+
+    border-left-width: 1px;
+    border-left-style: solid;
+    border-left-color: @table-body-cell-border-color;
+
+    box-sizing: border-box;
+
+    &:first-child {
+        border-left: none;
+    }
+}

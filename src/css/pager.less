@@ -1,0 +1,76 @@
+.@{ui-class-prefix}-pager {
+
+    .user-select;
+    .ui-status;
+
+    ul {
+        font-size: 0;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+}
+
+.@{ui-class-prefix}-pager-item,
+.@{ui-class-prefix}-pager-omit {
+    .inline-block;
+}
+
+.@{ui-class-prefix}-pager-item {
+    border: @pager-item-border;
+    color: @pager-item-color;
+    cursor: pointer;
+
+    font-size: @font-size-base;
+    font-weight: @pager-item-font-weight;
+    margin-left: @pager-item-space;
+    padding: @pager-item-padding;
+    border-radius: @pager-item-border-radius;
+
+    .gradient-vertical(
+        @pager-item-start-bgcolor,
+        @pager-item-end-bgcolor
+    );
+    .box-shadow(@pager-item-box-shadow);
+
+    &:first-child {
+        margin-left: 0;
+    }
+
+    &:hover {
+        border-color: @pager-item-hover-border-color;
+    }
+
+    &.@{ui-class-prefix}-pager-active {
+        border-color: @pager-item-active-border-color;
+        color: @pager-item-active-color;
+        cursor: text;
+        font-weight: bold;
+        .gradient-vertical(
+            @pager-item-active-start-bgcolor,
+            @pager-item-active-end-bgcolor
+        );
+        .box-shadow(@pager-item-active-box-shadow);
+    }
+
+    &.@{ui-class-prefix}-pager-disabled {
+        border-color: @pager-item-disabled-border-color;
+        color: @pager-item-disabled-color;
+        cursor: default;
+        .gradient-vertical(
+            @pager-item-disabled-start-bgcolor,
+            @pager-item-disabled-end-bgcolor
+        );
+        .box-shadow(@pager-item-disabled-box-shadow);
+    }
+}
+
+.@{ui-class-prefix}-pager-omit {
+    color: @pager-omit-color;
+    font-size: @font-size-base;
+    margin: 0 @pager-omit-space;
+
+    + .@{ui-class-prefix}-pager-item {
+        margin-left: 0;
+    }
+}

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Button - ZUI Demo</title>
+
+        <script src="asset/js/jquery.js"></script>
+        <script src="asset/js/esl.js"></script>
+        <script src="asset/js/config.js"></script>
+        <link rel="stylesheet" href="asset/css/demo.css" />
+        <link rel="stylesheet" href="asset/css/font-awesome/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="../src/css/main.less" />
+    </head>
+
+    <body>
+        <header>Button</header>
+        <div id="ui-button">按钮</div>
+        <div id="ui-button-disabled">置灰的按钮</div>
+        <div id="ui-button-toggle">toggle button</div>
+        <div id="ui-button-icon">icon button</div>
+        <div id="ui-button-icon-user">
+            icon button
+            <span class="icon-user" id="custom"></span>
+        </div>
+        <button id="ui-button-icon-only"></button>
+
+        <script src="Button.js"></script>
+        <script>
+            require(
+                [
+                    'gui/Button'
+                ],
+                function (Button) {
+
+                    var buttons = [
+                        new Button({
+                            main: $('#ui-button-disabled'),
+                            disabled: true
+                        }),
+                        new Button({
+                            main: $('#ui-button-toggle'),
+                            selected: true,
+                            toggle: true
+                        }),
+                        new Button({
+                            main: $('#ui-button-icon'),
+                            icon: 'cloud-upload',
+                            labelPlacement: 'right'
+                        }),
+                        new Button({
+                            main: $('#ui-button-icon-user'),
+                            labelPlacement: 'right'
+                        }),
+                        new Button({
+                            main: $('#ui-button-icon-only'),
+                            icon: 'cloud-upload'
+                        })
+                    ];
+
+                    $.each(buttons, function (index, btn) {
+                        btn.render();
+                    });
+
+                    buttons[3].setLabel('用户');
+                }
+            );
+        </script>
+    </body>
+
+</html>

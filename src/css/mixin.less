@@ -1,0 +1,197 @@
+/**
+ * @file 工具方法
+ * @author zhujialu
+ */
+
+// 清除浮动
+.clearfix() {
+    &:before,
+    &:after {
+        display: table;
+        line-height: 0;
+        content: "";
+    }
+    &:after {
+        clear: both;
+    }
+    *zoom: 1;
+}
+
+// 兼容 IE7
+.inline-block() {
+    display: inline-block;
+
+    *display: inline;
+    *zoom: 1;
+}
+
+// 长文本以省略号截断
+// 需自行设置 max-width
+.text-overflow() {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+// 不透明度 如 0.5
+.opacity(@opacity) {
+    opacity: @opacity;
+    // IE8 filter
+    @opacity-ie: (@opacity * 100);
+    filter: ~"alpha(opacity=@{opacity-ie})";
+}
+
+.user-select(@value: none) {
+    -moz-user-select: @value;
+    -webkit-user-select: @value;
+    -ms-user-select: @value; // IE10
+}
+
+// 下面是 CSS3 特性
+
+// 设置 上下左右 圆角
+.border-top-radius(@radius) {
+    border-top-right-radius: @radius;
+    border-top-left-radius: @radius;
+}
+.border-right-radius(@radius) {
+    border-bottom-right-radius: @radius;
+    border-top-right-radius: @radius;
+}
+.border-bottom-radius(@radius) {
+    border-bottom-right-radius: @radius;
+    border-bottom-left-radius: @radius;
+}
+.border-left-radius(@radius) {
+    border-bottom-left-radius: @radius;
+    border-top-left-radius: @radius;
+}
+
+// 阴影
+.box-shadow(@shadow) {
+    -webkit-box-shadow: @shadow;
+    box-shadow: @shadow;
+}
+
+// 各种渐变
+.gradient-horizontal(@startColor: #555, @endColor: #333) {
+    background-color: @endColor;
+    background-image: -moz-linear-gradient(left, @startColor, @endColor); // FF 3.6+
+    background-image: -webkit-gradient(linear, 0 0, 100% 0, from(@startColor), to(@endColor)); // Safari 4+, Chrome 2+
+    background-image: -webkit-linear-gradient(left, @startColor, @endColor); // Safari 5.1+, Chrome 10+
+    background-image: -o-linear-gradient(left, @startColor, @endColor); // Opera 11.10
+    background-image: linear-gradient(to right, @startColor, @endColor); // Standard, IE10
+    background-repeat: repeat-x;
+}
+.gradient-vertical(@startColor: #555, @endColor: #333) {
+    background-color: @endColor;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(@startColor), to(@endColor)); // Safari 4+, Chrome 2+
+    background-image: -webkit-linear-gradient(top, @startColor, @endColor); // Safari 5.1+, Chrome 10+
+    background-image: -moz-linear-gradient(top, @startColor, @endColor); // FF 3.6+
+    background-image: linear-gradient(to bottom, @startColor, @endColor); // Standard, IE10
+    background-repeat: repeat-x;
+}
+.gradient-directional(@startColor: #555, @endColor: #333, @deg: 45deg) {
+    background-color: @endColor;
+    background-repeat: repeat-x;
+    background-image: -webkit-linear-gradient(@deg, @startColor, @endColor); // Safari 5.1+, Chrome 10+
+    background-image: -moz-linear-gradient(@deg, @startColor, @endColor); // FF 3.6+
+    background-image: linear-gradient(@deg, @startColor, @endColor); // Standard, IE10
+}
+.gradient-horizontal-three-colors(@startColor: #00b3ee, @midColor: #7a43b6, @colorStop: 50%, @endColor: #c3325f) {
+    background-color: mix(@midColor, @endColor, 80%);
+    background-image: -webkit-gradient(left, linear, 0 0, 0 100%, from(@startColor), color-stop(@colorStop, @midColor), to(@endColor));
+    background-image: -webkit-linear-gradient(left, @startColor, @midColor @colorStop, @endColor);
+    background-image: -moz-linear-gradient(left, @startColor, @midColor @colorStop, @endColor);
+    background-image: linear-gradient(to right, @startColor, @midColor @colorStop, @endColor);
+    background-repeat: no-repeat;
+}
+.gradient-vertical-three-colors(@startColor: #00b3ee, @midColor: #7a43b6, @colorStop: 50%, @endColor: #c3325f) {
+    background-color: mix(@midColor, @endColor, 80%);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(@startColor), color-stop(@colorStop, @midColor), to(@endColor));
+    background-image: -webkit-linear-gradient(@startColor, @midColor @colorStop, @endColor);
+    background-image: -moz-linear-gradient(top, @startColor, @midColor @colorStop, @endColor);
+    background-image: linear-gradient(@startColor, @midColor @colorStop, @endColor);
+    background-repeat: no-repeat;
+}
+.gradient-radial(@innerColor: #555, @outerColor: #333) {
+    background-color: @outerColor;
+    background-image: -webkit-gradient(radial, center center, 0, center center, 460, from(@innerColor), to(@outerColor));
+    background-image: -webkit-radial-gradient(circle, @innerColor, @outerColor);
+    background-image: -moz-radial-gradient(circle, @innerColor, @outerColor);
+    background-image: radial-gradient(circle, @innerColor, @outerColor);
+    background-repeat: no-repeat;
+}
+.gradient-striped(@color: #555, @angle: 45deg) {
+    background-color: @color;
+    background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.25, rgba(255,255,255,.15)), color-stop(.25, transparent), color-stop(.5, transparent), color-stop(.5, rgba(255,255,255,.15)), color-stop(.75, rgba(255,255,255,.15)), color-stop(.75, transparent), to(transparent));
+    background-image: -webkit-linear-gradient(@angle, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
+    background-image: -moz-linear-gradient(@angle, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
+    background-image: linear-gradient(@angle, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
+}
+
+.gradient-vertical-with-image (
+    @startColor, @endColor,
+    @image-url:"",
+    @x:0, @y:0,
+    @repeat-type:no-repeat
+) {
+    @image: @end-color url(@image-url) @repeat-type @x @y;
+
+    background: @image;
+    background: @image, -webkit-gradient(linear, 0 0, 0 100%, from(@startColor), to(@endColor)); // Safari 4+, Chrome 2+
+    background: @image, -webkit-linear-gradient(top, @startColor, @endColor); // Safari 5.1+, Chrome 10+
+    background: @image, -moz-linear-gradient(top, @startColor, @endColor); // FF 3.6+
+    background: @image, linear-gradient(to bottom, @startColor, @endColor); // Standard, IE10
+    // background-repeat: repeat-x;
+}
+
+
+// 选中文本的文本颜色和背景色
+.selection(@bgColor: #42B0CC, @color: #FFF) {
+    ::-moz-selection {
+        background-color: @bgColor;
+        color: @color;
+    }
+    ::-webkit-selection {
+        background-color: @bgColor;
+        color: @color;
+    }
+    ::selection {
+        background-color: @bgColor;
+        color: @color;
+    }
+}
+
+.ui-status() {
+
+    &[hidden="hidden"] {
+        display: none;
+    }
+
+}
+
+.arrow() {
+    .inline-block;
+
+    width: 0;
+    height: 0;
+}
+
+.arrow-up(@color, @width, @height) {
+    .arrow();
+
+    border-top: @height solid transparent;
+    border-bottom: @height solid @color;
+    border-right: @width solid transparent;
+    border-left: @width solid transparent;
+}
+
+.arrow-down(@color, @width, @height) {
+    .arrow();
+
+    border-top: @height solid @color;
+    border-bottom: @height solid transparent;
+    border-right: @width solid transparent;
+    border-left: @width solid transparent;
+}

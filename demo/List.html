@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>List - ZUI Demo</title>
+
+        <script src="asset/js/jquery.js"></script>
+        <script src="asset/js/esl.js"></script>
+        <script src="asset/js/config.js"></script>
+        <link rel="stylesheet" href="asset/css/demo.css" />
+        <link rel="stylesheet" href="../src/css/main.less" />
+        <style>
+            #group-list {
+                margin-top: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <header>List</header>
+
+        <div id="ui-list">
+        </div>
+
+        <div id="group-list">
+
+        </div>
+
+        <script src="List.js"></script>
+        <script>
+        require(
+            [
+                'gui/List'
+            ],
+            function (List) {
+
+                var datasource = [ ];
+
+                for (var i = 0; i < 5; i++) {
+                    var groupList = [];
+
+                    for (var j = 0; j < 10; j++) {
+                        groupList.push({ text: 'text' + i + '-' + j, value: j });
+                    }
+
+                    datasource.push({ text: '分组' + i, value: i, children: groupList });
+                }
+
+                list = new List({
+                    main: $('#group-list')[0],
+                    datasource: datasource,
+                    toggle: true,
+                    multiple: false
+                });
+
+                list.render();
+
+            }
+        );
+        </script>
+    </body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>TextBox - ZUI Demo</title>
+
+        <script src="asset/js/jquery.js"></script>
+        <script src="asset/js/esl.js"></script>
+        <script src="asset/js/config.js"></script>
+        <link rel="stylesheet" href="asset/css/demo.css" />
+        <link rel="stylesheet" href="../src/css/main.less" />
+    </head>
+    <body>
+        <header>TextBox</header>
+        <input id="ui-textbox" type="text" data-placeholder="占位符" />
+        <input id="ui-textbox-disabled" type="text" data-placeholder="占位符" />
+        <script src="TextBox.js"></script>
+        <script>
+            require(
+                [
+                    'gui/TextBox'
+                ],
+                function (TextBox) {
+
+                    var textbox = new TextBox({
+                        main: $('#ui-textbox-disabled'),
+                        disabled: true
+                    });
+
+                    textbox.render();
+                }
+            );
+        </script>
+    </body>
+</html>

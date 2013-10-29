@@ -1,21 +1,19 @@
 .@{ui-class-prefix}-textbox {
 
+    .ui-common;
+
     background-color: @textbox-bgcolor;
 
-    border-width: 1px;
-    border-style: solid;
-    border-color: @textbox-border-color;
+    border: @textbox-border-width
+            @textbox-border-style
+            @textbox-border-color;
 
     color: @textbox-color;
     font-size: @textbox-font-size;
-    font-family: @font-family-sans-serif;
 
-    margin: 0;
-    padding: @textbox-padding;
+    padding: @textbox-padding-h
+             @textbox-padding-v;
 
-    text-align: left;
-
-    box-sizing: border-box;
     border-radius: @textbox-border-radius;
     .box-shadow(@textbox-box-shadow);
 
@@ -26,8 +24,6 @@
 
         .box-shadow(@textbox-focus-box-shadow);
     }
-
-    .ui-status;
 
     &[disabled] {
         background-color: @textbox-disabled-bgcolor;

@@ -1,15 +1,13 @@
 .@{ui-class-prefix}-combobox {
 
+    .ui-common;
     .inline-block;
 
     position: relative;
-    font-size: @font-size-base;
-
-    .ui-status;
 
     .@{ui-class-prefix}-button {
         text-align: left;
-        padding-right: @combobox-button-caret-size + 2 * @button-horizontal-padding;
+        padding-right: @combobox-button-caret-size + 2 * @button-padding-h;
         .text-overflow;
     }
 
@@ -28,12 +26,8 @@
 
     .@{ui-class-prefix}-list-item {
 
-        border-top-color: transparent;
-
-        height: @combobox-list-item-height;
-        line-height: @combobox-list-item-height;
-
-        padding: 0 @combobox-list-item-horizontal-padding;
+        padding: @combobox-list-item-padding-v
+                 @combobox-list-item-padding-h;
         white-space: nowrap;
 
         &:hover {

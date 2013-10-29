@@ -1,29 +1,29 @@
 .@{ui-class-prefix}-dialog {
 
+    .ui-common;
+
     background-color: @dialog-bgcolor;
 
-    width: 300px;
+    width: @dialog-width;
     position: absolute;
 
     .border-top-radius(@dialog-border-top-radius);
     .border-bottom-radius(@dialog-border-bottom-radius);
     .box-shadow(@dialog-box-shadow);
 
-    .ui-status;
-
-    &[draggable="draggable"] {
+    &[draggable] {
         .@{ui-class-prefix}-dialog-header {
-            cursor: move;
+            cursor: @cursor-draggable;
         }
     }
 }
 
 .@{ui-class-prefix}-dialog-header {
-    border-bottom: 1px solid @dialog-header-border-bottom-color;
+    border-bottom: @dialog-header-border-bottom;
     background-color: @dialog-header-bgcolor;
     font-size: @font-size-base;
-    position: relative;
     padding: @dialog-header-padding;
+    position: relative;
 
     .border-top-radius(@dialog-border-top-radius);
 }
@@ -51,13 +51,13 @@
     position: absolute;
     top: @dialog-close-top;
     right: @dialog-close-right;
-    cursor: pointer;
+    cursor: @cursor-clickable;
 }
 
 .@{ui-class-prefix}-dialog-footer {
 
     background-color: @dialog-footer-bgcolor;
-    border-top: 1px solid @dialog-footer-border-top-color;
+    border-top: @dialog-footer-border-top;
 
     text-align: @dialog-footer-align;
     padding: @dialog-footer-padding;

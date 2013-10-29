@@ -1,7 +1,7 @@
 .@{ui-class-prefix}-pager {
 
+    .ui-common;
     .user-select;
-    .ui-status;
 
     ul {
         font-size: 0;
@@ -19,9 +19,8 @@
 .@{ui-class-prefix}-pager-item {
     border: @pager-item-border;
     color: @pager-item-color;
-    cursor: pointer;
+    cursor: @cursor-clickable;
 
-    font-size: @font-size-base;
     font-weight: @pager-item-font-weight;
     margin-left: @pager-item-space;
     padding: @pager-item-padding;
@@ -44,7 +43,7 @@
     &.@{ui-class-prefix}-pager-active {
         border-color: @pager-item-active-border-color;
         color: @pager-item-active-color;
-        cursor: text;
+        cursor: @cursor-active;
         font-weight: bold;
         .gradient-vertical(
             @pager-item-active-start-bgcolor,
@@ -56,7 +55,7 @@
     &.@{ui-class-prefix}-pager-disabled {
         border-color: @pager-item-disabled-border-color;
         color: @pager-item-disabled-color;
-        cursor: default;
+        cursor: @cursor-disabled;
         .gradient-vertical(
             @pager-item-disabled-start-bgcolor,
             @pager-item-disabled-end-bgcolor

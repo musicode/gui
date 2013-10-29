@@ -1,12 +1,14 @@
 .@{ui-class-prefix}-texteditor {
 
-    border: 1px solid #CCC;
+    .ui-common;
+
+    border: @texteditor-border-width
+            @texteditor-border-style
+            @texteditor-border-color;
 
     font-size: @texteditor-font-size;
     line-height: @texteditor-line-height;
     position: relative;
-
-    .ui-status;
 
     p {
 
@@ -55,13 +57,12 @@
 
         line-height: @texteditor-line-height;
         padding: 0 0 0 3px;
-        box-shadow: none;
 
         /**  火狐下 left: 0; right: 0; 无效 **/
         width: 100%;
         height: 100%;
 
-        box-sizing: border-box;
-        -moz-box-sizing: border-box;
+        .box-sizing(border-box);
+        .box-shadow(none);
     }
 }

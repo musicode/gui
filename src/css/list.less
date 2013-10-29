@@ -1,53 +1,53 @@
 .@{ui-class-prefix}-list {
 
-    display: block;
-    overflow-x: hidden;
-    overflow-y: auto;
+    .ui-common;
+
+    border: @list-border-width
+            @list-border-style
+            @list-border-color;
 
     background-color: @list-bgcolor;
 
-    border-width: 1px;
-    border-style: solid;
-    border-color: @list-border-color;
-
-    font-size: @font-size-base;
-    font-family: @font-family-sans-serif;
+    display: block;
     padding: @list-padding;
-    text-align: left;
-
-    box-sizing: border-box;
+    overflow-x: hidden;
+    overflow-y: auto;
     border-radius: @list-border-radius;
 
-    .ui-status;
-
-    &[overflow="overflow"] .@{ui-class-prefix}-list-item {
+    &[overflow] .@{ui-class-prefix}-list-item {
         .text-overflow;
     }
 }
 
 .@{ui-class-prefix}-list-group-header {
-    padding: 10px @list-item-horizontal-padding;
-    border-bottom: 1px solid #DDD;
+    border-bottom: @list-group-header-border-width
+                   @list-group-header-border-style
+                   @list-group-header-border-color;
+    background-color: @list-group-header-bgcolor;
+    color: @list-group-header-color;
+    font-size: @list-group-header-font-size;
+    padding: @list-group-header-padding-v
+             @list-group-header-padding-h;
 }
 .@{ui-class-prefix}-list-item {
 
-    border-top: @list-item-border-top;
+    border-bottom: @list-item-border-width
+                   @list-item-border-style
+                   @list-item-border-color;
+
     color: @list-item-color;
+    padding: @list-item-padding-v
+             @list-item-padding-h;
 
-    height: @list-item-height;
-    line-height: @list-item-height;
-
-    padding: 0 @list-item-horizontal-padding;
-
-    box-sizing: border-box;
+    .box-sizing(border-box);
     .box-shadow(@list-item-box-shadow);
 
     &:hover {
         background-color: @list-item-hover-bgcolor;
         color: @list-item-hover-color;
     }
-    &:first-child {
-        border-top: none;
+    &:last-child {
+        border-bottom: none;
     }
 }
 

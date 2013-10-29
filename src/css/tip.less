@@ -1,12 +1,14 @@
 .@{ui-class-prefix}-tip-layer {
+    .ui-common;
+
     background-color: @tip-layer-bgcolor;
-    border: @tip-layer-border;
-    font-size: @font-size-base;
+
+    border: @tip-layer-border-width
+            @tip-layer-border-style
+            @tip-layer-border-color;
+
     padding: @tip-layer-padding;
-
     position: absolute;
-
-    .ui-status;
 
     .box-shadow(@tip-layer-box-shadow);
 }

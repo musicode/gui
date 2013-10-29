@@ -12,9 +12,9 @@ define(function (require) {
      *
      * @constructor
      * @param {Object} options
-     * @param {(HTMLElement | jQuery)} options.main 主元素
+     * @param {(HTMLElement | jQuery)=} options.main 主元素
      * @param {number=} options.width 按钮宽度, 一般不用设置, 由样式 padding 负责
-     * @param {number=} options.height 按钮高度
+     * @param {number=} options.height 按钮高度, 一般不用设置, 由样式 height 负责
      * @param {boolean=} options.hidden 是否隐藏
      * @param {boolean=} options.disabled 是否置灰
      * @param {boolean=} options.selected 是否选中
@@ -58,7 +58,6 @@ define(function (require) {
         createMain: function () {
             return document.createElement('button');
         }
-
     };
 
     /**
@@ -66,9 +65,7 @@ define(function (require) {
      *
      * @type {Object}
      */
-    Button.defaultOptions = {
-        height: 26
-    };
+    Button.defaultOptions = { };
 
     Button.painter = {
 
@@ -88,6 +85,7 @@ define(function (require) {
 
 
     lib.inherits(Button, SuperClass);
+
 
     return Button;
 

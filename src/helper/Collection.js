@@ -144,23 +144,25 @@ define(function (require) {
                 }
             );
 
+            var setElement;
+
             // 确定容器元素
             var container = this.getItemContainer();
 
             if (index >= this.items.length) {
                 $.merge(this.items, items);
 
-                function setElement(element) {
+                setElement = function (element) {
                     container.appendChild(element);
-                }
+                };
             }
             else {
                 lib.splice(this.items, index, 0, items);
 
                 var next = container.children[index];
-                function setElement(element) {
+                setElement = function (element) {
                     container.insertBefore(element, next);
-                }
+                };
             }
 
             this.startInsertThread(items, {

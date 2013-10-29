@@ -166,7 +166,6 @@ define(function (require) {
     ComboBox.defaultOptions = {
         emptyText: '',
         width: 100,
-        height: 26,
         selectedIndex: -1
     };
 

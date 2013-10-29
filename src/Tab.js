@@ -6,6 +6,7 @@ define(function (require) {
 
     var SuperClass = require('./interface/Control');
     var lib = require('./helper/lib');
+    var gui = require('./main');
 
     /**
      * 标签页
@@ -97,7 +98,9 @@ define(function (require) {
                 var divExtra = item.id ? ' id="' + item.id + '"' : '';
 
                 navHTML += '<li><a' + aExtra + '>' + item.title + '</a></li>';
-                contentHTML += '<div class="tab-panel"' + divExtra + '>' + item.content + '</div>';
+                contentHTML += '<div class="' + Tab.CLASS_PANEL + '"' + divExtra + '>'
+                             + item.content
+                             + '</div>';
             });
 
             navHTML = '<ul>' + navHTML + '</ul>';
@@ -111,19 +114,17 @@ define(function (require) {
 
             var nav = $('.' + Tab.CLASS_NAV, tab.main);
             var content = nav.next();
+            var activeClass = gui.CLASS.ACTIVE;
+            var panelSelector = '.' + Tab.CLASS_PANEL;
 
             if (prevIndex != null) {
                 // 取消上次选中的
-                nav.find('li:eq(' + prevIndex + ')').removeClass('ui-active');
-                content.find('.tab-panel:eq(' + prevIndex + ')').removeClass('ui-active');
+                nav.find('li:eq(' + prevIndex + ')').removeClass(activeClass);
+                content.find(panelSelector + ':eq(' + prevIndex + ')').removeClass(activeClass);
             }
 
-            nav.find('li:eq(' + currentIndex + ')').addClass('ui-active');
-            content.find('.tab-panel:eq(' + currentIndex + ')').addClass('ui-active');
-        },
-
-        width: function (tab, width) {
-            tab.main.width(width);
+            nav.find('li:eq(' + currentIndex + ')').addClass(activeClass);
+            content.find(panelSelector + ':eq(' + currentIndex + ')').addClass(activeClass);
         }
     };
 
@@ -145,9 +146,32 @@ define(function (require) {
         this.fire('select');
     }
 
+    var classPrefix = gui.config.uiClassPrefix + '-tab-';
 
-    Tab.CLASS_NAV = 'tab-nav';
-    Tab.CLASS_CONTENT = 'tab-content';
+    /**
+     * 导航栏 class
+     *
+     * @static
+     * @type {string}
+     */
+    Tab.CLASS_NAV = classPrefix + 'nav';
+
+    /**
+     * 内容区 class
+     *
+     * @static
+     * @type {string}
+     */
+    Tab.CLASS_CONTENT = classPrefix + 'content';
+
+    /**
+     * 切换面板 class
+     *
+     * @static
+     * @type {string}
+     */
+    Tab.CLASS_PANEL = classPrefix + 'panel';
+
 
     lib.inherits(Tab, SuperClass);
 

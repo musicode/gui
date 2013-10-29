@@ -81,14 +81,12 @@ define(function (require) {
             // 创建两个按钮
             var uploadButton = new Button({
                 label: this.uploadButtonText,
-                height: 25,
                 disabled: true
             });
             uploadButton.appendTo(action);
 
             var selectButton = new Button({
-                label: this.selectButtonText,
-                height: 25
+                label: this.selectButtonText
             });
             selectButton.appendTo(action);
 

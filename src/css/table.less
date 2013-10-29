@@ -1,18 +1,17 @@
 .@{ui-class-prefix}-table {
 
+    .ui-common;
+
     text-align: left;
     font-size: @font-size-base;
 
-
-    .ui-status;
-
-    &[overflow="overflow"] {
+    &[overflow] {
         .@{ui-class-prefix}-table-cell {
             .text-overflow;
         }
     }
 
-    &[breakline="breakline"] {
+    &[breakline] {
         .@{ui-class-prefix}-table-cell {
             word-wrap: break-word;
             word-break: break-all;
@@ -30,20 +29,20 @@
 .@{ui-class-prefix}-table-header {
     background-color: @table-header-bgcolor;
 
-    border-width: 1px;
-    border-style: solid;
-    border-color: @table-header-border-color;
+    border: @table-header-border-width
+            @table-header-border-style
+            @table-header-border-color;
 
     color: @table-header-color;
 
     th {
-        border-left-width: 1px;
-        border-left-style: solid;
-        border-left-color: @table-header-cell-border-color;
+        border-left: @table-header-cell-border-width
+                     @table-header-cell-border-style
+                     @table-header-cell-border-color;
 
         padding: @table-header-cell-padding;
 
-        box-sizing: border-box;
+        .box-sizing(border-box);
 
         &:first-child {
             border-left: none;
@@ -52,9 +51,10 @@
 }
 
 .@{ui-class-prefix}-table-body {
-    border-width: 1px;
-    border-style: solid;
-    border-color: @table-body-border-color;
+    border: @table-body-border-width
+            @table-body-border-style
+            @table-body-border-color;
+
     border-top: none;
 
     color: @table-body-color;
@@ -65,9 +65,9 @@
 .@{ui-class-prefix}-table-row {
     table-layout: fixed;
 
-    border-top-width: 1px;
-    border-top-style: solid;
-    border-top-color: @table-body-row-border-color;
+    border-top: @table-body-row-border-width
+                @table-body-row-border-style
+                @table-body-row-border-color;
 
     &:first-child {
         border-top: none;
@@ -100,12 +100,11 @@
 .@{ui-class-prefix}-table-cell {
     padding: @table-body-cell-padding;
 
+    border-left: @table-body-cell-border-width
+                 @table-body-cell-border-style
+                 @table-body-cell-border-color;
 
-    border-left-width: 1px;
-    border-left-style: solid;
-    border-left-color: @table-body-cell-border-color;
-
-    box-sizing: border-box;
+    .box-sizing(border-box);
 
     &:first-child {
         border-left: none;

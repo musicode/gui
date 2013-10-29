@@ -209,9 +209,7 @@ define(function (require) {
          * @param {HTMLElement} target 目标容器元素
          */
         prependTo: function (target) {
-            if (this.main) {
-                this.main.prependTo(target);
-            }
+            this.main.prependTo(target);
         },
 
         /**
@@ -220,9 +218,7 @@ define(function (require) {
          * @param {HTMLElement} target 目标容器元素
          */
         appendTo: function (target) {
-            if (this.main) {
-                this.main.appendTo(target);
-            }
+            this.main.appendTo(target);
         },
 
         /**
@@ -322,8 +318,6 @@ define(function (require) {
             Observable.prototype.dispose.call(this);
 
             this.stage = lib.LifeCycle.DISPOSED;
-
-            this.fire('afterdispose');
         }
 
     };

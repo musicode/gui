@@ -86,12 +86,12 @@ define(function (require) {
             textBox.on('submit', onsubmit, this);
 
             // 列表事件
-            list.on('clickItem', onclickitem, this);
-            list.on('enterItem', onenteritem, this);
-            list.on('leaveItem', onleaveitem, this);
-            list.on('clickGroup', onclickgroup, this);
-            list.on('enterGroup', onentergroup, this);
-            list.on('leaveGroup', onleavegroup, this);
+            list.on('clickitem', clickItem, this);
+            list.on('enteritem', enterItem, this);
+            list.on('leaveitem', leaveItem, this);
+            list.on('clickgroup', clickGroup, this);
+            list.on('entergroup', enterGroup, this);
+            list.on('leavegroup', leaveGroup, this);
 
             // 键盘遍历
             iterator.on('enter', onenter, this);
@@ -118,6 +118,13 @@ define(function (require) {
             this.setProperties({
                 closed: true
             });
+        },
+
+        /**
+         * 提交表单
+         */
+        submit: function () {
+            this.fire('submit');
         }
 
     };
@@ -307,14 +314,16 @@ define(function (require) {
         // 如果提示层打开并选中了某项，需要更新`用户输入值`
         updateInputValue(this, item && item.raw);
 
-        this.fire('submit');
+        this.submit();
     }
 
     /**
      * 鼠标进入下拉列表项
      */
-    function onenteritem(e) {
-        var index = e.item.index;
+    function enterItem(e, params) {
+        var item = params.item;
+        var index = item.index;
+
         this.iterator.restart(index);
 
         // 这里不能只用 item.setProperties({ selected: true });
@@ -325,8 +334,8 @@ define(function (require) {
     /**
      * 鼠标离开下拉列表项
      */
-    function onleaveitem(e) {
-        var item = e.item;
+    function leaveItem(e, params) {
+        var item = params.item;
         item.setProperties({
             selected: false
         });
@@ -334,24 +343,23 @@ define(function (require) {
         this.iterator.restart();
     }
 
-    function onclickitem(e) {
-
-        var item = e.item;
+    function clickItem(e, params) {
+        var item = params.item;
         updateInputValue(this, item.raw);
 
         this.close();
         this.submit();
     }
 
-    function onentergroup(e) {
+    function enterGroup(e) {
 
     }
 
-    function onleavegroup() {
+    function leaveGroup() {
 
     }
 
-    function onclickgroup() {
+    function clickGroup() {
 
     }
 

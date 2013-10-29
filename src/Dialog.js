@@ -88,7 +88,7 @@ define(function (require) {
             }
 
             this.on('click', '.' + Class.CLASS_CLOSE, this.hide);
-            this.on('afterdispose', afterDispose);
+            this.on('beforedispose', beforeDispose);
 
             SuperClass.prototype.initStructure.apply(this, arguments);
         },
@@ -283,7 +283,7 @@ define(function (require) {
         }
     }
 
-    function afterDispose() {
+    function beforeDispose() {
         var buttons = this.buttons;
         if (buttons) {
             for (var key in buttons) {

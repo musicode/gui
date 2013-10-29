@@ -118,8 +118,8 @@ define(function (require) {
             this.list = list;
 
             list.on('click', clickItem, this);
-            list.on('aftershow', onaftershow, this);
-            list.on('afterhide', onafterhide, this);
+            list.on('aftershow', afterListShow, this);
+            list.on('afterhide', afterListHide, this);
 
             this.one('beforedispose', beforeDispose);
 
@@ -192,14 +192,17 @@ define(function (require) {
 
         width: function (combobox, width) {
 
+            var button = combobox.button;
+            var list = combobox.list;
+
             var properties = {
                 width: width
             };
 
-            combobox.button.setProperties(properties);
+            button.setProperties(properties);
 
             if (combobox.overflow) {
-                combobox.list.setProperties(properties);
+                list.setProperties(properties);
             }
         },
 
@@ -253,11 +256,11 @@ define(function (require) {
         }
     };
 
-    function onaftershow() {
+    function afterListShow() {
         this.main.addClass(gui.CLASS.ACTIVE);
     }
 
-    function onafterhide() {
+    function afterListHide() {
         this.main.removeClass(gui.CLASS.ACTIVE);
     }
 

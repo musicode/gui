@@ -50,7 +50,7 @@ define(function (require) {
          * @override
          */
         initStructure: function () {
-            this.on('afterdispose', afterDispose);
+            this.on('beforedispose', beforeDispose);
         },
 
         /**
@@ -185,7 +185,7 @@ define(function (require) {
      */
     Item.CLASS_SELECTBOX = classPrefix + 'item-selectbox';
 
-    function afterDispose() {
+    function beforeDispose() {
         this.main.remove();
     }
 

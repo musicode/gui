@@ -73,14 +73,16 @@ define(function (require) {
     Button.painter = {
 
         height: function (button, height) {
-            var main = button.main;
-            var offset = main.outerHeight() - main.height();
-            var value = (height - offset) + 'px';
+            if (typeof height === 'number') {
+                var main = button.main;
+                var offset = main.outerHeight() - main.height();
+                var value = (height - offset) + 'px';
 
-            main.css({
-                height: value,
-                'line-height': value
-            });
+                main.css({
+                    height: value,
+                    'line-height': value
+                });
+            }
         }
     };
 

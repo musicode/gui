@@ -174,11 +174,11 @@ define (function (require) {
         var overlay = options.overlay;
 
         if (options.showBy === 'click') {
-            trigger.click(options, showClick);
+            trigger.on('click', options, showClick);
         }
         else {
-            trigger.mouseenter(options, showEnter);
-            trigger.mouseleave(options, showLeave);
+            trigger.on('mouseenter', options, showEnter);
+            trigger.on('mouseleave', options, showLeave);
         }
 
         overlay.on('aftershow', onaftershow, options);

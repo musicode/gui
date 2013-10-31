@@ -20,7 +20,7 @@ define(function (require) {
      *
      * @constructor
      * @param {Object} options
-     * @param {HTMLElement=} options.main 主元素
+     * @param {(HTMLElement | jQuery)=} options.main 主元素
      * @param {string=} options.template 浮层模板
      * @param {number=} options.width 宽度
      * @param {number=} options.height 高度
@@ -73,8 +73,8 @@ define(function (require) {
                 main.html(this.template);
             }
 
-            this.on('aftershow', onaftershow);
-            this.on('afterhide', onafterhide);
+            this.on('aftershow', afterShow);
+            this.on('afterhide', afterHide);
 
             SuperClass.prototype.initStructure.apply(this, arguments);
         },
@@ -127,13 +127,13 @@ define(function (require) {
         }
     };
 
-    function onaftershow() {
+    function afterShow() {
         if (this.global) {
             autoAlign(this);
         }
     }
 
-    function onafterhide() {
+    function afterHide() {
         var onresize = this._onresize;
         if (typeof onresize === 'function') {
             var win = lib.getWindow();

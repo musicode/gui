@@ -13,7 +13,7 @@ define(function (require) {
      *
      * @constructor
      * @param {Object} options
-     * @param {(HTMLElement | jQuery)} options.main 主元素
+     * @param {(HTMLElement | jQuery)=} options.main 主元素
      * @param {boolean=} options.hidden 是否隐藏
      * @param {boolean=} options.disabled 是否置灰
      * @param {boolean=} options.selected 是否选中

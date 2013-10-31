@@ -356,6 +356,44 @@ define(function (require, exports, module) {
 
     })();
 
+    /**
+     * 检测是否支持 input 事件
+     *
+     * @type {boolean}
+     */
+    exports.supportInputEvent = (function () {
+
+        var input = document.createElement('input');
+        var result = 'oninput' in input;
+        input = null;
+
+        return result;
+    })();
+
+    /**
+     * 是否长按某键
+     *
+     * @type {number}
+     */
+    exports.keyPressed = null;
+
+    var doc = exports.getDocument();
+    var prevKey;
+
+    doc.keydown(function (e) {
+        var keyCode = e.keyCode;
+        if (keyCode === prevKey) {
+            exports.keyPressed = keyCode;
+        }
+        else {
+            prevKey = keyCode;
+        }
+    });
+
+    doc.keyup(function () {
+        prevKey = null;
+        exports.keyPressed = null;
+    });
 
     exports.KEYCODE_UP = 38;
     exports.KEYCODE_DOWN = 40;

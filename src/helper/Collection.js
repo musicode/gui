@@ -82,7 +82,6 @@ define(function (require) {
                 this.on('mouseenter', itemClass, enterItem);
                 this.on('mouseleave', itemClass, leaveItem);
             }
-
         },
 
         /**
@@ -112,7 +111,7 @@ define(function (require) {
                 header = options.raw.text || '';
             }
 
-            var html = '<div id="' + this.guid + '" class="' + classList.join(' ') + '">'
+            var html = '<div class="' + classList.join(' ') + '">'
                      +     '<div class="' + Class.CLASS_GROUP_HEADER + '">' + header + '</div>'
                      +     '<div class="' + Class.CLASS_GROUP_BODY + '"></div>'
                      + '</div>';

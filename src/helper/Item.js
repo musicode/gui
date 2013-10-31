@@ -87,7 +87,7 @@ define(function (require) {
                             : ItemClass.CLASS_EVEN );
 
             var tagName = options.tagName || ItemClass.defaultOptions.tagName;
-            html = '<' + tagName + ' id="' + this.guid + '" class="' + classList.join(' ') + '">'
+            html = '<' + tagName + ' class="' + classList.join(' ') + '">'
                  +    html
                  + '</' + tagName + '>';
 

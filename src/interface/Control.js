@@ -1,5 +1,5 @@
 /**
- * @file 控件基类
+ * @file Control
  * @author zhujl
  */
 define(function (require) {
@@ -12,24 +12,22 @@ define(function (require) {
      * 3. 属性变化时的重绘
      */
 
-    var gui = require('../main');
-    var lib = require('../helper/lib');
     var Observable = require('./Observable');
+    var lib = require('../helper/lib');
+    var gui = require('../main');
 
     /**
      * 基类构造函数
      *
      * @constructor
      * @param {Object} options 初始化参数
-     * @param {HTMLElement|jQuery} options.main 控件主元素
-     *                                          只有传入了才表示需要，否则只是临时创建
+     * @param {(HTMLElement | jQuery)=} options.main 控件主元素
      * @param {boolean=} options.disabled 是否禁用
      * @param {boolean=} options.hidden 是否隐藏
-     *
      */
     function Control(options) {
 
-        options = $.extend({}, options);
+        options = $.extend({ }, options);
 
         Observable.call(this, options);
 
@@ -69,6 +67,11 @@ define(function (require) {
 
     Control.prototype = {
 
+        /**
+         * 控件类型
+         *
+         * @type {string}
+         */
         type: 'Control',
 
         /**
@@ -87,14 +90,12 @@ define(function (require) {
          * @protected
          */
         initStructure: function () {
-            var main = this.main;
-            if (main) {
-                var type = this.type && this.type.toLowerCase();
-                if (type) {
-                    var uiClass = classPrefix + type;
-                    if (!main.hasClass(uiClass)) {
-                        main.addClass(uiClass);
-                    }
+            var type = this.type && this.type.toLowerCase();
+            if (type) {
+                var main = this.main;
+                var uiClass = classPrefix + type;
+                if (!main.hasClass(uiClass)) {
+                    main.addClass(uiClass);
                 }
             }
         },
@@ -206,7 +207,7 @@ define(function (require) {
         /**
          * 将控件插到 target 内部最前面
          *
-         * @param {HTMLElement} target 目标容器元素
+         * @param {(HTMLElement | jQuery)} target 目标容器元素
          */
         prependTo: function (target) {
             this.main.prependTo(target);
@@ -215,7 +216,7 @@ define(function (require) {
         /**
          * 将控件插到 target 内部最后面
          *
-         * @param {HTMLElement} target 目标容器元素
+         * @param {(HTMLElement | jQuery)} target 目标容器元素
          */
         appendTo: function (target) {
             this.main.appendTo(target);

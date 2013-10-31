@@ -4,7 +4,7 @@
  */
 define(function (require) {
 
-    var Control = require('./Control');
+    var SuperClass = require('./Control');
     var lib = require('../helper/lib');
     var gui = require('../main');
 
@@ -15,7 +15,7 @@ define(function (require) {
      * @param {Object} options
      */
     function Inputable(options) {
-        Control.apply(this, arguments);
+        SuperClass.apply(this, arguments);
     }
 
     Inputable.prototype = {
@@ -35,14 +35,13 @@ define(function (require) {
          */
         initStructure: function () {
 
-            this.on('keydown', onkeydown);
             this.on('keyup', onkeyup);
 
-            if (!supportInputEvent) {
+            if (!lib.supportInputEvent) {
                 this.on('propertychange', onpropertychange);
             }
 
-            Control.prototype.initStructure.apply(this, arguments);
+            SuperClass.prototype.initStructure.apply(this, arguments);
         },
 
         /**
@@ -72,28 +71,7 @@ define(function (require) {
         }
     };
 
-    // 检测是否支持 input 事件
-    var input = document.createElement('input');
-    var supportInputEvent = 'oninput' in input;
-    input = null;
-
-    /**
-     * 是否正在长按某个键
-     *
-     * @static
-     * @type {boolean}
-     */
-    Inputable.isKeyPressed = false;
-
-    function onkeydown(e) {
-        if (!Inputable.isKeyPressed) {
-            Inputable.isKeyPressed = true;
-        }
-    }
-
     function onkeyup(e) {
-
-        Inputable.isKeyPressed = false;
 
         if (e.keyCode === 13) {
 
@@ -104,18 +82,25 @@ define(function (require) {
         }
     }
 
+    /**
+     * 纠正低版本 IE
+     */
     function onpropertychange(e) {
         var name = e.originalEvent.propertyName;
-
         if (name === 'value') {
             // IE 直接赋值也会触发事件...
             if (this.hasFocus()) {
+
+                /**
+                 * @event Inputable#input
+                 */
                 this.fire('input');
+
             }
         }
     }
 
-    lib.inherits(Inputable, Control);
+    lib.inherits(Inputable, SuperClass);
 
 
     return Inputable;

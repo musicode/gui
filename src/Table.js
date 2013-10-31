@@ -139,26 +139,37 @@ define(function (require) {
 
         datasource: function (table, datasource) {
 
-            // 停掉所有正在执行的线程
-            var helper = table.helper;
-            helper.stopThreads();
-
-            // 插入数据
-            helper.setProperties({
-                raw: datasource
-            });
-
+            var isInited = table.stage === lib.LifeCycle.INITED;
             var main = table.main;
-            main.removeClass(Table.CLASS_DEFAULT);
-            main.removeClass(Table.CLASS_LOADING);
 
-            if (datasource && datasource.length > 0) {
-                main.removeClass(Table.CLASS_EMPTY);
+            if (isInited) {
+                if (datasource == null) {
+                    main.addClass(Table.CLASS_DEFAULT);
+                }
+                else if (datasource.length === 0) {
+                    main.html(table.emptyText || '');
+                    main.addClass(Table.CLASS_EMPTY);
+                }
             }
             else {
-                main.addClass(Table.CLASS_EMPTY);
+
+                if (oldData == null) {
+                    main.removeClass(Table.CLASS_DEFAULT);
+                }
+
+                if (datasource && datasource.length > 0) {
+                    main.removeClass(Table.CLASS_EMPTY);
+                }
+                else if (!main.hasClass(Table.CLASS_EMPTY)) {
+                    main.html(table.emptyText || '');
+                    main.addClass(Table.CLASS_EMPTY);
+                }
             }
 
+            table.helper.stopThreads();
+            table.helper.setProperties({
+                raw: datasource
+            });
         }
     };
 

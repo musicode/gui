@@ -8,61 +8,7 @@
 
     font-size: @texteditor-font-size;
     line-height: @texteditor-line-height;
-    position: relative;
 
-    p {
-
-        word-break: break-all;  /** chrome  **/
-        word-wrap: break-word;  /** firefox **/
-    }
 }
 
-.@{ui-class-prefix}-texteditor-line-number,
-.@{ui-class-prefix}-texteditor-line-text {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-}
-
-.@{ui-class-prefix}-texteditor-line-number {
-    background-color: @texteditor-line-number-bgcolor;
-    color: @texteditor-line-number-color;
-
-    margin: 0;
-    padding: 0;
-    list-style: none;
-
-    width: @texteditor-line-number-width + 20;
-
-    top: 0;
-
-    overflow-y: auto;
-    overflow-x: hidden;
-
-    text-align: center;
-    font-weight: bold;
-
-    li {
-        width: @texteditor-line-number-width;
-    }
-}
-
-.@{ui-class-prefix}-texteditor-line-text {
-    left: @texteditor-line-number-width;
-    right: 0;
-
-    textarea {
-        border: none;
-        resize: none;
-
-        line-height: @texteditor-line-height;
-        padding: 0 0 0 3px;
-
-        /**  火狐下 left: 0; right: 0; 无效 **/
-        width: 100%;
-        height: 100%;
-
-        .box-sizing(border-box);
-        .box-shadow(none);
-    }
-}
+@import '../lib/codemirror/lib/codemirror.css';

@@ -5,8 +5,7 @@
 define(function (require) {
 
     var SuperClass = require('./interface/Control');
-    var Iterator = require('./interface/Iterator');
-    var Inputable = require('./interface/Inputable');
+    var Iterator = require('./helper/Iterator');
 
     var TextBox = require('./TextBox');
     var List = require('./List');
@@ -74,7 +73,10 @@ define(function (require) {
             this.list = list;
 
             // 实现按上下键遍历元素
-            var iterator = new Iterator(textBox);
+            var iterator = new Iterator({
+                min: 0,
+                loop: true
+            });
             this.iterator = iterator;
 
             // 绑事件
@@ -151,11 +153,7 @@ define(function (require) {
             if (!closed
                 && (list.datasource && list.datasource.length > 0)
             ) {
-                var textBox = autoComplete.textBox;
-                var height = textBox.main.outerHeight();
-                list.main.css('top', height);
-
-                iterator.start(false);
+                iterator.start(0, 0, list.datasource.length);
                 list.show();
             }
             else {
@@ -239,7 +237,7 @@ define(function (require) {
      */
     function oninput() {
 
-        if (Inputable.isKeyPressed) {
+        if (lib.keyPressed) {
             return;
         }
 
@@ -264,7 +262,7 @@ define(function (require) {
         var keyCode = e.keyCode;
 
         // 长按字符键直接无视
-        if (Inputable.isKeyPressed && lib.isCharkey(keyCode)) {
+        if (lib.keyPressed && lib.isCharkey(keyCode)) {
             this.close();
         }
 
@@ -324,7 +322,7 @@ define(function (require) {
         var item = params.item;
         var index = item.index;
 
-        this.iterator.restart(index);
+        this.iterator.restart(index + 1);
 
         // 这里不能只用 item.setProperties({ selected: true });
         // 因为可能之前用方向键选中过一个，再滑入一个会出现同时选中两个的 bug
@@ -345,6 +343,7 @@ define(function (require) {
 
     function clickItem(e, params) {
         var item = params.item;
+
         updateInputValue(this, item.raw);
 
         this.close();
@@ -364,37 +363,31 @@ define(function (require) {
     }
 
     function onenter(e, index) {
-
-        var iterator = this.iterator;
-        var maxIndex = iterator.maxIndex;
         var text;
 
-        if (index >= 0 && index <= iterator.maxIndex) {
-            var item = this.list.selectItemByIndex(index);
-
-            if (item) {
-                var data = item.raw;
-                if (typeof data === 'string') {
-                    text = data;
-                }
-                else {
-                    text = data.name || data.text;
-                }
-            }
+        if (index === 0) {
+            text = this.value;
         }
         else {
-            text = this.value;
+            index--;
+
+            var item = this.list.selectItemByIndex(index);
+            var data = item.raw;
+
+            if (typeof data === 'string') {
+                text = data;
+            }
+            else {
+                text = data.name || data.text;
+            }
         }
 
         this.textBox.setValue(text);
     }
 
     function onleave(e, index) {
-        this.list.deselectItemByIndex(index);
-
-        var iterator = this.iterator;
-        if (iterator.index < 0 || iterator.index > iterator.maxIndex) {
-            iterator.restart(index === 0 ? iterator.maxIndex + 1 : -1);
+        if (index > 0) {
+            this.list.deselectItemByIndex(index - 1);
         }
     }
 
@@ -441,11 +434,6 @@ define(function (require) {
 
             if ($.isArray(list) && list.length > 0) {
 
-                var iterator = autoComplete.iterator;
-                iterator.restart();
-                iterator.maxIndex = list.length - 1;
-
-                // 直接更新
                 autoComplete.list.setProperties({
                     datasource: list
                 });

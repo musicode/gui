@@ -144,7 +144,7 @@
     @x:0, @y:0,
     @repeat-type:no-repeat
 ) {
-    @image: @end-color url(@image-url) @repeat-type @x @y;
+    @image: @endColor url(@image-url) @repeat-type @x @y;
 
     background: @image;
     background: @image, -webkit-gradient(linear, 0 0, 0 100%, from(@startColor), to(@endColor)); // Safari 4+, Chrome 2+
@@ -170,9 +170,7 @@
         color: @color;
     }
 }
-.ui-status() {
 
-}
 .ui-common() {
 
     font-size: @font-size-base;
@@ -183,7 +181,7 @@
 
     .box-sizing(border-box);
 
-    &[hidden="hidden"] {
+    &[hidden] {
         display: none;
     }
 

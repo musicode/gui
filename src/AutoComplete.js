@@ -203,7 +203,7 @@ define(function (require) {
         /**
          * @event AutoComplete#focus
          */
-        this.fire('focus');
+        // this.fire('focus');
     }
 
     /**
@@ -224,7 +224,7 @@ define(function (require) {
                 /**
                  * @event AutoComplete#blur
                  */
-                autoComplete.fire('blur');
+                // autoComplete.fire('blur');
             }
 
         }, 150);

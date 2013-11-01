@@ -4,7 +4,7 @@
  */
 define(function (require) {
 
-    var SuperClass = require('./interface/Inputable');
+    var SuperClass = require('./interface/Control');
     var Range = require('./helper/Range');
     var lib = require('./helper/lib');
     var gui = require('./main');
@@ -43,20 +43,44 @@ define(function (require) {
          */
         initOptions: function (options) {
 
-            lib.supply(options, TextBox.defaultOptions);
-
-            if (!options.placeholder) {
+            if (typeof options.placeholder !== 'string') {
                 var placeholder = this.main.data('placeholder');
                 if (placeholder) {
                     options.placeholder = placeholder;
                 }
             }
 
-            if (!options.value) {
+            if (typeof options.value !== 'string') {
                 options.value = this.main.val();
             }
 
+            lib.supply(options, TextBox.defaultOptions);
+
             SuperClass.prototype.initOptions.call(this, options);
+        },
+
+        /**
+         * 初始化控件 DOM 结构
+         *
+         * @protected
+         * @override
+         */
+        initStructure: function () {
+
+            this.on('focus', onfocus);
+            this.on('blur', onblur);
+            this.on('keydown', onkeydown);
+            this.on('keyup', onkeyup);
+
+            if (lib.supportInputEvent) {
+                this.on('input', oninput);
+            }
+            else {
+                this.on('propertychange', onpropertychange);
+            }
+
+
+            SuperClass.prototype.initStructure.apply(this, arguments);
         },
 
         /**
@@ -88,18 +112,29 @@ define(function (require) {
         },
 
         /**
-         * 初始化控件 DOM 结构
-         *
-         * @protected
-         * @override
+         * 输入框聚焦
          */
-        initStructure: function () {
+        focus: function () {
+            this.main.focus();
+        },
 
-            this.on('focus', onfocus);
-            this.on('blur', onblur);
-            this.on('input', oninput);
+        /**
+         * 输入框失焦
+         */
+        blur: function () {
+            this.main.blur();
+        },
 
-            SuperClass.prototype.initStructure.apply(this, arguments);
+        /**
+         * 输入框是否是失焦状态
+         *
+         * @return {boolean}
+         */
+        hasFocus: function () {
+            var element = this.main[0];
+            var activeElement = element.ownerDocument.activeElement;
+
+            return activeElement === element;
         },
 
         /**
@@ -204,6 +239,9 @@ define(function (require) {
         value: function(textBox, value) {
             var main = textBox.main;
 
+            // 避免赋值触发 input 事件
+            textBox.byManual = true;
+
             if (!textBox.hasFocus()) {
                 if (value) {
                     main.val(value);
@@ -218,6 +256,11 @@ define(function (require) {
         },
 
         placeholder: function(textBox, placeholder) {
+
+            if (textBox.value == null) {
+                return false;
+            }
+
             var main = textBox.main;
 
             if (placeholder) {
@@ -231,6 +274,9 @@ define(function (require) {
                 && textBox.value === ''
                 && placeholder
             ) {
+                // 避免赋值触发 input 事件
+                textBox.byManual = true;
+
                 main.val(placeholder);
                 main.addClass(TextBox.CLASS_PLACEHOLDER);
             }
@@ -271,8 +317,49 @@ define(function (require) {
         }
     }
 
+    function onkeydown(e) {
+        // 清掉标识
+        if (this.byManual) {
+            delete this.byManual;
+        }
+    }
+
+    function onkeyup(e) {
+
+        if (e.keyCode === 13) {
+
+            /**
+             * @event Inputable#submit
+             */
+            this.fire('submit');
+        }
+    }
+
     function oninput(e) {
         this.value = this.main.val();
+    }
+
+    /**
+     * 纠正低版本 IE
+     */
+    function onpropertychange(e) {
+        var name = e.originalEvent.propertyName;
+        if (name === 'value') {
+            // 手动触发需要过滤掉
+            if (this.byManual) {
+                delete this.byManual;
+                return false;
+            }
+            else {
+
+                this.value = this.main.val();
+
+                /**
+                 * @event Inputable#input
+                 */
+                this.fire('input');
+            }
+        }
     }
 
     lib.inherits(TextBox, SuperClass);

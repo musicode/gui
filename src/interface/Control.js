@@ -194,6 +194,8 @@ define(function (require) {
                             i--;
                         }
                     }
+
+                    //this[item.name] = item.newValue;
                 }
 
                 changes.length = 0;

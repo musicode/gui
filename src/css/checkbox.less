@@ -1,0 +1,26 @@
+.@{ui-class-prefix}-checkbox {
+
+    .ui-common;
+
+    color: @text-color;
+
+    .@{ui-class-prefix}-icon-checkbox {
+        .icon-checkbox;
+
+        &:hover {
+            .icon-checkbox-hover;
+        }
+    }
+
+    &[selected] .@{ui-class-prefix}-icon-checkbox {
+        .icon-checkbox-selected;
+    }
+
+    &[disabled] {
+        background-color: @textbox-disabled-bgcolor;
+        border-color: @textbox-disabled-border-color;
+        color: @textbox-disabled-color;
+
+        .box-shadow(@textbox-disabled-box-shadow);
+    }
+}

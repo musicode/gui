@@ -91,7 +91,8 @@ define(function (require) {
             button.appendTo(main);
 
             var list = new List({
-                hidden: true
+                hidden: true,
+                toggle: false
             });
             list.render();
             list.appendTo(main);
@@ -236,6 +237,10 @@ define(function (require) {
         },
 
         selectedIndex: function (combobox, selectedIndex) {
+            // 必须先初始化 list, 不然没法正常选择
+            if (!combobox.list.datasource) {
+                return false;
+            }
             selectItem(combobox, selectedIndex);
         },
 
@@ -326,9 +331,9 @@ define(function (require) {
         comboBox.button.setLabel(text || comboBox.emptyText);
 
         /**
-         * @event ComboBox#select
+         * @event ComboBox#ui-change
          */
-        comboBox.fire('select');
+        comboBox.fire('ui-change');
     }
 
 

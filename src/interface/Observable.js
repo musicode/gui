@@ -5,6 +5,7 @@
 define(function (require) {
 
     var lib = require('../helper/lib');
+    var gui = require('../main');
 
     /**
      * 观察者对象
@@ -25,6 +26,7 @@ define(function (require) {
          */
         this.guid = lib.getGUID();
 
+        gui[this.guid] = this;
 
         var main;
 

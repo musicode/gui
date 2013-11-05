@@ -430,13 +430,10 @@ define(function (require) {
      * @param {Item} e.item item 对象
      */
     function enterItem(e) {
-        var item = e.item;
-        var group = e.group || this;
-
-        this.fire(
-            'enteritem',
+        this.fire('enteritem', 
             {
-                item: item
+                item: e.item,
+                group: e.group || this.helper
             }
         );
     }
@@ -449,13 +446,10 @@ define(function (require) {
      * @param {Item} e.item item 对象
      */
     function leaveItem(e) {
-        var item = e.item;
-        var group = e.group || this;
-
-        this.fire(
-            'leaveitem',
+        this.fire('leaveitem', 
             {
-                item: item
+                item: e.item,
+                group: e.group || this.helper
             }
         );
     }
@@ -484,8 +478,7 @@ define(function (require) {
             });
         }
 
-        this.fire(
-            'clickgroup',
+        this.fire('clickgroup',
             {
                 group: group
             }
@@ -500,21 +493,11 @@ define(function (require) {
      * @param {Collection} e.group 分组对象
      */
     function enterGroup(e) {
-        var group = e.group;
-
-        this.fire(
-            'entergroup',
+        this.fire('entergroup',
             {
-                group: group
+                group: e.group
             }
         );
-    }
-
-    /**
-     * 销毁控件
-     */
-    function beforeDispose() {
-        this.helper.dispose();
     }
 
     /**
@@ -525,14 +508,18 @@ define(function (require) {
      * @param {Collection} e.group 分组对象
      */
     function leaveGroup(e) {
-        var group = e.group;
-
-        this.fire(
-            'leavegroup',
+        this.fire('leavegroup',
             {
-                group: group
+                group: e.group
             }
         );
+    }
+
+    /**
+     * 销毁控件
+     */
+    function beforeDispose() {
+        this.helper.dispose();
     }
 
 

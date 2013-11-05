@@ -86,7 +86,6 @@ define(function (require) {
 
 
     Table.defaultOptions = {
-        selectMode: 'box',
         multiple: false,
         breakLine: false
     };
@@ -153,7 +152,7 @@ define(function (require) {
             }
             else {
 
-                if (oldData == null) {
+                if (main.hasClass(Table.CLASS_DEFAULT)) {
                     main.removeClass(Table.CLASS_DEFAULT);
                 }
 
@@ -302,7 +301,7 @@ define(function (require) {
 
         // 剩下的宽度
         var body = $('.' + Table.CLASS_BODY, table.main);
-        var leftWidth = body.width();
+        var leftWidth = (body.width()).toFixed(1);
         var fields = table.fields;
 
         var filed;
@@ -314,6 +313,7 @@ define(function (require) {
 
             // 计算当前列的宽度
             width = widthStrategy.byAverage(leftWidth, len - i, field);
+            width = (width).toFixed(1);
             leftWidth -= width;
 
             style = 'width:' + width + 'px;';

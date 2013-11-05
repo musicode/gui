@@ -2,8 +2,13 @@
 
     .ui-common;
 
-    text-align: left;
-    font-size: @font-size-base;
+    border: @table-border-width
+            @table-border-style
+            @table-border-color;
+
+    background-color: @table-bgcolor;
+    padding: @table-padding;
+    border-radius: @table-radius;
 
     &[overflow] {
         .@{ui-class-prefix}-table-cell {

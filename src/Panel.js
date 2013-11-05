@@ -23,7 +23,7 @@ define(function (require) {
         /**
          * 控件类型
          *
-         * @type
+         * @type {string}
          */
         type: 'Panel',
 

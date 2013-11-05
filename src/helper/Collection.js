@@ -75,8 +75,8 @@ define(function (require) {
                 var itemClass = '.' + Class.ItemClass.CLASS_ITEM;
 
                 this.on('click', groupClass, clickGroup);
-                this.on('mouseenter', groupClass, enterGroup);
-                this.on('mouseleave', groupClass, leaveGroup);
+                this.on('mouseover', groupClass, enterGroup);
+                this.on('mouseout', groupClass, leaveGroup);
 
                 this.on('click', itemClass, clickItem);
                 this.on('mouseenter', itemClass, enterItem);
@@ -421,15 +421,15 @@ define(function (require) {
                 return false;
             }
 
-            if (collection.items) {
-                $.each (collection.items, function (index, item) {
+            var items = collection.items;
+            if (items.length > 0) {
+                $.each (items, function (index, item) {
                     item.dispose();
                 });
+                items.length = 0;
             }
 
-            collection.items.length = 0;
-
-            var items = raw.children ? raw.children : raw;
+            items = raw.children ? raw.children : raw;
             collection.insertItems(0, items);
         },
 

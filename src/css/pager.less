@@ -4,6 +4,7 @@
     .user-select;
 
     ul {
+        .inline-block;
         font-size: 0;
         margin: 0;
         padding: 0;
@@ -14,6 +15,7 @@
 .@{ui-class-prefix}-pager-item,
 .@{ui-class-prefix}-pager-omit {
     .inline-block;
+    font-size: @font-size-base;
 }
 
 .@{ui-class-prefix}-pager-item {
@@ -66,7 +68,6 @@
 
 .@{ui-class-prefix}-pager-omit {
     color: @pager-omit-color;
-    font-size: @font-size-base;
     margin: 0 @pager-omit-space;
 
     + .@{ui-class-prefix}-pager-item {

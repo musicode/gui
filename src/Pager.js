@@ -16,7 +16,7 @@ define(function (require) {
      * @param {number} options.page 当前页码（从 1 开始）
      * @param {number} options.total 数据总数
      * @param {number} options.pageSize 每页条数
-     *
+     * @param {string=} options.align 对齐方式, 可选值包括: left, center, right
      * @param {number} options.displayCount
      * @param {number} options.backCount
      * @param {string} options.backText
@@ -89,6 +89,7 @@ define(function (require) {
     Pager.defaultOptions = {
         page: 1,
         pageSize: 50,
+        align: 'left',
         displayCount: 5,
         backCount: 2,
         backText: '上一页',
@@ -103,6 +104,9 @@ define(function (require) {
     Pager.painter = {
         page: function (pager, page) {
             createPagination(pager);
+        },
+        align: function (pager, align) {
+            pager.main.css('text-align', align);
         }
     };
 
@@ -291,9 +295,9 @@ define(function (require) {
             });
 
             /**
-             * @event Pager#change
+             * @event Pager#pagechange
              */
-            this.fire('change');
+            this.fire('pagechange');
         }
     }
 

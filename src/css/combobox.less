@@ -22,9 +22,15 @@
         position: absolute;
         left: 0;
         top: @combobox-list-top;
+
+        .box-shadow(@combobox-list-box-shadow);
     }
 
     .@{ui-class-prefix}-list-item {
+
+        border-top: @combobox-list-item-border-width
+                    @combobox-list-item-border-style
+                    @combobox-list-item-border-color;
 
         padding: @combobox-list-item-padding-v
                  @combobox-list-item-padding-h;
@@ -40,6 +46,7 @@
     .@{ui-class-prefix}-list-item-selected:hover {
         background-color: @combobox-list-item-selected-bgcolor;
         color: @combobox-list-item-selected-color;
+        font-weight: normal;
     }
 
     .@{ui-class-prefix}-caret {

@@ -126,7 +126,47 @@ define(function (require) {
          * 提交表单
          */
         submit: function () {
-            this.fire('submit');
+            this.fire('ui-submit');
+        },
+
+        /**
+         * 获取当前 value
+         *
+         * @return {string}
+         */
+        getValue: function () {
+            return this.textBox.getValue();
+        },
+
+        /**
+         * 设置 value
+         *
+         * @param {string} value
+         */
+        setValue: function (value) {
+            this.textBox.setProperties({
+                value: value
+            });
+        },
+
+        /**
+         * 获取当前 placeholder
+         *
+         * @return {string}
+         */
+        getPlaceholder: function () {
+            return this.textBox.getPlaceholder();
+        },
+
+        /**
+         * 设置 placeholder
+         *
+         * @param {string} placeholder
+         */
+        setPlaceholder: function (placeholder) {
+            this.textBox.setProperties({
+                placeholder: placeholder
+            });
         }
 
     };
@@ -139,10 +179,11 @@ define(function (require) {
     AutoComplete.painter = {
 
         datasource: function (autoComplete, datasource) {
-            var list = autoComplete.list;
-            list.setProperties({
-                datasource: datasource
-            });
+            if (autoComplete.stage > lib.LifeCycle.INITED) {
+                autoComplete.list.setProperties({
+                    datasource: datasource
+                });
+            }
         },
 
         closed: function (autoComplete, closed) {
@@ -201,9 +242,9 @@ define(function (require) {
         }
 
         /**
-         * @event AutoComplete#focus
+         * @event AutoComplete#ui-focus
          */
-        // this.fire('focus');
+        this.fire('ui-focus');
     }
 
     /**
@@ -222,9 +263,9 @@ define(function (require) {
                 autoComplete.close();
 
                 /**
-                 * @event AutoComplete#blur
+                 * @event AutoComplete#ui-blur
                  */
-                // autoComplete.fire('blur');
+                autoComplete.fire('ui-blur');
             }
 
         }, 150);
@@ -246,9 +287,9 @@ define(function (require) {
         updateInputValue(this);
 
         /**
-         * @event AutoComplete#input
+         * @event AutoComplete#ui-input
          */
-        this.fire('input');
+        this.fire('ui-input');
     }
 
     /**
@@ -272,10 +313,10 @@ define(function (require) {
         }
 
         /**
-         * @event AutoComplete#keydown
+         * @event AutoComplete#ui-keydown
          * @param {Object} e
          */
-        this.fire('keydown', e);
+        this.fire('ui-keydown', e);
     }
 
     /**
@@ -293,10 +334,10 @@ define(function (require) {
         }
 
         /**
-         * @event AutoComplete#keyup
+         * @event AutoComplete#ui-keyup
          * @param {Object} e
          */
-        this.fire('keyup', e);
+        this.fire('ui-keyup', e);
     }
 
     /**
@@ -319,14 +360,14 @@ define(function (require) {
      * 鼠标进入下拉列表项
      */
     function enterItem(e, params) {
+        var group = params.group;
         var item = params.item;
+
         var index = item.index;
 
         this.iterator.restart(index + 1);
 
-        // 这里不能只用 item.setProperties({ selected: true });
-        // 因为可能之前用方向键选中过一个，再滑入一个会出现同时选中两个的 bug
-        this.list.selectItemByIndex(index);
+        group.selectItemByIndex(index);
     }
 
     /**
@@ -350,16 +391,31 @@ define(function (require) {
         this.submit();
     }
 
-    function enterGroup(e) {
+    function enterGroup(e, params) {
+
+        var group = params.group;
+
+        group.setProperties({
+            selected: true
+        });
+    }
+
+    function leaveGroup(e, params) {
+        var group = params.group;
+
+        group.setProperties({
+            selected: false
+        });
 
     }
 
-    function leaveGroup() {
+    function clickGroup(e, params) {
+        var group = params.group;
 
-    }
+        updateInputValue(this, group.raw);
 
-    function clickGroup() {
-
+        this.close();
+        this.submit();
     }
 
     function onenter(e, index) {
@@ -394,6 +450,7 @@ define(function (require) {
     function beforeDispose() {
         this.textBox.dispose();
         this.list.dispose();
+        this.iterator.dispose();
     }
 
     /**
@@ -434,7 +491,7 @@ define(function (require) {
 
             if ($.isArray(list) && list.length > 0) {
 
-                autoComplete.list.setProperties({
+                autoComplete.setProperties({
                     datasource: list
                 });
 
@@ -462,22 +519,8 @@ define(function (require) {
             var datasource = autoComplete.datasource;
             var remote = autoComplete.remote;
 
-            list = [ ];
-
             if (datasource) {
-
-                $.each(datasource, function (index, item) {
-                    if ($.isPlainObject(item)) {
-                        item = item.name || item.text;
-                    }
-                    if (lib.startWith(item, value)
-                        && item.length > value.length
-                    ) {
-                        list.push(item);
-                    }
-                });
-
-                callback(list);
+                callback(datasource);
             }
             else if (typeof remote === 'function') {
                 remote(function (data) {

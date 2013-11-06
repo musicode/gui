@@ -21,10 +21,9 @@ define(function (require) {
      * @param {boolean} options.multiple 是否可多选
      * @param {number} options.bodyHeight body 高度
      * @param {number} options.bodyMaxHeight body 最大高度
-     * @param {string} options.status 状态 default | loading | empty
-     * @param {string=} options.defaultHtml
-     * @param {string=} options.loadingHtml
-     * @param {string=} options.emptyHtml
+     * @param {string=} options.defaultText
+     * @param {string=} options.loadingText
+     * @param {string=} options.emptyText
      */
     function Table(options) {
         SuperClass.apply(this, arguments);
@@ -81,11 +80,24 @@ define(function (require) {
          */
         createMain: function () {
             return document.createElement('div');
+        },
+
+        /**
+         * 切换成 loading 状态
+         */
+        loading: function () {
+            var main = this.main;
+            var body = main.find('.' + Table.CLASS_BODY);
+            setBodyHTML(this, this.loadingText);
+            main.addClass(Table.CLASS_LOADING);
         }
     };
 
 
     Table.defaultOptions = {
+        defaultText: '',
+        emptyText: '',
+        loadingText: '',
         multiple: false,
         breakLine: false
     };
@@ -110,8 +122,13 @@ define(function (require) {
             }
         },
 
-        maxBodyHeight: function (table, maxBodyHeight) {
-            var tableBody = $('.' + Table.CLASS_BODY, table.main);
+        bodyHeight: function (table, bodyHeight) {
+            var tableBody = table.main.find('.' + Table.CLASS_BODY);
+            tableBody.height(bodyHeight);
+        },
+
+        bodyMaxHeight: function (table, maxHeight) {
+            var tableBody = table.main.find('.' + Table.CLASS_BODY);
             tableBody.css({
                 'max-height': maxBodyHeight
             });
@@ -138,37 +155,35 @@ define(function (require) {
 
         datasource: function (table, datasource) {
 
-            var isInited = table.stage === lib.LifeCycle.INITED;
+            datasource = datasource || [ ];
             var main = table.main;
 
-            if (isInited) {
-                if (datasource == null) {
+            if (datasource.length === 0) {
+
+                var isInited = table.stage === lib.LifeCycle.INITED;
+                var body = main.find('.' + Table.CLASS_BODY);
+
+                if (isInited) {
+                    setBodyHTML(table, table.defaultText);
                     main.addClass(Table.CLASS_DEFAULT);
                 }
-                else if (datasource.length === 0) {
-                    main.html(table.emptyText || '');
+                else {
+                    setBodyHTML(table, table.emptyText);
                     main.addClass(Table.CLASS_EMPTY);
                 }
             }
             else {
 
-                if (main.hasClass(Table.CLASS_DEFAULT)) {
-                    main.removeClass(Table.CLASS_DEFAULT);
-                }
+                main.removeClass(Table.CLASS_DEFAULT);
+                main.removeClass(Table.CLASS_EMPTY);
+                main.removeClass(Table.CLASS_LOADING);
 
-                if (datasource && datasource.length > 0) {
-                    main.removeClass(Table.CLASS_EMPTY);
-                }
-                else if (!main.hasClass(Table.CLASS_EMPTY)) {
-                    main.html(table.emptyText || '');
-                    main.addClass(Table.CLASS_EMPTY);
-                }
+                table.helper.stopThreads();
+                table.helper.setProperties({
+                    raw: datasource
+                });
             }
 
-            table.helper.stopThreads();
-            table.helper.setProperties({
-                raw: datasource
-            });
         }
     };
 
@@ -348,6 +363,17 @@ define(function (require) {
         return '<td class="' + TableRow.CLASS_CELL + '" style="width:35px;">'
              +    selectBox
              + '</td>';
+    }
+
+    /**
+     * 为了实现水平垂直居中, 需要加一个元素
+     */
+    function setBodyHTML(table, html) {
+        var body = table.main.find('.' + Table.CLASS_BODY);
+        html = '<div class="' + classPrefix + 'body-wrapper">'
+             +     html
+             + '</div>';
+        body.html(html);
     }
 
     function toggleAll(e) {

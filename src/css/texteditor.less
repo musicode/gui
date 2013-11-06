@@ -1,3 +1,5 @@
+@import '../lib/codemirror/lib/codemirror.css';
+
 .@{ui-class-prefix}-texteditor {
 
     .ui-common;
@@ -8,7 +10,25 @@
 
     font-size: @texteditor-font-size;
     line-height: @texteditor-line-height;
+    border-radius: @texteditor-radius;
 
+    .CodeMirror-gutters {
+        background: @texteditor-line-number-bg;
+    }
+    .CodeMirror-linenumber {
+        color: @texteditor-line-number-color;
+        font-weight: @texteditor-line-number-font-weight;
+        text-shadow: @texteditor-line-number-text-shadow;
+    }
+    .CodeMirror {
+        background: @texteditor-line-text-bg;
+        height: 100%;
+        border-radius: @texteditor-radius;
+    }
+    .CodeMirror-code {
+        color: @texteditor-line-text-color;
+        text-shadow: @texteditor-line-text-text-shadow;
+    }
 }
 
-@import '../lib/codemirror/lib/codemirror.css';
+

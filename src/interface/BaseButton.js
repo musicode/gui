@@ -148,6 +148,8 @@ define(function (require) {
             else {
                 main.removeAttr('selected');
             }
+
+            button.fire('ui-change');
         },
 
         label: function (button, label) {

@@ -21,7 +21,8 @@ define(function (require) {
      * @param {string=} options.value
      * @param {string=} options.placeholder
      * @param {number=} options.width 输入框的宽度
-     * @param {Function} options.remote
+     * @param {Function} options.remote 远程数据, 一般用作补全提示
+     * @param {Function} options.local 本地数据, 一般用作筛选数据
      */
     function AutoComplete(options) {
         SuperClass.apply(this, arguments);
@@ -126,7 +127,9 @@ define(function (require) {
          * 提交表单
          */
         submit: function () {
-            this.fire('ui-submit');
+            this.fire('ui-submit', {
+                data: this.getValue()
+            });
         },
 
         /**
@@ -172,7 +175,6 @@ define(function (require) {
     };
 
     AutoComplete.defaultOptions = {
-        datasource: [ ],
         closed: true
     };
 
@@ -237,7 +239,7 @@ define(function (require) {
         // 如果配了 datasource，可以直接用一下
         // 这样能稍稍提升点用户体验
         // 如果没配就算了，不至于去异步请求
-        if (this.datasource) {
+        if (this.datasource || this.local) {
             showSuggestion(this);
         }
 
@@ -388,7 +390,10 @@ define(function (require) {
         updateInputValue(this, item.raw);
 
         this.close();
-        this.submit();
+
+        this.fire('ui-submit', {
+            data: item.raw
+        });
     }
 
     function enterGroup(e, params) {
@@ -415,7 +420,10 @@ define(function (require) {
         updateInputValue(this, group.raw);
 
         this.close();
-        this.submit();
+
+        this.fire('ui-submit', {
+            data: group.raw
+        });
     }
 
     function onenter(e, index) {
@@ -484,20 +492,16 @@ define(function (require) {
      */
     function showSuggestion(autoComplete) {
 
-        var textBox = autoComplete.textBox;
-        var value = textBox.getValue();
+        var value = autoComplete.getValue();
 
         var callback = function (list) {
 
-            if ($.isArray(list) && list.length > 0) {
+            autoComplete.setProperties({
+                datasource: list
+            });
 
-                autoComplete.setProperties({
-                    datasource: list
-                });
-
-                if (autoComplete.closed) {
-                    autoComplete.open();
-                }
+            if (list.length > 0) {
+                autoComplete.open();
             }
             else {
                 autoComplete.close();
@@ -516,17 +520,13 @@ define(function (require) {
             callback(list);
         }
         else {
-            var datasource = autoComplete.datasource;
-            var remote = autoComplete.remote;
+            var request = autoComplete.local || autoComplete.remote;
 
-            if (datasource) {
-                callback(datasource);
-            }
-            else if (typeof remote === 'function') {
-                remote(function (data) {
+            if (typeof request === 'function') {
+                request(function (data) {
                     cache[value] = data;
-                    if (value === textBox.getValue()
-                        && textBox.hasFocus()
+                    if (value === autoComplete.getValue()
+                        && autoComplete.textBox.hasFocus()
                     ) {
                         callback(data);
                     }

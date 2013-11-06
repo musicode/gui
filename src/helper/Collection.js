@@ -82,6 +82,10 @@ define(function (require) {
                 this.on('mouseenter', itemClass, enterItem);
                 this.on('mouseleave', itemClass, leaveItem);
             }
+            else {
+                this.on('beforedispose', beforeDispose);
+            }
+
         },
 
         /**
@@ -469,6 +473,14 @@ define(function (require) {
                                           type: Thread.TYPE_SELECT
                                       });
         }
+    }
+
+
+    function beforeDispose() {
+        $.each(this.items, function (index, item) {
+            item.dispose();
+        });
+        this.main.remove();
     }
 
 

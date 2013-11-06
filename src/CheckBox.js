@@ -17,6 +17,7 @@ define(function (require) {
      * @param {boolean=} options.disabled 是否置灰
      * @param {boolean=} options.selected 是否选中
      * @param {string=} options.label 按钮的文本
+     * @param {string=} options.value 复选框的值
      */
     function CheckBox(options) {
         SuperClass.apply(this, arguments);

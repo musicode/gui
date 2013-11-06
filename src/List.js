@@ -22,7 +22,9 @@ define(function (require) {
      * @param {boolean=} options.multiple      是否支持多选(不支持分组)
      * @param {boolean=} options.toggle        是否支持第二次选中变成反选
      * @param {boolean=} options.overflow      字数超长是否截断处理
+     * @param {string=} options.defaultText    初始化时无数据的提示文本
      * @param {string=} options.emptyText      空数据的提示文本
+     * @param {string=} options.loadingText    加载数据时的提示文本
      * @param {Function=} options.groupHeaderTemplate
      * @param {Function=} options.itemTemplate
      */
@@ -241,6 +243,10 @@ define(function (require) {
         // 超长是否截断处理
         overflow: false,
 
+        defaultText: '',
+        emptyText: '',
+        loadingText: '',
+
         groupHeaderTemplate: function (group) {
             return group.name || group.text;
         },
@@ -255,39 +261,35 @@ define(function (require) {
 
     List.painter = {
 
-        datasource: function (list, datasource, oldData) {
+        datasource: function (list, datasource) {
 
-            var isInited = list.stage === lib.LifeCycle.INITED;
+            datasource = datasource || [ ];
             var main = list.main;
 
-            if (isInited) {
-                if (datasource == null) {
+            if (datasource.length === 0) {
+
+                var isInited = list.stage === lib.LifeCycle.INITED;
+
+                if (isInited) {
+                    main.html(list.defaultText);
                     main.addClass(List.CLASS_DEFAULT);
                 }
-                else if (datasource.length === 0) {
-                    main.html(list.emptyText || '');
+                else {
+                    main.html(list.emptyText);
                     main.addClass(List.CLASS_EMPTY);
                 }
             }
             else {
 
-                if (oldData == null) {
-                    main.removeClass(List.CLASS_DEFAULT);
-                }
+                main.removeClass(List.CLASS_DEFAULT);
+                main.removeClass(List.CLASS_EMPTY);
+                main.removeClass(List.CLASS_LOADING);
 
-                if (datasource && datasource.length > 0) {
-                    main.removeClass(List.CLASS_EMPTY);
-                }
-                else if (!main.hasClass(List.CLASS_EMPTY)) {
-                    main.html(list.emptyText || '');
-                    main.addClass(List.CLASS_EMPTY);
-                }
+                list.helper.stopThreads();
+                list.helper.setProperties({
+                    raw: datasource
+                });
             }
-
-            list.helper.stopThreads();
-            list.helper.setProperties({
-                raw: datasource
-            });
         },
 
         maxHeight: function (list, maxHeight) {

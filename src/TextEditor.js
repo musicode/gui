@@ -53,7 +53,7 @@ define(function (require) {
          */
         initStructure: function () {
 
-            this.codeMirror = CodeMirror(
+            var codeMirror = CodeMirror(
                 this.main[0],
                 {
                     value: '',
@@ -62,6 +62,23 @@ define(function (require) {
                     lineWrapping: this.wordWrap
                 }
             );
+
+            var me = this;
+            var onfocus = function () {
+                me.fire('ui-focus');
+            };
+            var onblur = function () {
+                me.fire('ui-blur');
+            };
+            codeMirror.on('focus', onfocus);
+            codeMirror.on('blur', onblur);
+
+            this.codeMirror = codeMirror;
+
+            this.on('beforeDispose', function () {
+                codeMirror.off('focus', onfocus);
+                codeMirror.off('blur', onblur);
+            });
 
             SuperClass.prototype.initStructure.apply(this, arguments);
         },
@@ -109,10 +126,6 @@ define(function (require) {
     };
 
     TextEditor.painter = {
-
-        height: function (textEditor, height) {
-            textEditor.codeMirror.setSize(null, height);
-        },
 
         placeholder: function (textEditor, placeholder) {
             return;

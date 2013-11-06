@@ -308,6 +308,7 @@ define(function (require) {
             this.main.removeClass(TextBox.CLASS_PLACEHOLDER);
             TextBox.painter.value(this, '');
         }
+        this.fire('ui-focus');
     }
 
     function onblur(e) {
@@ -315,6 +316,7 @@ define(function (require) {
             this.main.addClass(TextBox.CLASS_PLACEHOLDER);
             TextBox.painter.placeholder(this, this.placeholder);
         }
+        this.fire('ui-blur');
     }
 
     function onkeydown(e) {

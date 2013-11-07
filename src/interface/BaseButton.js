@@ -83,6 +83,8 @@ define(function (require) {
             // note: 有时候模版换行会造成多余的文本节点
             removeExtraTextNode(this.main);
 
+            this.on('click', onclick);
+
             SuperClass.prototype.initStructure.apply(this, arguments);
         },
 
@@ -219,6 +221,12 @@ define(function (require) {
         });
     }
 
+    /**
+     * 转发事件
+     */
+    function onclick(e) {
+        this.fire('ui-click');
+    }
     /**
      * 放置文本
      *

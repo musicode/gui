@@ -8,7 +8,8 @@
 
     background-color: @table-bgcolor;
     padding: @table-padding;
-    border-radius: @table-radius;
+
+    .border-radius(@table-radius);
 
     &[overflow] {
         .@{ui-class-prefix}-table-cell {
@@ -39,6 +40,16 @@
         vertical-align: middle;
     }
 }
+.@{ui-class-prefix}-table-default .@{ui-class-prefix}-table-body {
+    background-color: @table-body-default-bgcolor;
+}
+.@{ui-class-prefix}-table-loading .@{ui-class-prefix}-table-body {
+    background-color: @table-body-loading-bgcolor;
+}
+.@{ui-class-prefix}-table-empty .@{ui-class-prefix}-table-body {
+    background-color: @table-body-empty-bgcolor;
+}
+
 
 .@{ui-class-prefix}-table-header table,
 .@{ui-class-prefix}-table-row {
@@ -55,19 +66,35 @@
             @table-header-border-color;
 
     color: @table-header-color;
+
+    .border-radius(@table-header-border-radius);
     .box-sizing(border-box);
+    .box-shadow(@table-header-box-shadow);
 
     th {
         border-left: @table-header-cell-border-width
                      @table-header-cell-border-style
                      @table-header-cell-border-color;
 
+        font-weight: @table-header-font-weight;
         padding: @table-header-cell-padding;
 
         .box-sizing(border-box);
 
         &:first-child {
             border-left: none;
+        }
+    }
+    .@{ui-class-prefix}-table-sortable {
+        .icon-sort;
+        cursor: @cursor-clickable;
+        padding-right: 20px;
+
+        &[data-sort-type="asc"] {
+            .icon-sort-asc;
+        }
+        &[data-sort-type="desc"] {
+            .icon-sort-desc;
         }
     }
 }

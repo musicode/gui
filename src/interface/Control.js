@@ -110,8 +110,24 @@ define(function (require) {
             var changes = this.changes;
             var lastSize = changes.length;
 
-            for (var key in properties) {
+            var keys = [ ];
+            var key;
 
+            // 按照 painter 定义执行顺序遍历
+            var painter = this.constructor.painter;
+            for (key in painter) {
+                if (properties[key] !== undefined) {
+                    keys.push(key);
+                }
+            }
+            for (key in properties) {
+                if (!painter[key]) {
+                    keys.push(key);
+                }
+            }
+
+            for (var i = 0, len = keys.length; i < len; i++) {
+                key = keys[i];
                 var newValue = properties[key];
                 var oldValue = this[key];
 
@@ -125,7 +141,7 @@ define(function (require) {
 
                     this[key] = newValue;
                 }
-            }
+            };
 
             if (lastSize !== changes.length) {
                 this.stage = lib.LifeCycle.CHANGED;

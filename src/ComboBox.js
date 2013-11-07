@@ -237,18 +237,10 @@ define(function (require) {
         },
 
         selectedIndex: function (combobox, selectedIndex) {
-            // 必须先初始化 list, 不然没法正常选择
-            if (!combobox.list.datasource) {
-                return false;
-            }
             selectItem(combobox, selectedIndex);
         },
 
         value: function (combobox, value) {
-            // 必须先初始化 list, 不然没法正常选择
-            if (!combobox.list.datasource) {
-                return false;
-            }
 
             var datasource = combobox.datasource;
 

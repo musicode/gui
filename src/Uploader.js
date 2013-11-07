@@ -198,7 +198,7 @@ define(function (require) {
         helper.appendTo(uploader.selectButton.main);
         helper.render();
 
-        helper.on('change', changeFile, uploader);
+        helper.on('upload-change', changeFile, uploader);
         helper.on('upload-start', uploadStart, uploader);
         helper.on('upload-complete', uploadComplete, uploader);
         helper.on('upload-progress', uploadProgress, uploader);

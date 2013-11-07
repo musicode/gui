@@ -67,6 +67,8 @@ define(function (require) {
             if (this.selectMode === 'box' && this.multiple) {
                 this.on('click', '.' + Table.CLASS_ALLBOX, toggleAll);
             }
+            this.on('click', '.' + Table.CLASS_SORTABLE, sort);
+
 
             SuperClass.prototype.initStructure.apply(this, arguments);
         },
@@ -95,6 +97,7 @@ define(function (require) {
 
 
     Table.defaultOptions = {
+        datasource: [],
         defaultText: '',
         emptyText: '',
         loadingText: '',
@@ -155,8 +158,17 @@ define(function (require) {
 
         datasource: function (table, datasource) {
 
-            datasource = datasource || [ ];
             var main = table.main;
+
+            // 通过排序标识来判断
+            if (!table.sorting) {
+                // 去掉排序状态
+                var element = main.find('th[data-sort-type]');
+                element.removeAttr('data-sort-type');
+            }
+            else {
+                delete table.sorting;
+            }
 
             if (datasource.length === 0) {
 
@@ -178,8 +190,13 @@ define(function (require) {
                 main.removeClass(Table.CLASS_EMPTY);
                 main.removeClass(Table.CLASS_LOADING);
 
-                table.helper.stopThreads();
-                table.helper.setProperties({
+                var helper = table.helper;
+                // 清掉 helper 的 raw
+                // 以防 setProperties 时判断出相等的情况
+                helper.raw = null;
+
+                helper.stopThreads();
+                helper.setProperties({
                     raw: datasource
                 });
             }
@@ -255,7 +272,7 @@ define(function (require) {
     /**
      * 表头单元格模版方法
      *
-     * @inner
+     * @private
      * @param {Object} field 外部传入的 field 配置
      * @param {string} style 样式字符串
      * @return {string}
@@ -267,7 +284,7 @@ define(function (require) {
                 : '';
 
         var className = field.sortable
-                      ? 'class="ui-sortable" '
+                      ? 'class="' + Table.CLASS_SORTABLE + '" '
                       : '';
 
         return '<th ' + className + 'style="' + style + '">'
@@ -376,6 +393,74 @@ define(function (require) {
         body.html(html);
     }
 
+    function sort(e) {
+        var datasource = this.datasource;
+        if (datasource.length === 0) {
+            return;
+        }
+
+        var target = $(e.currentTarget);
+
+        // 排序方式
+        var type = target.attr('data-sort-type');
+        if (type) {
+            type = type === 'asc' ? 'desc' : 'asc';
+        }
+        else {
+            type = 'asc';
+        }
+        // 把之前排序的列恢复原状
+        var element = target.parent().find('th[data-sort-type]');
+        element.removeAttr('data-sort-type');
+
+        target.attr('data-sort-type', type);
+
+        this.datasource = null;
+        this.sorting = true;
+
+        // 计算是第几列
+        var index = lib.getElementIndex(target[0]);
+        if (this.selectMode === 'box' && this.multiple) {
+            index--;
+        }
+        var field = this.fields[index].field;
+
+        datasource.sort(sortBy(field, type));
+        this.setProperties({
+            datasource: datasource
+        });
+    }
+
+    /**
+     * 排序函数
+     *
+     * @param {string} name 排序的字段
+     * @param {string} type 排序方式 asc 或 desc
+     */
+    function sortBy(name, type) {
+        // 数字和时间用减法
+        // 文本则localeCompare
+        var compare;
+        function numberic(value1, value2) {
+            return value1 - value2;
+        };
+        function text(value1, value2) {
+            return value1.localeCompare(value2);
+        };
+
+        return function (obj1, obj2) {
+            var value1 = obj1[name];
+            var value2 = obj2[name];
+
+            if (!compare) {
+                compare = isNaN(Number(value1)) ? text : numberic;
+            }
+
+            var ret = compare(value1, value2);
+            return type === 'asc' ? ret : -1 * ret;
+        };
+    }
+
     function toggleAll(e) {
         var checkbox = e.target;
         this.helper.setProperties({
@@ -463,6 +548,11 @@ define(function (require) {
      * 表格 body 的 class
      */
     Table.CLASS_BODY = classPrefix + 'body';
+
+    /**
+     * 可排序
+     */
+    Table.CLASS_SORTABLE = classPrefix + 'sortable';
 
     /**
      * 全选/反选 class

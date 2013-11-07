@@ -10,7 +10,7 @@
 
     padding: @uploader-padding;
 
-    border-radius: @uploader-border-radius;
+    .border-radius(@uploader-border-radius);
     .box-shadow(@uploader-box-shadow);
 
     input[type="file"],
@@ -37,7 +37,7 @@
     .text-overflow;
 
     position: relative;
-    border-radius: @uploader-info-border-radius;
+    .border-radius(@uploader-info-border-radius);
     .box-sizing(border-box);
     .box-shadow(@uploader-info-box-shadow);
 }

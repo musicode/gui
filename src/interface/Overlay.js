@@ -115,12 +115,6 @@ define(function (require) {
         },
 
         align: function (overlay, align) {
-            // 必须先加入文档树
-            // 不然计算盒模型会有问题
-            if (!lib.contains(document.body, overlay.main[0])) {
-                return false;
-            }
-
             if (align) {
                 setAlign(overlay);
             }

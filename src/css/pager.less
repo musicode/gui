@@ -26,13 +26,13 @@
     font-weight: @pager-item-font-weight;
     margin-left: @pager-item-space;
     padding: @pager-item-padding;
-    border-radius: @pager-item-border-radius;
 
+    .border-radius(@pager-item-border-radius);
+    .box-shadow(@pager-item-box-shadow);
     .gradient-vertical(
         @pager-item-start-bgcolor,
         @pager-item-end-bgcolor
     );
-    .box-shadow(@pager-item-box-shadow);
 
     &:first-child {
         margin-left: 0;

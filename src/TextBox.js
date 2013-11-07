@@ -257,10 +257,6 @@ define(function (require) {
 
         placeholder: function(textBox, placeholder) {
 
-            if (textBox.value == null) {
-                return false;
-            }
-
             var main = textBox.main;
 
             if (placeholder) {

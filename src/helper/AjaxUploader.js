@@ -52,6 +52,17 @@ define(function (require) {
         },
 
         /**
+         * 初始化 DOM 结构
+         *
+         * @protected
+         * @override
+         */
+        initStructure: function () {
+            this.on('change', changeFile);
+            SuperClass.prototype.initStructure.apply(this, arguments);
+        },
+
+        /**
          * 获得已选文件
          *
          * @return {Object}
@@ -123,6 +134,10 @@ define(function (require) {
         }
 
     };
+
+    function changeFile() {
+        this.fire('upload-change');
+    }
 
     /**
      * 开始上传时触发
@@ -198,9 +213,13 @@ define(function (require) {
      * @return {Object}
      */
     function getFileInfo(file) {
+        var name = file.name;
+        var segments = name.split('.');
+        var type = segments.length > 0 ? segments.pop() : '';
+
         return {
-            name: file.name,
-            type: file.type.split('/').pop(),
+            name: name,
+            type: type,
             size: file.size
         };
     }

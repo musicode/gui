@@ -12,7 +12,8 @@
     padding: @list-padding;
     overflow-x: hidden;
     overflow-y: auto;
-    border-radius: @list-border-radius;
+
+    .border-radius(@list-border-radius);
 
     &[overflow] .@{ui-class-prefix}-list-item {
         .text-overflow;

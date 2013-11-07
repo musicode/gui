@@ -114,9 +114,36 @@ define(function (require) {
          *
          * @return {Array.<string>}
          */
-        getValueAsArray: function () {
+        getLines: function () {
             var value = this.getValue();
-            return value.split('\n');
+            var result = value.split('\n');
+
+            for (var i = result.length - 1; i >=0; i--) {
+                result[i] = $.trim(result[i]);
+                if (!result[i]) {
+                    result.splice(i, 1);
+                }
+            }
+
+            return result;
+        },
+
+        /**
+         * 获得去重后的 value
+         *
+         * @return {Array.<string>}
+         */
+        getUniqueLines: function () {
+            var result = [ ];
+            var cache = { };
+            $.each(this.getLines(), function (index, line) {
+                if (!cache[line]) {
+                    cache[line] = 1;
+                    result.push(line);
+                }
+            });
+
+            return result;
         }
     };
 

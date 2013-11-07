@@ -150,7 +150,7 @@ define(function (require) {
         if (queuedFileNum > 1) {
             uploader.swfUpload.cancelUpload();
         }
-        uploader.fire('change');
+        uploader.fire('upload-change');
     }
 
     function uploadStart(file) {

@@ -419,29 +419,6 @@ define(function (require) {
 
     Collection.painter = {
 
-        raw: function (collection, raw) {
-
-            if (!collection.renderThread) {
-                return false;
-            }
-
-            var items = collection.items;
-            if (items.length > 0) {
-                $.each (items, function (index, item) {
-                    item.dispose();
-                });
-                items.length = 0;
-            }
-
-            items = raw.children ? raw.children : raw;
-            collection.insertItems(0, items);
-        },
-
-        selected: function (collection, selected) {
-            Item.painter.selected(collection, selected);
-            collection.startSelectThread(collection.items, { selected: selected });
-        },
-
         async: function (collection, async) {
             ensureThread(collection);
 
@@ -454,6 +431,28 @@ define(function (require) {
 
             collection.renderThread.interval =
             collection.selectThread.interval = asyncStep;
+        },
+
+        raw: function (collection, raw) {
+
+            var items = collection.items;
+            if (items.length > 0) {
+                $.each (items, function (index, item) {
+                    item.dispose();
+                });
+                items.length = 0;
+            }
+
+            var element = collection.getItemContainer();
+            element.innerHTML = '';
+
+            items = raw.children ? raw.children : raw;
+            collection.insertItems(0, items);
+        },
+
+        selected: function (collection, selected) {
+            Item.painter.selected(collection, selected);
+            collection.startSelectThread(collection.items, { selected: selected });
         }
     };
 

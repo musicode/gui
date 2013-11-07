@@ -234,6 +234,8 @@ define(function (require) {
      */
     List.defaultOptions = {
 
+        datasource: [],
+
         // 不可多选
         multiple: false,
 
@@ -263,7 +265,6 @@ define(function (require) {
 
         datasource: function (list, datasource) {
 
-            datasource = datasource || [ ];
             var main = list.main;
 
             if (datasource.length === 0) {
@@ -285,8 +286,11 @@ define(function (require) {
                 main.removeClass(List.CLASS_EMPTY);
                 main.removeClass(List.CLASS_LOADING);
 
-                list.helper.stopThreads();
-                list.helper.setProperties({
+                var helper = list.helper;
+                helper.raw = null;
+
+                helper.stopThreads();
+                helper.setProperties({
                     raw: datasource
                 });
             }

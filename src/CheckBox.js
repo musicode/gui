@@ -40,7 +40,10 @@ define(function (require) {
          * @param {Object} options
          */
         initOptions: function (options) {
+            
             lib.supply(options, CheckBox.defaultOptions);
+            options.icon = lib.createElement('<span class="uicon-checkbox"></span>');
+
             SuperClass.prototype.initOptions.call(this, options);
         },
 
@@ -67,7 +70,6 @@ define(function (require) {
     };
 
     CheckBox.defaultOptions = {
-        cssIcon: 'icon-checkbox',
         toggle: true,
         labelPlacement: 'right'
     };

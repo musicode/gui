@@ -1,3 +1,22 @@
+.icon-caret(@size) {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    margin-top: -0.5 * @size;
+
+    width: 0;
+    height: 0;
+    border-width: @size;
+    border-style: solid;
+    border-color: @caret-color transparent transparent;
+}
+
+.icon-caret-active(@size) {
+    margin-top: -1.5 * @size;
+    border-color: transparent transparent @caret-color;
+}
+
+
 .icon-checkbox {
     background-color: #FFF;
     border: 1px solid #999;

@@ -1,8 +1,8 @@
 .@{ui-class-prefix}-combobox {
 
     .ui-common;
-    .inline-block;
 
+    display: inline-block;
     position: relative;
 
     .@{ui-class-prefix}-button {
@@ -50,22 +50,12 @@
         font-weight: normal;
     }
 
-    .@{ui-class-prefix}-caret {
-        position: absolute;
-        right: 8px;
-        top: 50%;
-        margin-top: -0.5 * @combobox-button-caret-size;
-
-        width: 0;
-        height: 0;
-        border-width: @combobox-button-caret-size;
-        border-style: solid;
-        border-color: @caret-color transparent transparent;
+    .uicon-caret {
+        .icon-caret(@combobox-button-caret-size);
     }
 
-    &.@{ui-class-prefix}-active .@{ui-class-prefix}-caret {
-        margin-top: -1.5 * @combobox-button-caret-size;
-        border-color: transparent transparent @caret-color;
+    &.@{ui-class-prefix}-active .uicon-caret {
+        .icon-caret-active(@combobox-button-caret-size);
     }
 }
 

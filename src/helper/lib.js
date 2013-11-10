@@ -56,6 +56,29 @@ define(function (require, exports, module) {
     };
 
     /**
+     * 把连字符形式转成驼峰形式，如margin-left => marginLeft
+     * 
+     * @param {string} name
+     * @return {string}
+     */
+    exports.camelize = function (str) {
+        return str.replace(/-([a-z])/g, function($0, $1) {
+            return $1.toUpperCase();
+        });
+    };
+
+    /**
+     * 首字母大写
+     * 
+     * @param {string} name
+     * @return {string}
+     */
+    exports.capitalize = function (str) {
+        var first = str.slice(0, 1).toUpperCase();
+        return first + str.slice(1);
+    };
+
+    /**
      * 把 from 补充进 to
      *
      * @param {Object} to

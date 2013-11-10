@@ -85,7 +85,7 @@ define(function (require) {
 
             var button = new Button({
                 labelPlacement: 'left',
-                cssIcon: 'caret'
+                icon: lib.createElement('<span class="uicon-caret"></span>')
             });
             button.render();
             button.appendTo(main);

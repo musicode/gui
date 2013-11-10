@@ -101,11 +101,13 @@ define(function (require) {
             var from = parseFloat(viewportWrapper.css('left'), 10);
             var to = -1 * page * pageWidth;
 
-            carousel.fire('ui-change');
+            if (to !== from) {
+                carousel.fire('ui-change');
 
-            viewportWrapper.animate({
-                left: to
-            }, 300);
+                viewportWrapper.animate({
+                    left: to
+                }, 300);
+            }
 
         }
     };

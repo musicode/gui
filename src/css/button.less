@@ -2,7 +2,6 @@
 
     .ui-common;
     .user-select;
-    .inline-block;
 
     border: @button-border-width
             @button-border-style
@@ -10,6 +9,7 @@
 
     color: @button-color;
     cursor: @cursor-clickable;
+    display: inline-block;
     font-weight: normal;
 
     height: @button-height;
@@ -59,6 +59,9 @@
         cursor: @cursor-disabled;
 
         .box-shadow(@button-disabled-box-shadow);
+    }
+    &[disabled],
+    &[disabled]:hover {
         .gradient-vertical(
             @button-disabled-start-bgcolor,
             @button-disabled-end-bgcolor

@@ -52,17 +52,15 @@ define(function (require) {
                 }
             }
 
-            // 确定 icon
-            if (typeof options.icon !== 'string') {
-                var iconElement = getIconElement(this.main);
-                if (iconElement) {
-                    var icon = iconElement.className;
-                    var prefix = gui.config.iconClassPrefix;
-
-                    if (lib.startWith(icon, prefix)) {
-                        icon = icon.substr(prefix.length);
+            // icon 可以是字符串
+            // 或是个 HTMLElement
+            var icon = options.icon;
+            if (typeof icon !== 'string') {
+                if (icon == null || icon.nodeType !== 1) {
+                    var iconElement = getIconElement(this.main);
+                    if (iconElement) {
+                        options.icon = iconElement;
                     }
-                    options.icon = icon;
                 }
             }
 
@@ -166,36 +164,6 @@ define(function (require) {
             }
         },
 
-        icon: function (button, icon) {
-            var iconElement = getIconElement(button.main);
-
-            if (icon) {
-                if (!iconElement) {
-                    iconElement = document.createElement('span');
-                    placeIcon(button, iconElement);
-                }
-                iconElement.className = gui.config.iconClassPrefix + '-' + icon;
-            }
-            else if (iconElement) {
-                iconElement.parentNode.removeChild(iconElement);
-            }
-        },
-
-        cssIcon: function (button, cssIcon) {
-            var iconElement = getIconElement(button.main);
-
-            if (cssIcon) {
-                if (!iconElement) {
-                    iconElement = document.createElement('span');
-                    placeIcon(button, iconElement);
-                }
-                iconElement.className = gui.config.uiClassPrefix + '-' + cssIcon;
-            }
-            else if (iconElement) {
-                iconElement.parentNode.removeChild(iconElement);
-            }
-        },
-
         labelPlacement: function (button, labelPlacement) {
             var main = button.main;
             var textNode = getTextNode(main);
@@ -206,11 +174,46 @@ define(function (require) {
             }
         },
 
+        icon: function (button, icon) {
+            var iconElement = getIconElement(button.main);
+
+            if (icon) {
+                if (!iconElement) {
+                    if (typeof icon === 'string') {
+                        iconElement = document.createElement('span');
+                        iconElement.className = gui.config.iconClassPrefix + '-' + icon;
+                    }
+                    else {
+                        iconElement = icon;
+                    }
+                    placeIcon(button, iconElement);
+                }
+
+                // 设置边距
+                if (button.label) {
+                    var name = lib.camelize('margin-' + button.labelPlacement);
+                    var value = BaseButton.iconSpace + 'px';
+                    iconElement.style[name] = value;
+                }
+            }
+            else if (iconElement) {
+                iconElement.parentNode.removeChild(iconElement);
+            }
+        },
+
         toggle: function (button, toggle) {
             var method = toggle ? 'on' : 'off';
             button[method]('click', ontoggle);
         }
     };
+
+    /**
+     * icon 和文本的间距
+     *
+     * @static
+     * @type {number}
+     */
+    BaseButton.iconSpace = 4;
 
     /**
      * 交替选中状态
@@ -322,6 +325,7 @@ define(function (require) {
     }
 
     lib.inherits(BaseButton, SuperClass);
+
 
     return BaseButton;
 

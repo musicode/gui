@@ -20,10 +20,10 @@
 
 .@{ui-class-prefix}-dialog-header {
     border-bottom: @dialog-header-border-bottom;
-    background-color: @dialog-header-bgcolor;
-    font-size: @font-size-base;
-    padding: @dialog-header-padding;
+    background: @dialog-header-bg;
     position: relative;
+    padding: @dialog-header-padding-v
+             @dialog-header-padding-h;
 
     .border-top-radius(@dialog-border-top-radius);
 }
@@ -32,7 +32,6 @@
     color: @dialog-title-color;
     font-size: @dialog-title-font-size;
     font-weight: @dialog-title-font-weight;
-    font-family: @font-family-serif;
 
     margin: 0;
     padding: 0;
@@ -43,15 +42,28 @@
 }
 
 .@{ui-class-prefix}-dialog-close {
+    background-color: @dialog-close-bgcolor;
     font-style: normal;
-    font-weight: bold;
+    font-weight: @dialog-close-font-weight;
     font-size: @dialog-close-font-size;
     color: @dialog-close-color;
+
+    width: @dialog-close-width;
+    height: @dialog-close-height;
+    line-height: @dialog-close-height;
+    text-align: center;
 
     position: absolute;
     top: @dialog-close-top;
     right: @dialog-close-right;
     cursor: @cursor-clickable;
+
+    .border-radius(@dialog-close-border-radius);
+    .box-shadow(@dialog-close-box-shadow);
+
+    &:hover {
+        background-color: @dialog-close-hover-bgcolor;
+    }
 }
 
 .@{ui-class-prefix}-dialog-footer {
@@ -63,6 +75,7 @@
     padding: @dialog-footer-padding;
 
     .border-bottom-radius(@dialog-border-bottom-radius);
+    .box-shadow(@dialog-footer-box-shadow);
 
     .@{ui-class-prefix}-button {
         margin-left: @dialog-footer-button-space;

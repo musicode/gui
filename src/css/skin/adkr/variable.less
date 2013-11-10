@@ -193,32 +193,43 @@
 
 // Dialog
 @dialog-width:                                     300px;
-@dialog-bgcolor:                                   #FFF;
+@dialog-bgcolor:                                   @background-color;
 @dialog-box-shadow:                                0 1px 4px #666;
 @dialog-border-top-radius:                         4px;
 @dialog-border-bottom-radius:                      4px;
 
 @dialog-header-border-bottom:                      1px solid #EEE;
-@dialog-header-bgcolor:                            #FDFDFD;
-@dialog-header-padding:                            9px 15px;
+@dialog-header-bg:                                 url('dialog-header-bg.png');
+@dialog-header-padding-h:                          15px;
+@dialog-header-padding-v:                          9px;
 
-@dialog-title-color:                               #666;
+@dialog-title-color:                               #FFF;
 @dialog-title-font-weight:                         bold;
 @dialog-title-font-size:                           130%;
 
-@dialog-close-font-size:                           140%;
-@dialog-close-color:                               #CCC;
+@dialog-close-bgcolor:                             #111;
+@dialog-close-width:                               26px;
+@dialog-close-height:                              26px;
+@dialog-close-font-size:                           170%;
+@dialog-close-font-weight:                         normal;
+@dialog-close-color:                               #FFF;
+@dialog-close-border-radius:                       @dialog-close-width / 2;
+@dialog-close-box-shadow:                          inset 0 -1px 1px #777777, 
+                                                   inset 0 1px 2px #000000;
+@dialog-close-hover-bgcolor:                       #A11715;
 
-@dialog-close-top:                                 12px;
-@dialog-close-right:                               12px;
+@dialog-close-top:                                 6px;
+@dialog-close-right:                               8px;
+
 @dialog-body-padding:                              15px;
 
-@dialog-footer-bgcolor:                            #F5F5F5;
-@dialog-footer-border-top:                         1px solid #DDD;
+@dialog-footer-bgcolor:                            #F3F3F3;
+@dialog-footer-border-top:                         1px solid #EEE;
 
-@dialog-footer-align:                              right;
+@dialog-footer-align:                              center;
 @dialog-footer-button-space:                       10px;
 @dialog-footer-padding:                            9px 15px;
+@dialog-footer-box-shadow:                         inset 0 1px 0 white;
 
 
 

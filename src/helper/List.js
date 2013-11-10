@@ -30,14 +30,6 @@ define(function (require) {
     var classPrefix = gui.config.uiClassPrefix + '-list-';
 
     /**
-     * 列表选中状态的 class
-     *
-     * @static
-     * @type {string}
-     */
-    List.CLASS_SELECTED = classPrefix + 'selected';
-
-    /**
      * 列表分组 class
      *
      * @static

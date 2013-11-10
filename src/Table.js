@@ -365,17 +365,14 @@ define(function (require) {
 
 
     function getHeaderSelectBox(multiple) {
-        var selectBox = multiple
-                      ? '<input class="' + Table.CLASS_ALLBOX + '" type="checkbox" />'
-                      : '';
+        var selectBox = multiple ? lib.getCheckbox([ Table.CLASS_ALLBOX ]) : ''; 
         return '<th style="width:35px;">' + selectBox + '</th>';
     }
 
     function getBodySelectBox(multiple) {
 
         var type = multiple ? 'checkbox' : 'radio';
-        var selectBox = '<input class="' + TableRow.CLASS_SELECTBOX
-                      + '" type="' + type + '" />';
+        var selectBox = lib.getCheckbox([ TableRow.CLASS_SELECTBOX ]);
 
         return '<td class="' + TableRow.CLASS_CELL + '" style="width:35px;">'
              +    selectBox
@@ -463,8 +460,13 @@ define(function (require) {
 
     function toggleAll(e) {
         var checkbox = e.target;
+        var checked = !lib.getCheckboxChecked(checkbox);
+
+
+        lib.setCheckboxChecked(checkbox, checked);
+
         this.helper.setProperties({
-            selected: checkbox.checked
+            selected: checked
         });
     }
 
@@ -521,7 +523,7 @@ define(function (require) {
                         var selected = helper.getSelectedItems().length;
                         var total = this.datasource.length;
 
-                        checkbox.prop('checked', selected === total);
+                        lib.setCheckboxChecked(checkbox, selected === total);
                     }
                 }
 

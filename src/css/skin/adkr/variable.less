@@ -16,15 +16,16 @@
 @border-selected-color:                           @border-active-color;
 @border-focus-color:                              #D6BF62;
 
-@background-hover-color:                          #9ED4E6;
-@background-selected-color:                       #4294A9;
+@background-color:                                #FDFDFD;
+@background-hover-color:                          #D1BCA9;
+@background-selected-color:                       #AD7F79;
 @background-disabled-color:                       #EEE;
 
 @box-shadow-focus:                                0px 0px 4px rgb(238, 215, 166);
 
 
 @caret-color:                                     #666;
-
+@layer-z-index:                                   10;
 
 // 排版
 @font-family-sans-serif:                          Arial;
@@ -43,6 +44,7 @@
 @gradient-start-color:                            #FFF;
 @gradient-end-color:                              #E9E9E9;
 
+@border-radius:                                   3px;
 
 // Button
 @button-border-width:                             1px;
@@ -51,7 +53,7 @@
 @button-color:                                    @text-color;
 @button-height:                                   30px;
 @button-padding-h:                                7px;
-@button-border-radius:                            3px;
+@button-border-radius:                            @border-radius;
 @button-start-bgcolor:                            @gradient-start-color;
 @button-end-bgcolor:                              @gradient-end-color;
 @button-box-shadow:                               none;
@@ -80,6 +82,43 @@
 @button-selected-end-bgcolor:                     @gradient-start-color;
 @button-selected-box-shadow:                      inset 0 1px 6px rgba(0, 0, 0, 0.13);
 
+
+// List
+@list-bgcolor:                                     @background-color;
+@list-border-width:                                1px;
+@list-border-style:                                solid;
+@list-border-color:                                @border-color;
+@list-border-radius:                               @border-radius;
+@list-padding-h:                                   1px;
+@list-padding-v:                                   1px;
+
+@list-group-header-border-width:                   0;
+@list-group-header-border-style:                   solid;
+@list-group-header-border-color:                   #DDD;
+@list-group-header-bgcolor:                        #F3F3F3;
+@list-group-header-font-size:                      @font-size-base;
+@list-group-header-font-weight:                    bold;
+@list-group-header-color:                          darken(@text-color, 10%);
+@list-group-header-padding-h:                      5px;
+@list-group-header-padding-v:                      10px;
+@list-group-header-box-shadow:                     1px 1px 0px rgb(223, 223, 223);
+
+@list-item-border-width:                           1px;
+@list-item-border-style:                           solid;
+@list-item-border-color:                           #E6E6E6;
+@list-item-color:                                  @text-color;
+@list-item-padding-h:                              5px;
+@list-item-padding-v:                              8px;
+@list-item-height:                                 30px;
+@list-item-box-shadow:                             0 1px 0px #FFF;
+
+@list-item-hover-bgcolor:                          @background-hover-color;
+@list-item-hover-color:                            #FFF;
+
+@list-item-selected-bgcolor:                       @background-selected-color;
+@list-item-selected-color:                         #FFF;
+@list-item-selected-font-weight:                   bold;
+@list-item-selected-box-shadow:                    inset 0 1px 2px rgb(129, 129, 129);;
 
 // TextBox
 @textbox-border-width:                            1px;
@@ -126,61 +165,28 @@
 @texteditor-line-text-box-shadow:                 inset 0 0 1px #999;
 
 
-// List
-@list-bgcolor:                                     #FDFDFD;
-@list-border-width:                                1px;
-@list-border-style:                                solid;
-@list-border-color:                                @border-color;
-@list-border-radius:                               3px;
-@list-padding:                                     5px 1px;
-
-@list-group-header-border-width:                   1px;
-@list-group-header-border-style:                   solid;
-@list-group-header-border-color:                   #DDD;
-@list-group-header-bgcolor:                        #F3F3F3;
-@list-group-header-font-size:                      @font-size-base;
-@list-group-header-font-weight:                    bold;
-@list-group-header-color:                          #444;
-@list-group-header-padding-h:                      5px;
-@list-group-header-padding-v:                      10px;
-
-@list-item-border-width:                           1px;
-@list-item-border-style:                           solid;
-@list-item-border-color:                           #E6E6E6;
-@list-item-color:                                  @text-color;
-@list-item-padding-h:                              5px;
-@list-item-padding-v:                              8px;
-@list-item-height:                                 30px;
-@list-item-box-shadow:                             0 2px 1px #FFF;
-
-@list-item-hover-color:                            #FFF;
-@list-item-hover-bgcolor:                          @background-hover-color;
-
-@list-item-selected-color:                         #FFF;
-@list-item-selected-bgcolor:                       @background-selected-color;
-@list-item-selected-font-weight:                   bold;
-
-
-
 // ComboBox
 @combobox-button-caret-size:                       5px;
 
 @combobox-list-top:                                @button-height + 1;
-@combobox-list-bgcolor:                            #FFF;
-@combobox-list-border:                             1px solid #DDD;
+@combobox-list-bgcolor:                            @background-color;
+@combobox-list-border-width:                       1px;
+@combobox-list-border-style:                       solid;
+@combobox-list-border-color:                       @border-color;
 @combobox-list-font-size:                          @font-size-base * 0.9;
-@combobox-list-padding:                            5px 1px;
-@combobox-list-box-shadow:                         0 1px 5px #BBB;
+@combobox-list-padding-h:                          1px;
+@combobox-list-padding-v:                          5px;
+@combobox-list-box-shadow:                         0 1px 3px rgb(213, 213, 213);
 
 @combobox-list-item-border-width:                  0;
 @combobox-list-item-border-style:                  solid;
 @combobox-list-item-border-color:                  #DDD;
 @combobox-list-item-padding-h:                     5px;
 @combobox-list-item-padding-v:                     6px;
+@combobox-list-item-hover-bgcolor:                 @background-hover-color;
 @combobox-list-item-hover-color:                   #FFF;
-@combobox-list-item-hover-bgcolor:                 #08C;
-@combobox-list-item-selected-color:                #FFF;
 @combobox-list-item-selected-bgcolor:              @background-selected-color;
+@combobox-list-item-selected-color:                #FFF;
 
 
 
@@ -261,8 +267,9 @@
 @table-border-width:                              1px;
 @table-border-style:                              solid;
 @table-border-color:                              #DDD;
-@table-bgcolor:                                   #FFF;
-@table-padding:                                   5px;
+@table-bgcolor:                                   @background-color;
+@table-padding-h:                                 5px;
+@table-padding-v:                                 5px;
 @table-radius:                                    5px;
 
 @table-header-border-width:                       0;
@@ -296,17 +303,18 @@
 @table-body-cell-border-style:                    solid;
 @table-body-cell-border-color:                    #DDD;
 
-@table-body-row-odd-bgcolor:                      #EFEFEF;
 @table-body-row-even-bgcolor:                     #FFF;
+@table-body-row-odd-bgcolor:                      darken(@table-body-row-even-bgcolor, 7%);
 
 @table-body-row-hover-bgcolor:                    @background-hover-color;
 @table-body-row-hover-color:                      #FFF;
 
-@table-body-row-odd-selected-bgcolor:             @background-selected-color;
-@table-body-row-odd-selected-color:               #FFF;
-
 @table-body-row-even-selected-bgcolor:            @background-selected-color;
 @table-body-row-even-selected-color:              #FFF;
+
+@table-body-row-odd-selected-bgcolor:             darken(@background-selected-color, 7%);
+@table-body-row-odd-selected-color:               #FFF;
+
 
 
 

@@ -53,14 +53,6 @@ define(function (require) {
     ListItem.CLASS_EVEN = classPrefix + 'list-item-even';
 
     /**
-     * 列表项选中时的 class
-     *
-     * @static
-     * @type {string}
-     */
-    ListItem.CLASS_SELECTED = classPrefix + 'list-item-selected';
-
-    /**
      * 列表项的 selectbox
      *
      * @static

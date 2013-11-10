@@ -9,7 +9,7 @@
     background-color: @list-bgcolor;
 
     display: block;
-    padding: @list-padding;
+    padding: @list-padding-v @list-padding-h;
     overflow-x: hidden;
     overflow-y: auto;
 
@@ -24,29 +24,41 @@
     border-top: @list-group-header-border-width
                 @list-group-header-border-style
                 @list-group-header-border-color;
+
     background-color: @list-group-header-bgcolor;
     color: @list-group-header-color;
     font-size: @list-group-header-font-size;
     font-weight: @list-group-header-font-weight;
     padding: @list-group-header-padding-v
              @list-group-header-padding-h;
+
+    .box-shadow(@list-group-header-box-shadow);
 }
+
 .@{ui-class-prefix}-list-item {
 
     border-top: @list-item-border-width
                 @list-item-border-style
                 @list-item-border-color;
 
-    color: @list-item-color;
     padding: @list-item-padding-v
              @list-item-padding-h;
 
     .box-sizing(border-box);
-    .box-shadow(@list-item-box-shadow);
 
-    &:hover {
+    &:not(:hover):not([selected]) {
+        color: @list-item-color;
+        .box-shadow(@list-item-box-shadow);
+    }
+    &:hover:not([selected]) {
         background-color: @list-item-hover-bgcolor;
         color: @list-item-hover-color;
+    }
+    &[selected] {
+        background-color: @list-item-selected-bgcolor;
+        color: @list-item-selected-color;
+        font-weight: @list-item-selected-font-weight;
+        .box-shadow(@list-item-selected-box-shadow);
     }
     &:first-child {
         border-top: none;
@@ -55,13 +67,5 @@
 
 .@{ui-class-prefix}-list-group-header,
 .@{ui-class-prefix}-list-item {
-    cursor: @cursor-clickable;
     display: block;
-}
-
-.@{ui-class-prefix}-list-item-selected,
-.@{ui-class-prefix}-list-item-selected:hover {
-    background-color: @list-item-selected-bgcolor;
-    color: @list-item-selected-color;
-    font-weight: @list-item-selected-font-weight;
 }

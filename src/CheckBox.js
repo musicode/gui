@@ -42,7 +42,7 @@ define(function (require) {
         initOptions: function (options) {
             
             lib.supply(options, CheckBox.defaultOptions);
-            options.icon = lib.createElement('<span class="i-checkbox"></span>');
+            options.icon = lib.createElement(lib.getCheckbox());
 
             SuperClass.prototype.initOptions.call(this, options);
         },
@@ -69,6 +69,12 @@ define(function (require) {
         }
     };
 
+    /**
+     * 默认配置
+     *
+     * @static
+     * @type {Object}
+     */
     CheckBox.defaultOptions = {
         toggle: true,
         labelPlacement: 'right'

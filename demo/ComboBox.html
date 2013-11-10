@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>ComboBox - ZUI Demo</title>
+        <title>ComboBox - GUI Demo</title>
         
         <script src="asset/js/jquery.js"></script>
         <script src="asset/js/esl.js"></script>
@@ -13,6 +13,30 @@
     <body>
         <header>ComboBox</header>
         <div id="ui-combobox"></div>
+        <div id="ui-combobox1"></div>
+
         <script src="ComboBox.js"></script>
+        <script>
+            require(
+                [
+                    'gui/ComboBox'
+                ],
+                function (ComboBox) {
+
+                    var comboBox = new ComboBox({
+                        main: $('#ui-combobox1'),
+                        emptyText: '请选择',
+                        datasource: [
+                            { text: '上午', value: 1 },
+                            { text: '下午', value: 2 },
+                            { text: '晚上', value: 3 }
+                        ]
+                    });
+
+                    comboBox.render();
+
+                }
+            );
+        </script>
     </body>
 </html>

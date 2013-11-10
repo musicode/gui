@@ -17,7 +17,7 @@ require(
         ];
 
         var combobox = new ComboBox({
-            main: $('#ui-combobox')[0],
+            main: $('#ui-combobox'),
             emptyText: '请选择',
             datasource: datasource,
             maxHeight: 150,
@@ -25,8 +25,8 @@ require(
         });
 
         combobox.render();
-        combobox.onselect = function (e) {
+        combobox.on('ui-change', function (e) {
             console.log(e);
-        };
+        });
     }
 );

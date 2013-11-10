@@ -258,11 +258,17 @@ define(function (require) {
     };
 
     function afterListShow() {
-        this.main.addClass(gui.CLASS.ACTIVE);
+        var button = this.button;
+        button.setProperties({
+            selected: true
+        });
     }
 
     function afterListHide() {
-        this.main.removeClass(gui.CLASS.ACTIVE);
+        var button = this.button;
+        button.setProperties({
+            selected: false
+        });
     }
 
     function beforeDispose() {

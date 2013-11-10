@@ -38,6 +38,29 @@ define(function (require, exports, module) {
         return exports.divElement.firstChild;
     };
 
+    /**
+     * 获得 checkbox 模板
+     *
+     * @param {Array} classes
+     * @param {Array} attrs
+     * @return {string}
+     */
+    exports.getCheckbox = function (classes, attrs) {
+        classes = classes || [];
+        classes.push('i-checkbox');
+
+        var className = classes.join(' ');
+        var attr = '';
+        
+        if (attrs) {
+            for (var key in attrs) {
+                attr += ' key="' + attrs[key] + '"';
+            }
+        }
+
+        return '<span class="' + className + '"' + attr + '></span>';
+    };
+
     var win;
     var doc;
 
@@ -53,6 +76,31 @@ define(function (require, exports, module) {
             win = $(window);
         }
         return win;
+    };
+
+    /**
+     * 获得 checkbox 的选中状态
+     * 
+     * @param  {HTMLElement} element
+     * @return  {boolean}
+     */
+    exports.getCheckboxChecked = function (element) {
+        return element.getAttribute('selected') === 'selected';
+    };
+
+    /**
+     * 设置 checkbox 的选中状态
+     * 
+     * @param  {HTMLElement} element
+     * @param  {boolean} checked 是否选中
+     */
+    exports.setCheckboxChecked = function (element, checked) {
+        if (checked) {
+            element.setAttribute('selected', 'selected');
+        }
+        else {
+            element.removeAttribute('selected');
+        }
     };
 
     /**

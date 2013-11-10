@@ -99,10 +99,10 @@ define(function (require) {
         createMain: function (options) {
 
             var Class = this.constructor;
-            var classList = [ Class.CLASS_GROUP ];
+            var attr = '';
 
             if (options.selected) {
-                classList.push(Class.CLASS_SELECTED);
+                attr = ' selected="selected"';
             }
 
             // group header 可自定义
@@ -115,7 +115,7 @@ define(function (require) {
                 header = options.raw.text || '';
             }
 
-            var html = '<div class="' + classList.join(' ') + '">'
+            var html = '<div class="' + Class.CLASS_GROUP + '"' + attr + '>'
                      +     '<div class="' + Class.CLASS_GROUP_HEADER + '">' + header + '</div>'
                      +     '<div class="' + Class.CLASS_GROUP_BODY + '"></div>'
                      + '</div>';

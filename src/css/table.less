@@ -7,7 +7,8 @@
             @table-border-color;
 
     background-color: @table-bgcolor;
-    padding: @table-padding;
+    padding: @table-padding-v
+             @table-padding-h;
 
     .border-radius(@table-radius);
 
@@ -58,18 +59,20 @@
 }
 
 .@{ui-class-prefix}-table-header {
-    .gradient-vertical(@table-header-start-bgcolor,
-                       @table-header-end-bgcolor);
 
     border: @table-header-border-width
             @table-header-border-style
             @table-header-border-color;
 
     color: @table-header-color;
+    position: relative;
+    z-index: @layer-z-index;
 
     .border-radius(@table-header-border-radius);
     .box-sizing(border-box);
     .box-shadow(@table-header-box-shadow);
+    .gradient-vertical(@table-header-start-bgcolor,
+                       @table-header-end-bgcolor);
 
     th {
         border-left: @table-header-cell-border-width
@@ -133,7 +136,7 @@
 .@{ui-class-prefix}-table-row-odd {
     background-color: @table-body-row-odd-bgcolor;
 
-    &.@{ui-class-prefix}-table-row-selected {
+    &[selected] {
         background-color: @table-body-row-odd-selected-bgcolor;
         color: @table-body-row-odd-selected-color;
     }
@@ -142,7 +145,7 @@
 .@{ui-class-prefix}-table-row-even {
     background-color: @table-body-row-even-bgcolor;
 
-    &.@{ui-class-prefix}-table-row-selected {
+    &[selected] {
         background-color: @table-body-row-even-selected-bgcolor;
         color: @table-body-row-even-selected-color;
     }

@@ -39,6 +39,7 @@ require(
                     field: 'id',
                     sortable: false,
                     resizable: true,
+                    align: 'right',
                     content: function (item) {
                         return item.id;
                     }

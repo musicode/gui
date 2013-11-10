@@ -78,16 +78,18 @@ define(function (require) {
             var ItemClass = this.constructor;
 
             var classList = [ ItemClass.CLASS_ITEM ];
-            if (options.selected) {
-                classList.push(ItemClass.CLASS_SELECTED);
-            }
+            var attr = '';
 
             classList.push( options.index % 2
                             ? ItemClass.CLASS_ODD
                             : ItemClass.CLASS_EVEN );
 
+            if (options.selected) {
+                attr = ' selected="selected"';
+            }
+
             var tagName = options.tagName || ItemClass.defaultOptions.tagName;
-            html = '<' + tagName + ' class="' + classList.join(' ') + '">'
+            html = '<' + tagName + ' class="' + classList.join(' ') + '"' + attr + '>'
                  +    html
                  + '</' + tagName + '>';
 
@@ -129,16 +131,16 @@ define(function (require) {
             var checkbox = item.getSelectBox();
 
             if (checkbox) {
-                if (checkbox.disabled) {
-                    return;
-                }
-                checkbox.checked = selected;
+                lib.setCheckboxChecked(checkbox, selected);
             }
 
-            var ItemClass = item.constructor;
-            var selectedClass = ItemClass.CLASS_SELECTED;
-
-            item.main[ selected ? 'addClass' : 'removeClass' ](selectedClass);
+            var main = item.main;
+            if (selected) {
+                main.attr('selected', 'selected');
+            }
+            else {
+                main.removeAttr('selected');
+            }
         }
 
     };
@@ -152,14 +154,6 @@ define(function (require) {
      * @type {string}
      */
     Item.CLASS_ITEM = classPrefix + 'item';
-
-    /**
-     * 集合项选中状态的 class
-     *
-     * @static
-     * @type {string}
-     */
-    Item.CLASS_SELECTED = classPrefix + 'item-selected';
 
     /**
      * 奇数集合项 class

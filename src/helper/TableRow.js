@@ -41,14 +41,6 @@ define(function(require) {
     TableRow.CLASS_ITEM = classPrefix + 'table-row';
 
     /**
-     * 表格行选中状态的 class
-     *
-     * @static
-     * @type {string}
-     */
-    TableRow.CLASS_SELECTED = classPrefix + 'table-row-selected';
-
-    /**
      * 奇数表格行 class
      *
      * @static

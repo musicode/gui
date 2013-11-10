@@ -42,7 +42,7 @@ define(function (require) {
         initOptions: function (options) {
             
             lib.supply(options, CheckBox.defaultOptions);
-            options.icon = lib.createElement('<span class="uicon-checkbox"></span>');
+            options.icon = lib.createElement('<span class="i-checkbox"></span>');
 
             SuperClass.prototype.initOptions.call(this, options);
         },

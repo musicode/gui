@@ -163,7 +163,7 @@ define(function (require) {
 
     Uploader.defaultOptions = {
         //maxSize: 5 * MB,   // 5 M
-        changeText: '已选择[ ${filename} ]',
+        changeText: '已选择 [ ${filename} ]',
         startText: '正在上传 [ ${filename} ]',
         progressText: '正在上传 ${loaded} M / ${total} M',
         successText: '上传成功',

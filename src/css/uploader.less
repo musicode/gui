@@ -2,8 +2,6 @@
 
     .ui-common;
 
-    .gradient-vertical(@uploader-start-bgcolor, @uploader-end-bgcolor);
-
     border: @uploader-border-width
             @uploader-border-style
             @uploader-border-color;
@@ -12,6 +10,10 @@
 
     .border-radius(@uploader-border-radius);
     .box-shadow(@uploader-box-shadow);
+    .gradient-vertical(
+        @uploader-start-bgcolor,
+        @uploader-end-bgcolor
+    );
 
     input[type="file"],
     object {
@@ -29,14 +31,15 @@
 
 .@{ui-class-prefix}-uploader-info {
 
-    border: @uploader-info-border;
+    border: @uploader-info-border-width
+            @uploader-info-border-style
+            @uploader-info-border-color;
     background-color: @uploader-info-bgcolor;
     color: @uploader-info-color;
-
-    height: @uploader-button-height;
-    .text-overflow;
-
+    height: @button-height;
     position: relative;
+
+    .text-overflow;
     .border-radius(@uploader-info-border-radius);
     .box-sizing(border-box);
     .box-shadow(@uploader-info-box-shadow);
@@ -70,7 +73,7 @@
 .@{ui-class-prefix}-uploader-text {
 
     display: block;
-    line-height: @uploader-button-height;
+    line-height: @button-height - 2 * @uploader-info-border-width;
     padding: 0 @uploader-text-padding-h;
 
     position: relative;

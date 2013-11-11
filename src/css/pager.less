@@ -19,50 +19,58 @@
 }
 
 .@{ui-class-prefix}-pager-item {
-    border: @pager-item-border;
-    color: @pager-item-color;
-    cursor: @cursor-clickable;
-
-    font-weight: @pager-item-font-weight;
+    border: @pager-item-border-width
+            @pager-item-border-style
+            @pager-item-border-color;
+    
     margin-left: @pager-item-space;
     padding: @pager-item-padding;
 
     .border-radius(@pager-item-border-radius);
-    .box-shadow(@pager-item-box-shadow);
-    .gradient-vertical(
-        @pager-item-start-bgcolor,
-        @pager-item-end-bgcolor
-    );
-
+    
     &:first-child {
         margin-left: 0;
     }
 
-    &:hover {
+    &:not([selected]):not([disabled]) {
+        color: @pager-item-color;
+        cursor: @cursor-clickable;
+        font-weight: @pager-item-font-weight;
+
+        .box-shadow(@pager-item-box-shadow);
+        .gradient-vertical(
+            @pager-item-start-bgcolor,
+            @pager-item-end-bgcolor
+        );
+    }
+
+    &:hover:not([selected]):not([disabled]) {
         border-color: @pager-item-hover-border-color;
     }
 
-    &.@{ui-class-prefix}-pager-active {
-        border-color: @pager-item-active-border-color;
-        color: @pager-item-active-color;
+    &[selected] {
+        border-color: @pager-item-selected-border-color;
+        color: @pager-item-selected-color;
         cursor: @cursor-active;
-        font-weight: bold;
+        font-weight: @pager-item-selected-font-weight;
+
+        .box-shadow(@pager-item-selected-box-shadow);
         .gradient-vertical(
-            @pager-item-active-start-bgcolor,
-            @pager-item-active-end-bgcolor
+            @pager-item-selected-start-bgcolor,
+            @pager-item-selected-end-bgcolor
         );
-        .box-shadow(@pager-item-active-box-shadow);
     }
 
-    &.@{ui-class-prefix}-pager-disabled {
+    &[disabled] {
         border-color: @pager-item-disabled-border-color;
         color: @pager-item-disabled-color;
         cursor: @cursor-disabled;
+
+        .box-shadow(@pager-item-disabled-box-shadow);
         .gradient-vertical(
             @pager-item-disabled-start-bgcolor,
             @pager-item-disabled-end-bgcolor
         );
-        .box-shadow(@pager-item-disabled-box-shadow);
     }
 }
 

@@ -1,13 +1,9 @@
 require(
     [
-        'gui'
-
+        'gui/TextEditor'
     ],
-    function (gui, TextEditor) {
+    function (TextEditor) {
 
-        gui.init();
-
-        return;
         var textEditor = new TextEditor({
             main: $('#ui-texteditor'),
             placeholder: '请输入...',

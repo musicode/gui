@@ -13,7 +13,9 @@
         position: absolute;
         left: 0;
         right: 0;
-        z-index: 10;
+        z-index: @layer-z-index;
+
+        .box-shadow(@autocomplete-list-box-shadow);
     }
 
     .@{ui-class-prefix}-textbox,

@@ -6,7 +6,7 @@ require(
     function (Table, lib) {
 
         var datasource = [ ];
-        for (var i = 0, len = 1000; i < len; i++) {
+        for (var i = 0, len = 20; i < len; i++) {
             datasource.push({ title: '标题' + i, index: i, id: lib.random() });
         }
 

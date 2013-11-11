@@ -60,7 +60,7 @@ define(function (require) {
 
             createPagination(this);
 
-            this.on('click', 'li', onclick);
+            this.on('click', 'li:not([selected]):not([disabled])', onclick);
 
             SuperClass.prototype.initStructure.apply(this, arguments);
         },
@@ -116,8 +116,6 @@ define(function (require) {
     Pager.CLASS_OMIT = classPrefix + 'omit';
     Pager.CLASS_PREV = classPrefix + 'prev';
     Pager.CLASS_NEXT = classPrefix + 'next';
-    Pager.CLASS_ACTIVE = classPrefix + 'active';
-    Pager.CLASS_DISABLED = classPrefix + 'disabled';
 
     /**
      * 创建页码
@@ -266,14 +264,16 @@ define(function (require) {
 
         $.each(datasource, function (index, item) {
             var className = [ Pager.CLASS_ITEM ];
+            var attrs = 'data-page="' + item.value + '"';
+
             if (item.selected) {
-                className.push(Pager.CLASS_ACTIVE);
+                attrs += ' selected="selected"';
             }
             if (item.disabled) {
-                className.push(Pager.CLASS_DISABLED);
+                attrs += ' disabled="disabled"';
             }
 
-            html += '<li class="' + className.join(' ') + '" data-page="' + item.value + '">'
+            html += '<li class="' + Pager.CLASS_ITEM + '" ' + attrs + '>'
                   +     item.text
                   + '</li>';
         });
@@ -285,10 +285,7 @@ define(function (require) {
         var target = $(e.target);
         var page = target.data('page');
 
-        if (page
-            && !target.hasClass(Pager.CLASS_ACTIVE)
-            && !target.hasClass(Pager.CLASS_DISABLED)
-        ) {
+        if (page) {
 
             this.setProperties({
                 page: page

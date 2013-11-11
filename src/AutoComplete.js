@@ -17,7 +17,6 @@ define(function (require) {
      *
      * @constructor
      * @param {Object} options
-     * @param {Array=} options.datasource
      * @param {string=} options.value
      * @param {string=} options.placeholder
      * @param {number=} options.width 输入框的宽度
@@ -170,6 +169,26 @@ define(function (require) {
             this.textBox.setProperties({
                 placeholder: placeholder
             });
+        },
+
+        /**
+         * 获得补全数据
+         *
+         * @return {Array}
+         */
+        getDatasouce: function () {
+            return this.list.datasource;
+        },
+
+        /**
+         * 设置补全数据
+         *
+         * @param {Array} datasource
+         */
+        setDatasource: function (datasource) {
+            this.list.setProperties({
+                datasource: datasource
+            });
         }
 
     };
@@ -179,14 +198,6 @@ define(function (require) {
     };
 
     AutoComplete.painter = {
-
-        datasource: function (autoComplete, datasource) {
-            if (autoComplete.stage > lib.LifeCycle.INITED) {
-                autoComplete.list.setProperties({
-                    datasource: datasource
-                });
-            }
-        },
 
         closed: function (autoComplete, closed) {
 
@@ -236,10 +247,10 @@ define(function (require) {
      */
     function onfocus() {
 
-        // 如果配了 datasource，可以直接用一下
+        // 如果配了本地数据，可以使用
         // 这样能稍稍提升点用户体验
         // 如果没配就算了，不至于去异步请求
-        if (this.datasource || this.local) {
+        if (this.local) {
             showSuggestion(this);
         }
 
@@ -494,13 +505,13 @@ define(function (require) {
 
         var value = autoComplete.getValue();
 
-        var callback = function (list) {
+        var callback = function (datasource) {
 
-            autoComplete.setProperties({
-                datasource: list
+            autoComplete.list.setProperties({
+                datasource: datasource
             });
 
-            if (list.length > 0) {
+            if (datasource.length > 0) {
                 autoComplete.open();
             }
             else {
@@ -513,11 +524,11 @@ define(function (require) {
             cache = autoComplete.cache = { };
         }
 
-        var list = cache[value];
+        var datasource = cache[value];
 
-        if ($.isArray(list) && list.length > 0) {
+        if ($.isArray(datasource) && datasource.length > 0) {
 
-            callback(list);
+            callback(datasource);
         }
         else {
             var request = autoComplete.local || autoComplete.remote;

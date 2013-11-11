@@ -22,10 +22,11 @@
 @background-disabled-color:                       #EEE;
 
 @box-shadow-focus:                                0px 0px 4px rgb(238, 215, 166);
-
+@box-shadow-active:                               inset 0 1px 6px rgba(0, 0, 0, 0.13);
 
 @caret-color:                                     #666;
 @layer-z-index:                                   10;
+@layer-box-shadow:                                2px 2px 0px #E6E6E6;
 
 // 排版
 @font-family-sans-serif:                          Arial;
@@ -51,7 +52,7 @@
 @button-border-style:                             solid;
 @button-border-color:                             @border-color;
 @button-color:                                    @text-color;
-@button-height:                                   30px;
+@button-height:                                   28px;
 @button-padding-h:                                7px;
 @button-border-radius:                            @border-radius;
 @button-start-bgcolor:                            @gradient-start-color;
@@ -68,7 +69,7 @@
 @button-active-color:                             @text-active-color;
 @button-active-start-bgcolor:                     @gradient-end-color;
 @button-active-end-bgcolor:                       @gradient-start-color;
-@button-active-box-shadow:                        inset 0 1px 6px rgba(0, 0, 0, 0.13);
+@button-active-box-shadow:                        @box-shadow-active;
 
 @button-disabled-border-color:                    @border-disabled-color;
 @button-disabled-color:                           @text-disabled-color;
@@ -80,8 +81,7 @@
 @button-selected-color:                           @text-selected-color;
 @button-selected-start-bgcolor:                   @gradient-end-color;
 @button-selected-end-bgcolor:                     @gradient-start-color;
-@button-selected-box-shadow:                      inset 0 1px 6px rgba(0, 0, 0, 0.13);
-
+@button-selected-box-shadow:                      @box-shadow-active;
 
 // List
 @list-bgcolor:                                     @background-color;
@@ -120,26 +120,27 @@
 @list-item-selected-font-weight:                   bold;
 @list-item-selected-box-shadow:                    inset 0 1px 2px rgb(129, 129, 129);;
 
+
 // TextBox
 @textbox-border-width:                            1px;
 @textbox-border-style:                            solid;
 @textbox-border-color:                            @border-color;
-@textbox-border-radius:                           3px;
-@textbox-bgcolor:                                 #FCFCFC;
-@textbox-color:                                   #666;
+@textbox-border-radius:                           @border-radius;
+@textbox-bgcolor:                                 @background-color;
+@textbox-color:                                   @text-color;
 @textbox-placeholder-color:                       #BBB;
 @textbox-font-size:                               @font-size-base;
-@textbox-padding-h:                               6px;
+@textbox-padding-h:                               5px;
 @textbox-padding-v:                               4px;
-@textbox-box-shadow:                              inset 0 1px 1px rgba(0,0,0,0.075);
+@textbox-box-shadow:                              inset 0 1px 1px rgba(0,0,0,0.1);
 
-@textbox-focus-border-color:                      #90BEC7;
+@textbox-focus-border-color:                      @border-focus-color;
 @textbox-focus-bgcolor:                           #FFF;
-@textbox-focus-box-shadow:                        inset 0 1px 1px rgba(0,0,0,0.075), 0 0 2px rgba(82,168,236,0.6);
+@textbox-focus-box-shadow:                        @box-shadow-focus;
 
-@textbox-disabled-border-color:                   #DDD;
-@textbox-disabled-bgcolor:                        #F8F8F8;
-@textbox-disabled-color:                          #CACACA;
+@textbox-disabled-border-color:                   @border-disabled-color;
+@textbox-disabled-bgcolor:                        @background-disabled-color;
+@textbox-disabled-color:                          @text-disabled-color;
 @textbox-disabled-box-shadow:                     none;
 
 
@@ -149,7 +150,7 @@
 @texteditor-border-width:                         1px;
 @texteditor-border-style:                         solid;
 @texteditor-border-color:                         @border-color;
-@texteditor-radius:                               3px;
+@texteditor-radius:                               @border-radius;
 @texteditor-font-size:                            @font-size-base;
 @texteditor-line-height:                          round(1.5 * @font-size-base);
 
@@ -176,7 +177,7 @@
 @combobox-list-font-size:                          @font-size-base * 0.9;
 @combobox-list-padding-h:                          1px;
 @combobox-list-padding-v:                          5px;
-@combobox-list-box-shadow:                         0 1px 3px rgb(213, 213, 213);
+@combobox-list-box-shadow:                         @layer-box-shadow;
 
 @combobox-list-item-border-width:                  0;
 @combobox-list-item-border-style:                  solid;
@@ -242,20 +243,20 @@
 
 // Autocomplete
 @autocomplete-list-border:                         1px solid #DDD;
-@autocomplete-list-bgcolor:                        #FFF;
+@autocomplete-list-bgcolor:                        @background-color;
 @autocomplete-list-color:                          #666;
 @autocomplete-list-item-padding-h:                 3px;
-
+@autocomplete-list-box-shadow:                     @layer-box-shadow;
 
 
 
 // Tab
 @tab-nav-item-border-width:                        1px;
 @tab-nav-item-border-style:                        solid;
-@tab-nav-item-border-color:                        lighten(@border-color, 10%);
-@tab-nav-item-border-radius:                       3px;
-@tab-nav-item-color:                               #FFF;
-@tab-nav-item-bgcolor:                             #6396B8;
+@tab-nav-item-border-color:                        transparent;
+@tab-nav-item-border-radius:                       @border-radius;
+@tab-nav-item-color:                               @text-color;
+@tab-nav-item-bgcolor:                             transparent;
 @tab-nav-item-padding:                             6px 12px;
 @tab-nav-item-space:                               5px;
 
@@ -263,12 +264,12 @@
 
 @tab-nav-item-active-border-color:                 @border-color;
 @tab-nav-item-active-color:                        @text-color;
-@tab-nav-item-active-bgcolor:                      #FFF;
+@tab-nav-item-active-bgcolor:                      @background-color;
 
 @tab-content-border-width:                         1px;
 @tab-content-border-style:                         solid;
 @tab-content-border-color:                         @border-color;
-@tab-content-bgcolor:                              #FFF;
+@tab-content-bgcolor:                              @background-color;
 @tab-content-padding:                              10px;
 
 
@@ -334,19 +335,22 @@
 @uploader-border-width:                           1px;
 @uploader-border-style:                           solid;
 @uploader-border-color:                           @border-color;
-@uploader-start-bgcolor:                          #FFF;
-@uploader-end-bgcolor:                            #E7E7E7;
+@uploader-start-bgcolor:                          @gradient-start-color;
+@uploader-end-bgcolor:                            @gradient-end-color;
 @uploader-padding:                                7px 10px;
-@uploader-border-radius:                          5px;
+@uploader-border-radius:                          @border-radius;
 @uploader-box-shadow:                             none;
 
-@uploader-info-border:                            none;
-@uploader-info-border-radius:                     3px;
+@uploader-info-border-width:                      0;
+@uploader-info-border-style:                      solid;
+@uploader-info-border-color:                      #DDD;
+@uploader-info-border-radius:                     @border-radius;
 @uploader-info-bgcolor:                           #F0F0F0;
 @uploader-info-color:                             #888;
-@uploader-info-box-shadow:                        inset 0 1px 2px #777,
+@uploader-info-box-shadow:                        inset 0 1px 3px #AAA,
                                                   inset 0 0 1px #999,
                                                   0 1px 1px #FFF;
+
 @uploader-action-space:                           9px;
 
 @uploader-text-padding-h:                         5px;
@@ -363,15 +367,16 @@
 @uploader-error-bgcolor:                          #D85A5A;
 @uploader-error-color:                            #F9F9F9;
 
-@uploader-button-height:                          @button-height;
 @uploader-button-space:                           8px;
 
 
 
 
 // Pager
-@pager-item-border:                             1px solid @border-color;
-@pager-item-border-radius:                      3px;
+@pager-item-border-width:                       1px;
+@pager-item-border-style:                       solid;
+@pager-item-border-color:                       @border-color;
+@pager-item-border-radius:                      @border-radius;
 @pager-item-color:                              @text-color;
 @pager-item-font-weight:                        normal;
 @pager-item-padding:                            6px 10px;
@@ -385,25 +390,28 @@
 
 @pager-item-hover-border-color:                 @border-hover-color;
 
-@pager-item-active-border-color:                #ECA128;
-@pager-item-active-color:                       #FFF;
-@pager-item-active-start-bgcolor:               #FFBA00;
-@pager-item-active-end-bgcolor:                 #FFBA00;
-@pager-item-active-box-shadow:                  inset 0 1px 2px #BB9E59;
+@pager-item-selected-border-color:              @border-active-color;
+@pager-item-selected-color:                     #FFF;
+@pager-item-selected-font-weight:               bold;
+@pager-item-selected-start-bgcolor:             @background-selected-color;
+@pager-item-selected-end-bgcolor:               @background-selected-color;
+@pager-item-selected-box-shadow:                @box-shadow-active;
 
 @pager-item-disabled-border-color:              @border-disabled-color;
 @pager-item-disabled-color:                     @text-disabled-color;
-@pager-item-disabled-start-bgcolor:             #EEE;
-@pager-item-disabled-end-bgcolor:               #EEE;
+@pager-item-disabled-start-bgcolor:             @background-disabled-color;
+@pager-item-disabled-end-bgcolor:               @background-disabled-color;
 @pager-item-disabled-box-shadow:                none;
 
 
+// tip
 @tip-layer-border-width:                        1px;
 @tip-layer-border-style:                        solid;
 @tip-layer-border-color:                        @border-color;
-@tip-layer-bgcolor:                             #FFF;
+@tip-layer-border-radius:                       @border-radius;
+@tip-layer-bgcolor:                             @background-color;
 @tip-layer-padding:                             5px 8px;
-@tip-layer-box-shadow:                          2px 2px 0px #E6E6E6;
+@tip-layer-box-shadow:                          @layer-box-shadow;
 
 
 @checkboxgroup-space:                           10px;

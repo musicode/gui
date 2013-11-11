@@ -14,8 +14,10 @@ require(
         var autocomplete = new Autocomplete({
             main: $('#ui-autocomplete'),
             width: 200,
-            datasource: datasource,
-            placeholder: '试试输入 text'
+            placeholder: '试试输入 text',
+            local: function (callback) {
+                callback(datasource)
+            }
         });
 
         autocomplete.render();

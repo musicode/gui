@@ -4,6 +4,8 @@
  */
 define(function (require) {
 
+    'use strict';
+    
     var Item = require('./Item');
     var Thread = require('./Thread');
     var lib = require('./lib');
@@ -419,18 +421,11 @@ define(function (require) {
 
     Collection.painter = {
 
-        async: function (collection, async) {
-            ensureThread(collection);
-
-            collection.renderThread.interval =
-            collection.selectThread.interval = async ? this.asyncStep : 0;
-        },
-
         asyncStep: function (collection, asyncStep) {
             ensureThread(collection);
 
             collection.renderThread.interval =
-            collection.selectThread.interval = asyncStep;
+            collection.selectThread.interval = collection.async ? asyncStep : 0;
         },
 
         raw: function (collection, raw) {

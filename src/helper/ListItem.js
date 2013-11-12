@@ -4,6 +4,8 @@
  */
 define(function (require) {
 
+    'use strict';
+    
     var SuperClass = require('./Item');
     var lib = require('./lib');
     var gui = require('../main');

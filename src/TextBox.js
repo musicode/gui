@@ -4,6 +4,8 @@
  */
 define(function (require) {
 
+    'use strict';
+    
     var SuperClass = require('./interface/Control');
     var Range = require('./helper/Range');
     var lib = require('./helper/lib');

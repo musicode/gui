@@ -4,6 +4,8 @@
  */
 define(function (require) {
 
+    'use strict';
+    
     /**
      * @constructor
      * @param {number} start 开始位置

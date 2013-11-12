@@ -4,6 +4,8 @@
  */
 define(function (require) {
 
+    'use strict';
+    
     var SuperClass = require('../interface/Control');
     var Observable = require('../interface/Observable');
     var lib = require('./lib');

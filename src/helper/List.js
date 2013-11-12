@@ -4,6 +4,8 @@
  */
 define(function (require) {
 
+    'use strict';
+    
     var SuperClass = require('./Collection');
     var Item = require('./Item');
     var ListItem = require('./ListItem');

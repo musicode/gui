@@ -4,6 +4,8 @@
  */
 define(function (require, exports, module) {
 
+    'use strict';
+    
     var gui = require('../main');
 
     window.p = function (s) {

@@ -4,6 +4,8 @@
  */
 define(function (require) {
 
+    'use strict';
+    
     var SuperClass = require('./interface/Control');
     var Button = require('./Button');
     var List = require('./List');

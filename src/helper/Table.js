@@ -7,6 +7,8 @@
  */
 define(function (require) {
 
+    'use strict';
+    
     var Item = require('./Item');
     var Collection = require('./Collection');
 

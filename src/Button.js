@@ -4,6 +4,8 @@
  */
 define(function (require) {
 
+    'use strict';
+    
     var SuperClass = require('./interface/BaseButton');
     var lib = require('./helper/lib');
 

@@ -4,6 +4,8 @@
  */
 define(function (require) {
 
+    'use strict';
+    
     require('../lib/swfupload/swfupload');
     require('../lib/swfupload/plugins/swfupload.cookies');
 

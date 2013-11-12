@@ -9,6 +9,8 @@
  */
 define(function (require) {
 
+    'use strict';
+    
     var SuperClass = require('../interface/Control');
     var lib = require('./lib');
     var gui = require('../main');

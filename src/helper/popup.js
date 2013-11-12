@@ -4,6 +4,8 @@
  */
 define (function (require) {
 
+    'use strict';
+    
     var lib = require('../helper/lib');
 
     function showClick(e) {
@@ -87,11 +89,11 @@ define (function (require) {
             && !overlay.isHidden()
         ) {
 
-            function onclick(e) {
+            var onclick = function (e) {
                 if (!lib.contains(overlay.main[0], e.target)) {
                     overlay.hide();
                 }
-            }
+            };
 
             overlay._onclick = onclick;
 

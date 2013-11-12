@@ -4,6 +4,8 @@
  */
 define(function (require) {
 
+    'use strict';
+
     /**
      * 控件基类关注以下逻辑：
      *

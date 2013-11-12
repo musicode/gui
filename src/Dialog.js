@@ -4,6 +4,8 @@
  */
 define(function (require) {
 
+    'use strict';
+    
     var SuperClass = require('./interface/Overlay');
     var Draggable = require('./interface/Draggable');
     var lib = require('./helper/lib');

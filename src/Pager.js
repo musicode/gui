@@ -3,6 +3,8 @@
  * @author zhujl
  */
 define(function (require) {
+    
+    'use strict';
 
     var SuperClass = require('./interface/Control');
     var lib = require('./helper/lib');
@@ -249,7 +251,7 @@ define(function (require) {
             forwardArray,
 
             [{
-                text: pager.backText,
+                text: pager.forwardText,
                 value: page + 1,
                 disabled: page === pageSum
             }]

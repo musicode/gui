@@ -4,6 +4,8 @@
  */
 define(function (require) {
 
+    'use strict';
+    
     var SuperClass = require('./interface/Control');
     var TableHelper = require('./helper/Table');
     var TableRow = require('./helper/TableRow');
@@ -336,7 +338,7 @@ define(function (require) {
         var leftWidth = (body.width()).toFixed(1);
         var fields = table.fields;
 
-        var filed;
+        var field;
         var style;
         var width;
 

@@ -1,5 +1,5 @@
 /**
- * @file 滚轮
+ * @file wheelscroll
  * @author zhujl
  */
 define(function (require, exports) {
@@ -10,6 +10,13 @@ define(function (require, exports) {
     var type = 'onmousewheel' in div ? 'mousewheel' : 'DOMMouseScroll';
     div = null;
 
+    /**
+     * 处理浏览器的兼容问题
+     * 
+     * 向下滚动统一为正数
+     * 向上滚动统一为负数
+     * 滚动幅度取自 delta 属性
+     */
     function scrollWheel(e) {
         var event = e.originalEvent;
         var element = e.data;
@@ -22,10 +29,14 @@ define(function (require, exports) {
             value = event.detail;
         }
 
+        /**
+         * @event wheelscroll#wheelscroll
+         */
         element.trigger('wheelscroll', {
             delta: value
         });
 
+        // 避免让外层的原生滚动条滚动
         e.preventDefault();
     }
 

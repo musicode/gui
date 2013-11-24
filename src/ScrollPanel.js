@@ -142,7 +142,7 @@ define(function (require) {
 
         if (ratio < 1) {
             thumb.show();
-            thumb.height(height * ratio);
+            thumb.height(Math.round(height * ratio));
 
             draggable.enable({
                 element: thumb,

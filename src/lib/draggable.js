@@ -1,5 +1,5 @@
 /**
- * @file position
+ * @file draggable
  * @author zhujl
  */
 define(function (require, exports) {

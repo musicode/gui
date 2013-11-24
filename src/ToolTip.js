@@ -71,11 +71,17 @@ define(function (require) {
 
             overlay.on('beforeshow', onbeforeshow, this);
 
-            popup({
+            popup.enable({
                 trigger: this.main,
-                overlay: overlay,
+                element: overlay.main,
                 showBy: this.showBy,
-                hideBy: this.hideBy
+                hideBy: this.hideBy,
+                onshow: function () {
+                    overlay.show();
+                },
+                onhide: function () {
+                    overlay.hide();
+                }
             });
         }
 

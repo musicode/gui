@@ -99,11 +99,17 @@ define(function (require) {
             list.render();
             list.appendTo(main);
 
-            popup({
+            popup.enable({
                 trigger: button.main,
-                overlay: list,
+                element: list.main,
                 showBy: 'click',
-                hideBy: 'blur'
+                hideBy: 'blur',
+                onshow: function () {
+                    list.show();
+                },
+                onhide: function() {
+                    list.hide();
+                }
             });
 
             /**

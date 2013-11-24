@@ -8,7 +8,7 @@ define(function (require) {
     
     var SuperClass = require('./interface/Control');
     var Range = require('./helper/Range');
-    var lib = require('./helper/lib');
+    var lib = require('./lib/lib');
     var gui = require('./main');
 
     /**

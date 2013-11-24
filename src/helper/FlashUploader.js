@@ -10,7 +10,7 @@ define(function (require) {
     require('../lib/swfupload/plugins/swfupload.cookies');
 
     var SuperClass = require('../interface/Control');
-    var lib = require('./lib');
+    var lib = require('../lib/lib');
 
     /**
      * flash 上传

@@ -8,7 +8,7 @@ define(function (require) {
     
     var SuperClass = require('../interface/Control');
     var Observable = require('../interface/Observable');
-    var lib = require('./lib');
+    var lib = require('../lib/lib');
 
     /**
      * Ajax 上传

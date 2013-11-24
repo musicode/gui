@@ -20,9 +20,11 @@
 @import 'uploader';
 @import 'tooltip';
 @import 'carousel';
+@import 'panel';
+@import 'scrollpanel';
 @import 'icon';
 
-.@{ui-class-prefix}-unselectable,
-.@{ui-class-prefix}-unselectable * {
-        .user-select;
-    }
+body[unselectable],
+body[unselectable] * {
+    .user-select;
+}

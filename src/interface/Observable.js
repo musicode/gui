@@ -6,7 +6,7 @@ define(function (require) {
 
     'use strict';
     
-    var lib = require('../helper/lib');
+    var lib = require('../lib/lib');
     var gui = require('../main');
 
     /**

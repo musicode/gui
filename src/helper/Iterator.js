@@ -7,7 +7,7 @@ define(function (require) {
     'use strict';
     
     var Observable = require('../interface/Observable');
-    var lib = require('./lib');
+    var lib = require('../lib/lib');
 
     /**
      * 上下键元素遍历器

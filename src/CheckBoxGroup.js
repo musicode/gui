@@ -8,7 +8,7 @@ define(function (require) {
     
     var SuperClass = require('./interface/Control');
     var CheckBox = require('./CheckBox');
-    var lib = require('./helper/lib');
+    var lib = require('./lib/lib');
 
     /**
      * 复选框组

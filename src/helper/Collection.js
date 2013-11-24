@@ -8,7 +8,7 @@ define(function (require) {
     
     var Item = require('./Item');
     var Thread = require('./Thread');
-    var lib = require('./lib');
+    var lib = require('../lib/lib');
     var gui = require('../main');
 
     /**

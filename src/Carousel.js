@@ -7,7 +7,7 @@ define(function (require) {
     'use strict';
     
     var SuperClass = require('./interface/Control');
-    var lib = require('./helper/lib');
+    var lib = require('./lib/lib');
 
     /**
      * 轮播

@@ -12,7 +12,7 @@ define(function (require) {
     var TextBox = require('./TextBox');
     var List = require('./List');
 
-    var lib = require('./helper/lib');
+    var lib = require('./lib/lib');
 
     /**
      * 自动补全

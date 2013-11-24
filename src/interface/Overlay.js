@@ -7,8 +7,8 @@ define(function (require) {
     'use strict';
     
     var SuperClass = require('./Control');
-    var position = require('../helper/position');
-    var lib = require('../helper/lib');
+    var position = require('../lib/position');
+    var lib = require('../lib/lib');
 
     /**
      * 浮层基类

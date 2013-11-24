@@ -7,7 +7,7 @@ define(function (require) {
     'use strict';
     
     var SuperClass = require('./interface/BaseButton');
-    var lib = require('./helper/lib');
+    var lib = require('./lib/lib');
 
     /**
      * 复选框

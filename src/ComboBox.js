@@ -10,8 +10,8 @@ define(function (require) {
     var Button = require('./Button');
     var List = require('./List');
 
-    var popup = require('./helper/popup');
-    var lib = require('./helper/lib');
+    var popup = require('./lib/popup');
+    var lib = require('./lib/lib');
     var gui = require('./main');
 
     /**

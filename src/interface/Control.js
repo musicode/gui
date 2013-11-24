@@ -15,7 +15,7 @@ define(function (require) {
      */
 
     var Observable = require('./Observable');
-    var lib = require('../helper/lib');
+    var lib = require('../lib/lib');
     var gui = require('../main');
 
     /**
@@ -33,6 +33,8 @@ define(function (require) {
 
         Observable.call(this, options);
 
+        this.main.data('guid', this.guid);
+        
         /**
          * 当前生命周期阶段
          *
@@ -327,6 +329,46 @@ define(function (require) {
          */
         toggle: function () {
             this[ this.isHidden() ? 'show' : 'hide' ]();
+        },
+
+        /**
+         * 获得控件宽度
+         *
+         * @return {number}
+         */
+        getWidth: function () {
+            return this.width;
+        },
+
+        /**
+         * 设置控件宽度
+         *
+         * @param {number} width
+         */
+        setWidth: function () {
+            this.setProperties({
+                width: width
+            });
+        },
+
+        /**
+         * 获得控件高度
+         *
+         * @return {number}
+         */
+        getHeight: function () {
+            return this.height;
+        },
+
+        /**
+         * 设置控件高度
+         *
+         * @param {number} width
+         */
+        setHeight: function () {
+            this.setProperties({
+                height: height
+            });
         },
 
         /**

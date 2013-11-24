@@ -14,7 +14,7 @@ define(function (require) {
                       ? require('./helper/AjaxUploader')
                       : require('./helper/FlashUploader');
 
-    var lib = require('./helper/lib');
+    var lib = require('./lib/lib');
     var gui = require('./main');
 
     /**

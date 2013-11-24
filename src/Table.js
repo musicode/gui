@@ -9,7 +9,7 @@ define(function (require) {
     var SuperClass = require('./interface/Control');
     var TableHelper = require('./helper/Table');
     var TableRow = require('./helper/TableRow');
-    var lib = require('./helper/lib');
+    var lib = require('./lib/lib');
     var gui = require('./main');
 
     /**

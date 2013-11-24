@@ -13,7 +13,7 @@ define(function (require) {
     var Collection = require('./Collection');
 
     var TableRow = require('./TableRow');
-    var lib = require('./lib');
+    var lib = require('../lib/lib');
 
     /**
      * @constructor

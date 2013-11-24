@@ -7,8 +7,9 @@ define(function (require) {
     'use strict';
     
     var SuperClass = require('./interface/Overlay');
-    var Draggable = require('./interface/Draggable');
-    var lib = require('./helper/lib');
+
+    var draggable = require('./lib/draggable');
+    var lib = require('./lib/lib');
     var gui = require('./main');
 
     var Mask = require('./Mask');
@@ -229,10 +230,13 @@ define(function (require) {
             if (draggable) {
                 var Class = dialog.constructor;
 
-                Draggable({
-                    ctrl: dialog,
+                draggable.enable({
+                    element: dialog.main,
                     handle: '.' + Class.CLASS_HEADER
                 });
+            }
+            else {
+                draggable.disable(dialog.main);
             }
         },
 
@@ -293,7 +297,9 @@ define(function (require) {
             }
         }
 
-        this.main.remove();
+        var main = this.main;
+        draggable.disable(main);
+        main.remove();
     }
 
     var classPrefix = gui.config.uiClassPrefix + '-dialog-';

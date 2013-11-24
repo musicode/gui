@@ -225,9 +225,9 @@ define(function (require) {
             SuperClass.painter.hidden(dialog, hidden);
         },
 
-        draggable: function (dialog, draggable) {
+        draggable: function (dialog, value) {
 
-            if (draggable) {
+            if (value) {
                 var Class = dialog.constructor;
 
                 draggable.enable({

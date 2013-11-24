@@ -19,9 +19,8 @@ define (function (require, exports) {
             && element.css('display') === 'none'
         ) {
             options.onshow();
+            afterShow(options);
         }
-
-        afterShow(options);
     }
 
     /**

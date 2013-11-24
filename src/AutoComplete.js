@@ -7,11 +7,11 @@ define(function (require) {
     'use strict';
     
     var SuperClass = require('./interface/Control');
-    var Iterator = require('./helper/Iterator');
 
     var TextBox = require('./TextBox');
     var List = require('./List');
 
+    var iterator = require('./lib/iterator');
     var lib = require('./lib/lib');
 
     /**
@@ -75,11 +75,38 @@ define(function (require) {
             this.list = list;
 
             // 实现按上下键遍历元素
-            var iterator = new Iterator({
+            this.iteratorConfig = {
                 min: 0,
-                loop: true
-            });
-            this.iterator = iterator;
+                loop: true,
+                scope: this,
+                onenter: function (index) {
+                    var text;
+
+                    if (index === 0) {
+                        text = this.value;
+                    }
+                    else {
+                        index--;
+
+                        var item = list.selectItemByIndex(index);
+                        var data = item.raw;
+
+                        if (typeof data === 'string') {
+                            text = data;
+                        }
+                        else {
+                            text = data.name || data.text;
+                        }
+                    }
+
+                    textBox.setValue(text);
+                },
+                onleave: function (index) {
+                    if (index > 0) {
+                        list.deselectItemByIndex(index - 1);
+                    }
+                }
+            };
 
             // 绑事件
             textBox.on('keydown', onkeydown, this);
@@ -96,10 +123,6 @@ define(function (require) {
             list.on('clickgroup', clickGroup, this);
             list.on('entergroup', enterGroup, this);
             list.on('leavegroup', leaveGroup, this);
-
-            // 键盘遍历
-            iterator.on('enter', onenter, this);
-            iterator.on('leave', onleave, this);
 
             this.one('beforedispose', beforeDispose);
 
@@ -203,17 +226,19 @@ define(function (require) {
 
         closed: function (autoComplete, closed) {
 
-            var iterator = autoComplete.iterator;
+            var iteratorConfig = autoComplete.iteratorConfig;
             var list = autoComplete.list;
 
             if (!closed
                 && (list.datasource && list.datasource.length > 0)
             ) {
-                iterator.start(0, 0, list.datasource.length);
+                iteratorConfig.index = 0;
+                iteratorConfig.max = list.datasource.length;
+                iterator.enable(iteratorConfig);
                 list.show();
             }
             else {
-                iterator.stop();
+                iterator.disable(iteratorConfig);
                 list.hide();
             }
         },
@@ -380,7 +405,7 @@ define(function (require) {
 
         var index = item.index;
 
-        this.iterator.restart(index + 1);
+        this.iteratorConfig.index = index + 1;
 
         group.selectItemByIndex(index);
     }
@@ -394,7 +419,7 @@ define(function (require) {
             selected: false
         });
 
-        this.iterator.restart();
+        this.iteratorConfig.index = 0;
     }
 
     function clickItem(e, params) {
@@ -439,39 +464,10 @@ define(function (require) {
         });
     }
 
-    function onenter(e, index) {
-        var text;
-
-        if (index === 0) {
-            text = this.value;
-        }
-        else {
-            index--;
-
-            var item = this.list.selectItemByIndex(index);
-            var data = item.raw;
-
-            if (typeof data === 'string') {
-                text = data;
-            }
-            else {
-                text = data.name || data.text;
-            }
-        }
-
-        this.textBox.setValue(text);
-    }
-
-    function onleave(e, index) {
-        if (index > 0) {
-            this.list.deselectItemByIndex(index - 1);
-        }
-    }
-
     function beforeDispose() {
         this.textBox.dispose();
         this.list.dispose();
-        this.iterator.dispose();
+        iterator.disable(this.iteratorConfig);
     }
 
     /**

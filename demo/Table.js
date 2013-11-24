@@ -1,7 +1,7 @@
 require(
     [
         'gui/Table',
-        'gui/helper/lib'
+        'gui/lib/lib'
     ],
     function (Table, lib) {
 

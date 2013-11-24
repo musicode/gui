@@ -5,7 +5,7 @@
 define(function (require, exports) {
 
     'use strict';
-    
+
     var lib = require('./lib');
 
     // 思路来自 http://aralejs.org/position/

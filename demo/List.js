@@ -1,9 +1,8 @@
 require(
     [
-        'gui/List',
-        'gui/helper/Iterator'
+        'gui/List'
     ],
-    function (List, Iterator) {
+    function (List) {
 
         var datasource = [ ];
 
@@ -17,18 +16,6 @@ require(
             toggle: true
         });
         list.render();
-
-        var iterator = new Iterator({
-            loop: true
-        });
-
-        iterator.start(0, 0, datasource.length);
-        iterator.on('enter', function (e, index) {
-            list.selectItemByIndex(index);
-        });
-        iterator.on('leave', function (e, index) {
-            list.deselectItemByIndex(index);
-        });
 
         list.onselect = function (e) {
             console.log(e);

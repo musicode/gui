@@ -46,7 +46,7 @@ define(function (require) {
             main.html(this.template);
 
             this.on('dragging', scrollByDrag);
-            this.on('scroll', scrollByWheel);
+            this.on('wheelscroll', scrollByWheel);
 
             SuperClass.prototype.initStructure.apply(this, arguments);
         },

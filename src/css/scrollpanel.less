@@ -1,0 +1,27 @@
+.@{ui-class-prefix}-scrollpanel {
+    .ui-common;
+    position: relative;
+    overflow: hidden;
+}
+.@{ui-class-prefix}-scrollpanel-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+.@{ui-class-prefix}-scrollpanel-scrollbar {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: @scrollbar-thumb-width;
+}
+.@{ui-class-prefix}-scrollpanel-scrollthumb {
+    width: @scrollbar-thumb-width;
+    background-color: @scrollbar-thumb-bgcolor;
+    position: absolute;
+
+    &:hover {
+        background-color: @scrollbar-thumb-hover-bgcolor;
+    }
+}

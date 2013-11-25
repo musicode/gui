@@ -190,7 +190,7 @@ define(function (require) {
 
         scrollPanel.ratio = ratio;
         scrollPanel.minY = 0;
-        scrollPanel.maxY = Math.max(0, content.height() - height);
+        scrollPanel.maxY = Math.max(0, content[0].offsetHeight - height);
     }
 
     function scrollByDrag(e, data) {
@@ -200,7 +200,6 @@ define(function (require) {
     }
 
     function scrollByWheel(e, data) {
-        p(data.delta);
         this.setProperties({
             scrollY: this.scrollY + (data.delta * 20)
         });

@@ -7,7 +7,7 @@ define(function (require) {
     'use strict';
     
     var Item = require('./Item');
-    var Thread = require('./Thread');
+    var thread = require('../lib/thread');
     var lib = require('../lib/lib');
     var gui = require('../main');
 
@@ -322,7 +322,7 @@ define(function (require) {
          */
         startThread: function (type, items, data) {
 
-            var thread = type === 'select'
+            var target = type === 'select'
                        ? this.selectThread
                        : this.renderThread;
 
@@ -331,19 +331,21 @@ define(function (require) {
             var completeHandler = this[ type + 'CompleteHandler' ];
 
             if (typeof stepHandler === 'function') {
-                thread.on('step', function (e, params) {
-                    stepHandler(params.data, data);
-                });
+                target.onstep = function (part) {
+                    stepHandler(part, data);
+                };
             }
 
             if (typeof completeHandler === 'function') {
-                thread.on('complete', function () {
+                target.onfinish = function () {
                     collection.stopThread(type);
                     completeHandler(data);
-                });
+                };
             }
 
-            thread.start(items);
+            target.data = items;
+
+            thread.start(target);
         },
 
         /**
@@ -354,14 +356,11 @@ define(function (require) {
          */
         stopThread: function (type) {
 
-            var thread = type === 'select'
+            var target = type === 'select'
                        ? this.selectThread
                        : this.renderThread;
 
-            thread.stop();
-
-            thread.off('step');
-            thread.off('complete');
+            thread.stop(target);
         },
 
         /**
@@ -422,10 +421,13 @@ define(function (require) {
     Collection.painter = {
 
         asyncStep: function (collection, asyncStep) {
-            ensureThread(collection);
+            var config = {
+                unit: 20,
+                interval: collection.async ? asyncStep : 0
+            };
 
-            collection.renderThread.interval =
-            collection.selectThread.interval = collection.async ? asyncStep : 0;
+            collection.renderThread = config;
+            collection.selectThread = $.extend(true, config);
         },
 
         raw: function (collection, raw) {
@@ -450,24 +452,6 @@ define(function (require) {
             collection.startSelectThread(collection.items, { selected: selected });
         }
     };
-
-    /**
-     * 确保创建了线程对象
-     */
-    function ensureThread(collection) {
-
-        if (!collection.renderThead) {
-            collection.renderThread = new Thread({
-                                          type: Thread.TYPE_RENDER
-                                      });
-        }
-
-        if (!collection.selectThread) {
-            collection.selectThread = new Thread({
-                                          type: Thread.TYPE_SELECT
-                                      });
-        }
-    }
 
 
     function beforeDispose() {

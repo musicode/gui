@@ -49,10 +49,18 @@ define(function (require, exports) {
         };
     }
 
+    /**
+     * 判断 index 是否在合法区间内
+     *
+     * @return {boolean}
+     */
     function inRange(index, options) {
         return index >= options.min && index <= options.max;
     }
 
+    /**
+     * 向后遍历
+     */
     function prev(options) {
 
         var currentIndex = options.index;
@@ -78,6 +86,9 @@ define(function (require, exports) {
         }
     }
 
+    /**
+     * 向前遍历
+     */
     function next(options) {
 
         var currentIndex = options.index;

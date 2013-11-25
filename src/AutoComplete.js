@@ -23,7 +23,7 @@ define(function (require) {
      * @param {string=} options.placeholder
      * @param {number=} options.width 输入框的宽度
      * @param {Function} options.remote 远程数据, 一般用作补全提示
-     * @param {Function} options.local 本地数据, 一般用作筛选数据
+     * @param {Function} options.local 本地数据, 一般用作数据筛选
      */
     function AutoComplete(options) {
         SuperClass.apply(this, arguments);
@@ -75,38 +75,7 @@ define(function (require) {
             this.list = list;
 
             // 实现按上下键遍历元素
-            this.iteratorConfig = {
-                min: 0,
-                loop: true,
-                scope: this,
-                onenter: function (index) {
-                    var text;
-
-                    if (index === 0) {
-                        text = this.value;
-                    }
-                    else {
-                        index--;
-
-                        var item = list.selectItemByIndex(index);
-                        var data = item.raw;
-
-                        if (typeof data === 'string') {
-                            text = data;
-                        }
-                        else {
-                            text = data.name || data.text;
-                        }
-                    }
-
-                    textBox.setValue(text);
-                },
-                onleave: function (index) {
-                    if (index > 0) {
-                        list.deselectItemByIndex(index - 1);
-                    }
-                }
-            };
+            this.iteratorConfig = createIteratorConfig(this);
 
             // 绑事件
             textBox.on('keydown', onkeydown, this);
@@ -266,6 +235,40 @@ define(function (require) {
         }
     };
 
+    function createIteratorConfig(autoComplete) {
+        return {
+            min: 0,
+            loop: true,
+            scope: autoComplete,
+            onenter: function (index) {
+                var text;
+
+                if (index === 0) {
+                    text = this.value;
+                }
+                else {
+                    index--;
+
+                    var item = this.list.selectItemByIndex(index);
+                    var data = item.raw;
+
+                    if (typeof data === 'string') {
+                        text = data;
+                    }
+                    else {
+                        text = data.name || data.text;
+                    }
+                }
+
+                this.textBox.setValue(text);
+            },
+            onleave: function (index) {
+                if (index > 0) {
+                    this.list.deselectItemByIndex(index - 1);
+                }
+            }
+        };
+    }
 
     /**
      * textbox 触发 focus
@@ -274,9 +277,6 @@ define(function (require) {
      */
     function onfocus() {
 
-        // 如果配了本地数据，可以使用
-        // 这样能稍稍提升点用户体验
-        // 如果没配就算了，不至于去异步请求
         if (this.local) {
             showSuggestion(this);
         }

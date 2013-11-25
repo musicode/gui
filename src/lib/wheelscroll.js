@@ -26,7 +26,7 @@ define(function (require, exports) {
             value = -1 * event.wheelDelta / 120;
         }
         else {
-            value = event.detail;
+            value = event.detail / 3;
         }
 
         /**
@@ -40,10 +40,18 @@ define(function (require, exports) {
         e.preventDefault();
     }
 
+    /**
+     * 监听 element 的鼠标滚轮
+     *
+     * @param {jQuery} element
+     */
     exports.enable = function (element) {
         element.on(type, element, scrollWheel);
     };
 
+    /**
+     * 取消监听 element 的鼠标滚轮
+     */
     exports.disable = function (element) {
         element.off(type);
     };

@@ -19,6 +19,7 @@ define(function (require, exports) {
     /**
      * 获得 pin 点的坐标
      *
+     * @private
      * @param {Object} options
      *
      * @param {Object} options.pinObject
@@ -50,7 +51,7 @@ define(function (require, exports) {
         if (!baseObject) {
             // 默认以 body 左上角为基准
             baseObject = {
-                element: document.body,
+                element: lib.getBody(),
                 x: '0',
                 y: '0'
             };
@@ -81,7 +82,7 @@ define(function (require, exports) {
             y: '50%'
         };
         var baseObject = {
-            element: baseElement || document.body,
+            element: baseElement || lib.getBody(),
             x: '50%',
             y: '50%'
         };
@@ -186,6 +187,5 @@ define(function (require, exports) {
 
     exports.pin = pin;
     exports.center = center;
-    exports.getPinPosition = getPinPosition;
 
 });

@@ -194,13 +194,12 @@ define (function (require, exports) {
      * @param {jQuery} options.element
      * @param {string} options.showBy click|over
      * @param {string} options.hideBy blur|out
-     * @param {Function} options.onshow
+     * @param {Function} options.onshow 如果有显示逻辑，需自己调用，如 target.show()
      * @param {Function} options.onhide
      */
     exports.enable = function (options) {
 
         var trigger = options.trigger;
-        var element = options.element;
 
         if (options.showBy === 'click') {
             trigger.on('click', options, showClick);
@@ -211,8 +210,20 @@ define (function (require, exports) {
         }
     };
 
-    exports.disable = function () {
+    /**
+     * @param {Object} options 传入 enable 的对象
+     */
+    exports.disable = function (options) {
 
+        var trigger = options.trigger;
+
+        if (options.showBy === 'click') {
+            trigger.off('click', showClick);
+        }
+        else {
+            trigger.off('mouseenter', showEnter);
+            trigger.off('mouseleave', showLeave);
+        }
     };
 
 });

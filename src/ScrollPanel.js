@@ -19,6 +19,7 @@ define(function (require) {
      * @constructor
      * @param {Object} options
      * @param {string} options.content
+     * @param {number=} options.scrollY
      */
     function ScrollPanel(options) {
         SuperClass.apply(this, arguments);
@@ -33,6 +34,13 @@ define(function (require) {
          */
         type: 'ScrollPanel',
 
+        /**
+         * 初始化控件配置
+         * 
+         * @protected
+         * @override
+         * @param {Object} options
+         */
         initOptions: function (options) {
             if (typeof options.content !== 'string') {
                 options.content = this.main.html();
@@ -41,9 +49,14 @@ define(function (require) {
             SuperClass.prototype.initOptions.call(this, options);
         },
 
+        /**
+         * 初始化 DOM 结构
+         *
+         * @protected
+         * @override
+         */
         initStructure: function () {
-            var main = this.main;
-            main.html(this.template);
+            this.main.html(this.template);
 
             this.on('dragging', scrollByDrag);
             this.on('wheelscroll', scrollByWheel);
@@ -63,30 +76,12 @@ define(function (require) {
         },
 
         /**
+         * 获得可滚动高度
          * 
+         * @return {number}
          */
-        scrollTo: function (y) {
-
-            if (y < this.minY) {
-                y = this.minY;
-            }
-            else if (y > this.maxY) {
-                y = this.maxY;
-            }
-
-            y *= -1;
-
-            var contentPanel = this.main.find('.' + ScrollPanel.CLASS_CONTENT);
-            contentPanel.css({
-                top: y
-            });
-
-            if (!arguments[1]) {
-                var thumb = this.main.find('.' + ScrollPanel.CLASS_SCROLLTHUMB);
-                thumb.css({
-                    top: -1 * y * this.ratio
-                });
-            }
+        getScrollHeight: function () {
+            return this.main.find('.' + ScrollPanel.CLASS_CONTENT)[0].offsetHeight;
         }
     };
 
@@ -97,6 +92,7 @@ define(function (require) {
     ScrollPanel.CLASS_SCROLLTHUMB = classPrefix + 'scrollthumb';
 
     ScrollPanel.defaultOptions = {
+        scrollY: 0,
         template: '<div class="' + ScrollPanel.CLASS_CONTENT + '"></div>'
                 + '<div class="' + ScrollPanel.CLASS_SCROLLBAR + '">'
                 + '<div class="' + ScrollPanel.CLASS_SCROLLTHUMB + '"></div>'
@@ -115,6 +111,31 @@ define(function (require) {
             element.html(content);
 
             refreshScrollbar(scrollPanel);
+        },
+
+        scrollY: function (scrollPanel, y, oldY) {
+            if (y < scrollPanel.minY) {
+                y = scrollPanel.minY;
+            }
+            else if (y > scrollPanel.maxY) {
+                y = scrollPanel.maxY;
+            }
+
+            if (y === oldY) {
+                return;
+            }
+
+            y *= -1;
+
+            var contentPanel = scrollPanel.main.find('.' + ScrollPanel.CLASS_CONTENT);
+            contentPanel.css({
+                top: y
+            });
+
+            var thumb = scrollPanel.main.find('.' + ScrollPanel.CLASS_SCROLLTHUMB);
+            thumb.css({
+                top: -1 * y * scrollPanel.ratio
+            });
         }
     };
 
@@ -126,9 +147,16 @@ define(function (require) {
      */
     function getRatio(scrollPanel) {
         var containerHeight = scrollPanel.getHeight();
-        var contentHeight = scrollPanel.main.find('.' + ScrollPanel.CLASS_CONTENT).prop('scrollHeight');
-        return containerHeight / contentHeight;
+        var contentHeight = scrollPanel.getScrollHeight();
+
+        if (contentHeight > 0) {
+            return containerHeight / contentHeight;
+        }
+        else {
+            return 0;
+        }
     }
+
 
     /**
      * 根据内容和容器刷新滚动条
@@ -147,7 +175,8 @@ define(function (require) {
             draggable.enable({
                 element: thumb,
                 containment: thumb.parent(),
-                axis: 'y'
+                axis: 'y',
+                silence: true
             });
             wheelscroll.enable(main);
             content.css({ right: thumb.width() });
@@ -161,18 +190,20 @@ define(function (require) {
 
         scrollPanel.ratio = ratio;
         scrollPanel.minY = 0;
-        scrollPanel.maxY = content.prop('scrollHeight') - height;
+        scrollPanel.maxY = Math.max(0, content.height() - height);
     }
 
     function scrollByDrag(e, data) {
-        this.scrollTo(data.y / this.ratio, false);
+        this.setProperties({
+            scrollY: data.y / this.ratio
+        });
     }
 
     function scrollByWheel(e, data) {
-        var contentPanel = this.main.find('.' + ScrollPanel.CLASS_CONTENT);
-        var top = -1 * parseInt(contentPanel.css('top'), 10);
-
-        this.scrollTo(top + (data.delta * 20));
+        p(data.delta);
+        this.setProperties({
+            scrollY: this.scrollY + (data.delta * 20)
+        });
     }
 
     lib.inherits(ScrollPanel, SuperClass);

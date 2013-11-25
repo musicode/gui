@@ -132,10 +132,14 @@ define(function (require, exports) {
 
         var element = options.element;
         element.trigger('dragging', { x: x, y: y });
-        element.css({
-            left: x,
-            top: y
-        });
+
+        // 如果是静默的，则什么也不做
+        if (!options.silence) {
+            element.css({
+                left: x,
+                top: y
+            });
+        }
     }
 
     /**
@@ -154,13 +158,14 @@ define(function (require, exports) {
 
     /**
      * 启用拖拽
-     * 
+     *
      * @param {Object} options
      * @param {jQuery} options.element 需要拖拽的元素
      * @param {jQuery=} options.containment 限制拖拽范围的容器，默认是 document.body
      * @param {string=} options.handle 触发拖拽的区域 (css选择器)
      * @param {string=} options.cancel 不触发拖拽的区域 (css选择器)
      * @param {string=} options.axis 限制方向，x 或 y
+     * @param {boolean=} options.silence 是否啥也不做，仅把当前坐标通过事件传出去
      */
     exports.enable = function (options) {
 

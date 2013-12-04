@@ -14,13 +14,18 @@
         <header>TextBox</header>
         <input id="ui-textbox" type="text" data-placeholder="占位符" />
         <input id="ui-textbox-disabled" type="text" data-placeholder="占位符" />
+        <textarea id="ui-textbox-range"></textarea>
+        <button id="ui-button">确定</button>
+
         <script src="TextBox.js"></script>
         <script>
             require(
                 [
-                    'gui/TextBox'
+                    'gui/TextBox',
+                    'gui/Button',
+                    'gui/lib/range'
                 ],
-                function (TextBox) {
+                function (TextBox, Button, Range) {
 
                     var textbox = new TextBox({
                         main: $('#ui-textbox-disabled'),
@@ -28,6 +33,21 @@
                     });
 
                     textbox.render();
+
+                    var rangeBox = new TextBox({
+                        main: $('#ui-textbox-range')
+                    });
+                    rangeBox.render();
+
+                    var btn = new Button({
+                        main: $('#ui-button')
+                    });
+                    btn.render();
+
+                    btn.on('click', function () {
+                        rangeBox.setRange(1, 3);
+                        p(rangeBox.getRange());
+                    });
                 }
             );
         </script>

@@ -15,11 +15,8 @@ define (function (require, exports) {
         var options = e.data;
         var element = options.element;
 
-        if (typeof options.onshow === 'function'
-            && element.css('display') === 'none'
-        ) {
-            options.onshow();
-            afterShow(options);
+        if (element.css('display') === 'none') {
+            options.show();
         }
     }
 
@@ -40,10 +37,9 @@ define (function (require, exports) {
         // 延时显示，不然太灵敏了
         var task = setTimeout(function () {
             if (element.data('waiting')) {
-                if (typeof options.onshow === 'function'
-                    && element.css('display') === 'none'
+                if (element.css('display') === 'none'
                 ) {
-                    options.onshow();
+                    options.show();
                     afterShow(options);
                 }
                 element.removeData('waiting');
@@ -117,11 +113,8 @@ define (function (require, exports) {
         if (element.css('display') !== 'none') {
 
             var onblur = function (e) {
-                if (typeof options.onhide === 'function'
-                    && outside(e.target, element[0])
-                ) {
-                    options.onhide();
-                    afterHide(options);
+                if (outside(e.target, element[0])) {
+                    options.hide();
                 }
             };
 
@@ -174,12 +167,10 @@ define (function (require, exports) {
         // 启动隐藏任务
         var task = setTimeout(function () {
             if (element.data('waiting')) {
-                if (typeof options.onhide === 'function'
-                    && element.css('display') !== 'none'
+                if (element.css('display') !== 'none'
                     && outside(e.relatedTarget, trigger[0], element[0])
                 ) {
-                    options.onhide();
-                    afterHide(options);
+                    options.hide();
                 }
                 element.removeData('waiting');
             }
@@ -194,12 +185,34 @@ define (function (require, exports) {
      * @param {jQuery} options.element
      * @param {string} options.showBy click|over
      * @param {string} options.hideBy blur|out
-     * @param {Function} options.onshow 如果有显示逻辑，需自己调用，如 target.show()
-     * @param {Function} options.onhide
+     * @param {Function=} options.show 可选，默认是 options.element.show()
+     * @param {Function=} options.hide 可选，默认是 options.element.hide()
      */
     exports.enable = function (options) {
 
         var trigger = options.trigger;
+
+        var show = options.show;
+        options.show = function () {
+            if (typeof show === 'function') {
+                show();
+            }
+            else {
+                options.element.show();
+            }
+            afterShow(options);
+        };
+
+        var hide = options.hide;
+        options.hide = function () {
+            if (typeof hide === 'function') {
+                hide();
+            }
+            else {
+                options.element.hide();
+            }
+            afterHide(options);
+        };
 
         if (options.showBy === 'click') {
             trigger.on('click', options, showClick);

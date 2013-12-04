@@ -55,10 +55,14 @@ define(function (require, exports) {
 
     /**
      * 停止线程
-     * 
+     *
+     * @param {Object} options 传入 start 的对象
      */
-    exports.stop = function (task) {
-        clearTimeout(task);
+    exports.stop = function (options) {
+        if (options.task) {
+            clearTimeout(options.task);
+            delete options.task;
+        }
     };
 
 });

@@ -161,7 +161,7 @@ define(function (require, exports) {
         else if (percentAndNumberExpr.test(raw)) {
             percent = RegExp.$1 / 100;
             ret = getTotal() * percent;
-            px = RegExp.$3;
+            px = Number(RegExp.$3);
 
             if (RegExp.$2 === '+') {
                 ret += px;
@@ -175,7 +175,7 @@ define(function (require, exports) {
     }
 
     var percentExpr = /(\d+)%$/;
-    var percentAndNumberExpr = /(\d)+%\s?([+-])\s?(\d+)/;
+    var percentAndNumberExpr = /(\d+)%\s?([+-])\s?(\d+)/;
 
     function toJquery(element) {
         if (element.jquery == null) {

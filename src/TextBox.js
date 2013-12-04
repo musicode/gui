@@ -7,7 +7,7 @@ define(function (require) {
     'use strict';
     
     var SuperClass = require('./interface/Control');
-    var Range = require('./helper/Range');
+    var Range = require('./lib/Range');
     var lib = require('./lib/lib');
     var gui = require('./main');
 
@@ -68,6 +68,8 @@ define(function (require) {
          * @override
          */
         initStructure: function () {
+
+            this.range = new Range(this.main[0]);
 
             this.on('focus', onfocus);
             this.on('blur', onblur);
@@ -205,26 +207,44 @@ define(function (require) {
          * {
          *   start: 选区开始位置
          *   end: 选区结束位置
-         *   text: 选区内的文本
          * }
          *
          * @return {Object}
          */
         getRange: function () {
-            return Range.create(this.main[0]);
+            var range = this.range;
+            return {
+                start: range.getStart(),
+                end: range.getEnd()
+            };
         },
 
         /**
-         * 设置 range.start 到 range.end 之间的文本为 range.text
+         * 设置选区范围
          *
-         * @param {Object} range
-         * @param {number} range.start
-         * @param {number} range.end
-         * @param {string} range.text
+         * @param {number} start
+         * @param {number} end
          */
-        setRange: function (range) {
-            range = new Range(range.start, range.end, range.text);
-            range.replaceText(this, range.text);
+        setRange: function (start, end) {
+            this.range.setRange(start, end);
+        },
+
+        /**
+         * 获取选区文本
+         * 
+         * @return {string}
+         */
+        getRangeText: function () {
+            return this.range.getText();
+        },
+
+        /**
+         * 设置选区文本
+         * 
+         * @param {string} text
+         */
+        setRangeText: function (text) {
+            this.range.setText(text);
         }
 
     };

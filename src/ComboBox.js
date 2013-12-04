@@ -104,10 +104,10 @@ define(function (require) {
                 element: list.main,
                 showBy: 'click',
                 hideBy: 'blur',
-                onshow: function () {
+                show: function () {
                     list.show();
                 },
-                onhide: function() {
+                hide: function() {
                     list.hide();
                 }
             });

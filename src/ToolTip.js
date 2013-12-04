@@ -76,10 +76,10 @@ define(function (require) {
                 element: overlay.main,
                 showBy: this.showBy,
                 hideBy: this.hideBy,
-                onshow: function () {
+                show: function () {
                     overlay.show();
                 },
-                onhide: function () {
+                hide: function () {
                     overlay.hide();
                 }
             });

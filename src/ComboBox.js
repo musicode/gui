@@ -5,7 +5,7 @@
 define(function (require) {
 
     'use strict';
-    
+
     var SuperClass = require('./interface/Control');
     var Button = require('./Button');
     var List = require('./List');
@@ -344,7 +344,7 @@ define(function (require) {
         /**
          * @event ComboBox#ui-change
          */
-        comboBox.fire('ui-change');
+        comboBox.trigger('ui-change');
     }
 
 

@@ -5,7 +5,7 @@
 define(function (require) {
 
     'use strict';
-    
+
     var SuperClass = require('../interface/Control');
     var Observable = require('../interface/Observable');
     var lib = require('../lib/lib');
@@ -138,7 +138,7 @@ define(function (require) {
     };
 
     function changeFile() {
-        this.fire('upload-change');
+        this.trigger('upload-change');
     }
 
     /**
@@ -149,7 +149,7 @@ define(function (require) {
         /**
          * @event AjaxUploader#upload-start
          */
-        this.fire('upload-start');
+        this.trigger('upload-start');
     }
 
     function uploadComplete(e) {
@@ -157,7 +157,7 @@ define(function (require) {
         /**
          * @event AjaxUploader#upload-complete
          */
-        this.fire('upload-complete');
+        this.trigger('upload-complete');
     }
 
     function uploadProgress(e) {
@@ -170,7 +170,7 @@ define(function (require) {
              * @param {number} e.loaded 已上传大小
              * @param {number} e.total 总大小
              */
-            this.fire(
+            this.trigger(
                 'upload-progress',
                 {
                     uploaded: e.loaded,
@@ -190,7 +190,7 @@ define(function (require) {
          * @param {Object} e 事件对象
          * @param {string} e.response 返回的数据
          */
-        this.fire(
+        this.trigger(
             'upload-success',
             {
                 response: this.xhr.responseText
@@ -206,7 +206,7 @@ define(function (require) {
         /**
          * @event AjaxUploader#upload-fail
          */
-        this.fire('upload-fail');
+        this.trigger('upload-fail');
     }
 
     /**

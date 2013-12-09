@@ -5,7 +5,7 @@
 define(function (require) {
 
     'use strict';
-    
+
     var SuperClass = require('./interface/Control');
     var ListHelper = require('./helper/List');
     var lib = require('./lib/lib');
@@ -421,7 +421,7 @@ define(function (require) {
             }
         }
 
-        this.fire(
+        this.trigger(
             'clickitem',
             {
                 item: item
@@ -438,7 +438,7 @@ define(function (require) {
      * @param {Item} e.item item 对象
      */
     function enterItem(e) {
-        this.fire('enteritem', 
+        this.trigger('enteritem',
             {
                 item: e.item,
                 group: e.group || this.helper
@@ -454,7 +454,7 @@ define(function (require) {
      * @param {Item} e.item item 对象
      */
     function leaveItem(e) {
-        this.fire('leaveitem', 
+        this.trigger('leaveitem',
             {
                 item: e.item,
                 group: e.group || this.helper
@@ -486,7 +486,7 @@ define(function (require) {
             });
         }
 
-        this.fire('clickgroup',
+        this.trigger('clickgroup',
             {
                 group: group
             }
@@ -501,7 +501,7 @@ define(function (require) {
      * @param {Collection} e.group 分组对象
      */
     function enterGroup(e) {
-        this.fire('entergroup',
+        this.trigger('entergroup',
             {
                 group: e.group
             }
@@ -516,7 +516,7 @@ define(function (require) {
      * @param {Collection} e.group 分组对象
      */
     function leaveGroup(e) {
-        this.fire('leavegroup',
+        this.trigger('leavegroup',
             {
                 group: e.group
             }

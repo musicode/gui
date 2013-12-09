@@ -12,7 +12,7 @@ define(function (require, exports) {
 
     /**
      * 处理浏览器的兼容问题
-     * 
+     *
      * 向下滚动统一为正数
      * 向上滚动统一为负数
      * 滚动幅度取自 delta 属性

@@ -5,7 +5,7 @@
 define(function (require) {
 
     'use strict';
-    
+
     var SuperClass = require('./interface/Control');
     var Range = require('./lib/Range');
     var lib = require('./lib/lib');
@@ -231,7 +231,7 @@ define(function (require) {
 
         /**
          * 获取选区文本
-         * 
+         *
          * @return {string}
          */
         getRangeText: function () {
@@ -240,7 +240,7 @@ define(function (require) {
 
         /**
          * 设置选区文本
-         * 
+         *
          * @param {string} text
          */
         setRangeText: function (text) {
@@ -326,7 +326,7 @@ define(function (require) {
             this.main.removeClass(TextBox.CLASS_PLACEHOLDER);
             TextBox.painter.value(this, '');
         }
-        this.fire('ui-focus');
+        this.trigger('ui-focus');
     }
 
     function onblur(e) {
@@ -334,7 +334,7 @@ define(function (require) {
             this.main.addClass(TextBox.CLASS_PLACEHOLDER);
             TextBox.painter.placeholder(this, this.placeholder);
         }
-        this.fire('ui-blur');
+        this.trigger('ui-blur');
     }
 
     function onkeydown(e) {
@@ -351,7 +351,7 @@ define(function (require) {
             /**
              * @event Inputable#submit
              */
-            this.fire('submit');
+            this.trigger('submit');
         }
     }
 
@@ -377,7 +377,7 @@ define(function (require) {
                 /**
                  * @event Inputable#input
                  */
-                this.fire('input');
+                this.trigger('input');
             }
         }
     }

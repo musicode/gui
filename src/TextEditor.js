@@ -5,7 +5,7 @@
 define(function (require) {
 
     'use strict';
-    
+
     var SuperClass = require('./interface/Control');
     var CodeMirror = require('./lib/codemirror/lib/codemirror');
     var lib = require('./lib/lib');
@@ -67,10 +67,10 @@ define(function (require) {
 
             var me = this;
             var onfocus = function () {
-                me.fire('ui-focus');
+                me.trigger('ui-focus');
             };
             var onblur = function () {
-                me.fire('ui-blur');
+                me.trigger('ui-blur');
             };
             codeMirror.on('focus', onfocus);
             codeMirror.on('blur', onblur);

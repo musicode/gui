@@ -1,7 +1,7 @@
 define(function (require, exports, module) {
 
     'use strict';
-    
+
     /**
      * 配置项
      *
@@ -9,7 +9,8 @@ define(function (require, exports, module) {
      */
     exports.config = {
         uiClassPrefix: 'ui',
-        iconClassPrefix: 'icon'
+        iconClassPrefix: 'icon',
+        scrollbarWidth: 6
     };
 
     var classPrefix = exports.config.uiClassPrefix + '-';

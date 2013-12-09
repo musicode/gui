@@ -19,6 +19,7 @@ define(function (require) {
      * @constructor
      * @param {Object} options
      * @param {string} options.content
+     * @param {number=} options.height
      * @param {number=} options.scrollY
      */
     function ScrollPanel(options) {
@@ -36,7 +37,7 @@ define(function (require) {
 
         /**
          * 初始化控件配置
-         * 
+         *
          * @protected
          * @override
          * @param {Object} options
@@ -60,6 +61,7 @@ define(function (require) {
 
             this.on('dragging', scrollByDrag);
             this.on('wheelscroll', scrollByWheel);
+            this.on('contentChange', changeContent);
 
             SuperClass.prototype.initStructure.apply(this, arguments);
         },
@@ -77,11 +79,20 @@ define(function (require) {
 
         /**
          * 获得可滚动高度
-         * 
+         *
          * @return {number}
          */
         getScrollHeight: function () {
             return this.main.find('.' + ScrollPanel.CLASS_CONTENT)[0].offsetHeight;
+        },
+
+        /**
+         * 是否出现了滚动条
+         *
+         * @return {boolean}
+         */
+        hasScrollbar: function () {
+            return this.getScrollHeight() > this.getHeight();
         }
     };
 
@@ -103,14 +114,25 @@ define(function (require) {
 
         height: function (scrollPanel, height) {
             SuperClass.painter.height(scrollPanel, height);
-            refreshScrollbar(scrollPanel);
+
+            var element = scrollPanel.main.find('.' + ScrollPanel.CLASS_CONTENT);
+            if (height) {
+                element.css('position', 'absolute');
+                refreshScrollbar(scrollPanel);
+            }
+            else {
+                element.css('position', 'static');
+            }
         },
 
         content: function (scrollPanel, content) {
             var element = scrollPanel.main.find('.' + ScrollPanel.CLASS_CONTENT);
             element.html(content);
 
-            refreshScrollbar(scrollPanel);
+            /**
+             * @event ScrollPanel#contentChange
+             */
+            scrollPanel.trigger('contentChange');
         },
 
         scrollY: function (scrollPanel, y, oldY) {
@@ -124,6 +146,9 @@ define(function (require) {
             if (y === oldY) {
                 return;
             }
+
+            // 纠正一下
+            scrollPanel.scrollY = y;
 
             y *= -1;
 
@@ -142,7 +167,7 @@ define(function (require) {
     /**
      * 计算 scroll thumb 的高度
      * 此高度需参考内容和容器高度
-     * 
+     *
      * @return {number}
      */
     function getRatio(scrollPanel) {
@@ -203,6 +228,10 @@ define(function (require) {
         this.setProperties({
             scrollY: this.scrollY + (data.delta * 20)
         });
+    }
+
+    function changeContent(e) {
+        refreshScrollbar(this);
     }
 
     lib.inherits(ScrollPanel, SuperClass);

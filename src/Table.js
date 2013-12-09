@@ -5,10 +5,12 @@
 define(function (require) {
 
     'use strict';
-    
+
     var SuperClass = require('./interface/Control');
+    var Collection = require('./helper/Collection');
     var TableHelper = require('./helper/Table');
     var TableRow = require('./helper/TableRow');
+    var ScrollPanel = require('./ScrollPanel');
     var lib = require('./lib/lib');
     var gui = require('./main');
 
@@ -60,8 +62,13 @@ define(function (require) {
          */
         initStructure: function () {
 
-            var main = this.main;
-            main.html(template);
+            this.main.html(this.template);
+
+            this.scrollPanel = new ScrollPanel({
+                main: this.getBody()
+            });
+            this.scrollPanel.render();
+
 
             this.helper = createHelper(this);
             this.helper.on('click', clickBody, this);
@@ -91,20 +98,95 @@ define(function (require) {
          */
         loading: function () {
             var main = this.main;
-            var body = main.find('.' + Table.CLASS_BODY);
+            var body = this.getBody();
             setBodyHTML(this, this.loadingText);
             main.addClass(Table.CLASS_LOADING);
+        },
+
+        /**
+         * 获得表格头部
+         *
+         * @return {jQuery}
+         */
+        getHeader: function () {
+            return this.main.find('.' + Table.CLASS_HEADER);
+        },
+
+        /**
+         * 获得表格主体
+         *
+         * @return {jQuery}
+         */
+        getBody: function () {
+            return this.main.find('.' + Table.CLASS_BODY);
         }
     };
 
+    var classPrefix = gui.config.uiClassPrefix + '-table-';
 
+    /**
+     * 表格 header 的 class
+     *
+     * @static
+     * @type {string}
+     */
+    Table.CLASS_HEADER = classPrefix + 'header';
+
+    /**
+     * 表格 body 的 class
+     */
+    Table.CLASS_BODY = classPrefix + 'body';
+
+    /**
+     * 可排序
+     */
+    Table.CLASS_SORTABLE = classPrefix + 'sortable';
+
+    /**
+     * 全选/反选 class
+     */
+    Table.CLASS_ALLBOX = classPrefix + 'allbox';
+
+    /**
+     * 表格默认状态的 class
+     * 此状态只存在创建表格时，未设置 datasource
+     *
+     * @static
+     * @type {string}
+     */
+    Table.CLASS_DEFAULT = classPrefix + 'default';
+
+    /**
+     * 表格的数据正在加载状态的 class
+     *
+     * @static
+     * @type {string}
+     */
+    Table.CLASS_LOADING = classPrefix + 'loading';
+
+    /**
+     * 表格数据为空状态的 class
+     *
+     * @staic
+     * @type {string}
+     */
+    Table.CLASS_EMPTY = classPrefix + 'empty';
+
+
+    /**
+     * 表格默认配置
+     *
+     * @type {Object}
+     */
     Table.defaultOptions = {
-        datasource: [],
+        datasource: [ ],
         defaultText: '',
         emptyText: '',
         loadingText: '',
         multiple: false,
-        breakLine: false
+        breakLine: false,
+        template: '<div class="' + Table.CLASS_HEADER + '"></div>'
+                + '<div class="' + Table.CLASS_BODY + '"></div>'
     };
 
     Table.painter = {
@@ -128,14 +210,14 @@ define(function (require) {
         },
 
         bodyHeight: function (table, bodyHeight) {
-            var tableBody = table.main.find('.' + Table.CLASS_BODY);
-            tableBody.height(bodyHeight);
+            table.scrollPanel.setProperties({
+                height: bodyHeight
+            });
         },
 
-        bodyMaxHeight: function (table, maxHeight) {
-            var tableBody = table.main.find('.' + Table.CLASS_BODY);
-            tableBody.css({
-                'max-height': maxBodyHeight
+        bodyMaxHeight: function (table, bodyMaxHeight) {
+            table.scrollPanel.setProperties({
+                height: bodyMaxHeight
             });
         },
 
@@ -154,7 +236,7 @@ define(function (require) {
 
             html = '<table><tr>' + html + '</tr></table>';
 
-            var header = $('.' + Table.CLASS_HEADER, table.main);
+            var header = table.getHeader();
             header.html(html);
         },
 
@@ -175,7 +257,7 @@ define(function (require) {
             if (datasource.length === 0) {
 
                 var isInited = table.stage === lib.LifeCycle.INITED;
-                var body = main.find('.' + Table.CLASS_BODY);
+                var body = table.getBody();
 
                 if (isInited) {
                     setBodyHTML(table, table.defaultText);
@@ -218,11 +300,12 @@ define(function (require) {
     function createHelper(table) {
 
         var TableClass = table.constructor;
-        var body = $('.' + TableClass.CLASS_BODY, table.main);
+        var scrollPanel = table.scrollPanel;
+
         var styles;
 
         var options = {
-            main: body,
+            main: scrollPanel.main.find('.' + ScrollPanel.CLASS_CONTENT),
             multiple: table.multiple,
             itemTemplate: function (data) {
 
@@ -247,21 +330,26 @@ define(function (require) {
 
                 return '<tr>' + html + '</tr>';
             },
+            insertStepHandler: function (items, data) {
+                Collection.defaultOptions.insertStepHandler(items, data);
+                scrollPanel.trigger('contentChange');
+            },
             insertCompleteHandler: function () {
                 // 清掉, 以便下次渲染会计算最新的样式
                 styles = null;
 
                 // 渲染完后 table-body 可能出现滚动条，因此最好重新算
-                var scrollWidth = lib.getScrollbarWidth(body);
-                if (scrollWidth > 0) {
-                    var header = body.prev();
-                    header.css('padding-right', scrollWidth);
+                if (scrollPanel.hasScrollbar()) {
+                    var header = table.getHeader();
+                    header.css('padding-right', gui.config.scrollbarWidth);
                 }
+
+                scrollPanel.trigger('contentChange');
 
                 /**
                  * @event Table#render-complete
                  */
-                table.fire('render-complete');
+                table.trigger('render-complete');
             }
         };
 
@@ -334,7 +422,7 @@ define(function (require) {
         var styles = [ ];
 
         // 剩下的宽度
-        var body = $('.' + Table.CLASS_BODY, table.main);
+        var body = table.getBody();
         var leftWidth = (body.width()).toFixed(1);
         var fields = table.fields;
 
@@ -367,7 +455,7 @@ define(function (require) {
 
 
     function getHeaderSelectBox(multiple) {
-        var selectBox = multiple ? lib.getCheckbox([ Table.CLASS_ALLBOX ]) : ''; 
+        var selectBox = multiple ? lib.getCheckbox([ Table.CLASS_ALLBOX ]) : '';
         return '<th style="width:35px;">' + selectBox + '</th>';
     }
 
@@ -385,7 +473,7 @@ define(function (require) {
      * 为了实现水平垂直居中, 需要加一个元素
      */
     function setBodyHTML(table, html) {
-        var body = table.main.find('.' + Table.CLASS_BODY);
+        var body = table.getBody();
         html = '<div class="' + classPrefix + 'body-wrapper">'
              +     html
              + '</div>';
@@ -538,59 +626,7 @@ define(function (require) {
     }
 
 
-    var classPrefix = gui.config.uiClassPrefix + '-table-';
 
-    /**
-     * 表格 header 的 class
-     *
-     * @static
-     * @type {string}
-     */
-    Table.CLASS_HEADER = classPrefix + 'header';
-
-    /**
-     * 表格 body 的 class
-     */
-    Table.CLASS_BODY = classPrefix + 'body';
-
-    /**
-     * 可排序
-     */
-    Table.CLASS_SORTABLE = classPrefix + 'sortable';
-
-    /**
-     * 全选/反选 class
-     */
-    Table.CLASS_ALLBOX = classPrefix + 'allbox';
-
-    /**
-     * 表格默认状态的 class
-     * 此状态只存在创建表格时，未设置 datasource
-     *
-     * @static
-     * @type {string}
-     */
-    Table.CLASS_DEFAULT = classPrefix + 'default';
-
-    /**
-     * 表格的数据正在加载状态的 class
-     *
-     * @static
-     * @type {string}
-     */
-    Table.CLASS_LOADING = classPrefix + 'loading';
-
-    /**
-     * 表格数据为空状态的 class
-     *
-     * @staic
-     * @type {string}
-     */
-    Table.CLASS_EMPTY = classPrefix + 'empty';
-
-
-    var template = '<div class="' + Table.CLASS_HEADER + '"></div>'
-                 + '<div class="' + Table.CLASS_BODY + '"></div>';
 
 
     lib.inherits(Table, SuperClass);

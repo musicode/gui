@@ -5,7 +5,7 @@
 define(function (require) {
 
     'use strict';
-    
+
     var SuperClass = require('./interface/Control');
 
     var TextBox = require('./TextBox');
@@ -120,7 +120,7 @@ define(function (require) {
          * 提交表单
          */
         submit: function () {
-            this.fire('ui-submit', {
+            this.trigger('ui-submit', {
                 data: this.getValue()
             });
         },
@@ -284,7 +284,7 @@ define(function (require) {
         /**
          * @event AutoComplete#ui-focus
          */
-        this.fire('ui-focus');
+        this.trigger('ui-focus');
     }
 
     /**
@@ -305,7 +305,7 @@ define(function (require) {
                 /**
                  * @event AutoComplete#ui-blur
                  */
-                autoComplete.fire('ui-blur');
+                autoComplete.trigger('ui-blur');
             }
 
         }, 150);
@@ -329,7 +329,7 @@ define(function (require) {
         /**
          * @event AutoComplete#ui-input
          */
-        this.fire('ui-input');
+        this.trigger('ui-input');
     }
 
     /**
@@ -356,7 +356,7 @@ define(function (require) {
          * @event AutoComplete#ui-keydown
          * @param {Object} e
          */
-        this.fire('ui-keydown', e);
+        this.trigger('ui-keydown', e);
     }
 
     /**
@@ -377,7 +377,7 @@ define(function (require) {
          * @event AutoComplete#ui-keyup
          * @param {Object} e
          */
-        this.fire('ui-keyup', e);
+        this.trigger('ui-keyup', e);
     }
 
     /**
@@ -429,7 +429,7 @@ define(function (require) {
 
         this.close();
 
-        this.fire('ui-submit', {
+        this.trigger('ui-submit', {
             data: item.raw
         });
     }
@@ -459,7 +459,7 @@ define(function (require) {
 
         this.close();
 
-        this.fire('ui-submit', {
+        this.trigger('ui-submit', {
             data: group.raw
         });
     }

@@ -5,7 +5,7 @@
 define(function (require) {
 
     'use strict';
-    
+
     var lib = require('../lib/lib');
     var gui = require('../main');
 
@@ -28,36 +28,14 @@ define(function (require) {
          */
         this.guid = lib.getGUID();
 
-        gui[this.guid] = this;
-
-        var main;
-
-        if (!options.noDOM) {
-
-            main = options.main;
-
-            if (!main) {
-                main = this.createMain(options);
-            }
-            else {
-                delete options.main;
-            }
-
-            if (main && !main.jquery) {
-                main = $(main);
-            }
-        }
-
         /**
          * 主对象
          *
-         * 如果有 DOM 对象, 就用它包着;
-         * 如果没 DOM 对象, 就是一个纯 jQuery 对象, 主要负责事件通信;
-         *
          * @type {jQuery}
          */
-        this.main = main || $({ });
+        this.main = getMain.call(this, options);
 
+        gui[this.guid] = this;
     }
 
     Observable.prototype = {
@@ -68,7 +46,7 @@ define(function (require) {
          * @return {(HTMLElement | jQuery)}
          */
         createMain: function () {
-            // override
+            throw new Error('not implement createMain');
         },
 
         /**
@@ -92,6 +70,7 @@ define(function (require) {
             var guid = this.guid;
             var proxy = handler[guid];
 
+            // 改写 this
             if (typeof proxy !== 'function') {
                 proxy = $.proxy(handler, scope || this);
                 handler[guid] = proxy;
@@ -108,9 +87,9 @@ define(function (require) {
          *
          * 如果不需要事件代理, 可写成 off(type, handler)
          *
-         * @param {string} type 事件类型
+         * @param {string=} type 事件类型，如果未指定，表示移除所有事件
          * @param {string=} selector DOM 事件用到的选择器, 一般用于事件代理
-         * @param {Function} handler 事件处理函数
+         * @param {Function=} handler 事件处理函数
          */
         off: function (type, selector, handler) {
             if (typeof selector === 'function') {
@@ -141,12 +120,13 @@ define(function (require) {
          * @param {string} type 事件类型
          * @param {string=} selector
          * @param {Function} handler 事件处理函数
+         * @param {Object} scope
          */
-        one: function (type, selector, handler) {
+        one: function (type, selector, handler, scope) {
             this.on(type, selector, function () {
                 this.off(type, arguments.callee);
                 return handler.apply(this, arguments);
-            });
+            }, scope);
         },
 
         /**
@@ -155,7 +135,7 @@ define(function (require) {
          * @param {string} type 事件类型
          * @param {Object=} data 事件数据
          */
-        fire: function (type, data) {
+        trigger: function (type, data) {
             type += '.' + this.guid;
             this.main.trigger(type, data);
         },
@@ -167,6 +147,33 @@ define(function (require) {
             this.main.off();
         }
     };
+
+
+    /**
+     * 获得控件主对象
+     *
+     * 这是个 jQuery 对象，可负责事件通信
+     *
+     * @param {jQuery} main
+     * @return {jQuery}
+     */
+    function getMain(options) {
+
+        var main = options.main;
+
+        if (!main) {
+            main = this.createMain(options);
+        }
+        else {
+            delete options.main;
+        }
+
+        if (!main.jquery) {
+            main = $(main);
+        }
+
+        return main;
+    }
 
 
     return Observable;

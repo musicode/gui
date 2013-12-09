@@ -5,7 +5,7 @@
 define(function (require) {
 
     'use strict';
-    
+
     require('../lib/swfupload/swfupload');
     require('../lib/swfupload/plugins/swfupload.cookies');
 
@@ -152,22 +152,22 @@ define(function (require) {
         if (queuedFileNum > 1) {
             uploader.swfUpload.cancelUpload();
         }
-        uploader.fire('upload-change');
+        uploader.trigger('upload-change');
     }
 
     function uploadStart(file) {
         var uploader = this.customSettings.uploader;
-        uploader.fire('upload-start');
+        uploader.trigger('upload-start');
     }
 
     function uploadComplete(file) {
         var uploader = this.customSettings.uploader;
-        uploader.fire('upload-complete');
+        uploader.trigger('upload-complete');
     }
 
     function uploadProgress(file, loaded, total) {
         var uploader = this.customSettings.uploader;
-        uploader.fire(
+        uploader.trigger(
             'upload-progress',
             {
                 uploaded: loaded,
@@ -178,7 +178,7 @@ define(function (require) {
 
     function uploadSuccess(file, response) {
         var uploader = this.customSettings.uploader;
-        uploader.fire(
+        uploader.trigger(
             'upload-success',
             {
                 response: response
@@ -191,7 +191,7 @@ define(function (require) {
             && errorCode !== SWFUpload.UPLOAD_ERROR.UPLOAD_STOPPED
         ) {
             var uploader = this.customSettings.uploader;
-            uploader.fire('upload-fail');
+            uploader.trigger('upload-fail');
         }
     }
 

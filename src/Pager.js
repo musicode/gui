@@ -3,7 +3,7 @@
  * @author zhujl
  */
 define(function (require) {
-    
+
     'use strict';
 
     var SuperClass = require('./interface/Control');
@@ -296,7 +296,7 @@ define(function (require) {
             /**
              * @event Pager#pagechange
              */
-            this.fire('pagechange');
+            this.trigger('pagechange');
         }
     }
 

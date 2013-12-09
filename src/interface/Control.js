@@ -34,7 +34,7 @@ define(function (require) {
         Observable.call(this, options);
 
         this.main.data('guid', this.guid);
-        
+
         /**
          * 当前生命周期阶段
          *
@@ -47,7 +47,7 @@ define(function (require) {
          *
          * @event Control#new
          */
-        this.fire('new');
+        this.trigger('new');
 
 
         /**
@@ -66,7 +66,7 @@ define(function (require) {
          *
          * @event Control#inited
          */
-        this.fire('inited');
+        this.trigger('inited');
     }
 
     Control.prototype = {
@@ -149,7 +149,7 @@ define(function (require) {
 
             if (lastSize !== changes.length) {
                 this.stage = lib.LifeCycle.CHANGED;
-                this.fire('change');
+                this.trigger('change');
             }
 
             // 自动同步
@@ -170,7 +170,7 @@ define(function (require) {
                 /**
                  * @event Control#beforerender
                  */
-                this.fire('beforerender');
+                this.trigger('beforerender');
 
                 this.initStructure();
             }
@@ -182,7 +182,7 @@ define(function (require) {
                 /**
                  * @event Control#afterrender
                  */
-                this.fire('afterrender');
+                this.trigger('afterrender');
             }
 
             this.stage = lib.LifeCycle.RENDERED;
@@ -221,7 +221,7 @@ define(function (require) {
                 changes.length = 0;
 
                 this.stage = lib.LifeCycle.RENDERED;
-                this.fire('render');
+                this.trigger('render');
             }
 
         },
@@ -280,7 +280,7 @@ define(function (require) {
                 /**
                  * @event Control#beforeshow
                  */
-                this.fire('beforeshow');
+                this.trigger('beforeshow');
 
                 this.setProperties({
                     hidden: false
@@ -289,7 +289,7 @@ define(function (require) {
                 /**
                  * @event Control#aftershow
                  */
-                this.fire('aftershow');
+                this.trigger('aftershow');
             }
         },
 
@@ -302,7 +302,7 @@ define(function (require) {
                 /**
                  * @event Control#beforehide
                  */
-                this.fire('beforehide');
+                this.trigger('beforehide');
 
                 this.setProperties({
                     hidden: true
@@ -311,7 +311,7 @@ define(function (require) {
                 /**
                  * @event Control#afterhide
                  */
-                this.fire('afterhide');
+                this.trigger('afterhide');
             }
         },
 
@@ -376,7 +376,7 @@ define(function (require) {
          */
         dispose: function () {
 
-            this.fire('beforedispose');
+            this.trigger('beforedispose');
 
             Observable.prototype.dispose.call(this);
 

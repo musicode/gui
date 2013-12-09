@@ -5,7 +5,7 @@
 define(function (require) {
 
     'use strict';
-    
+
     var SuperClass = require('./Control');
     var lib = require('../lib/lib');
     var gui = require('../main');
@@ -46,7 +46,7 @@ define(function (require) {
          */
         initOptions: function (options) {
 
-            // 确定 label
+            // 确定按钮文本
             if (typeof options.label !== 'string') {
                 var textNode = getTextNode(this.main);
                 if (textNode) {
@@ -67,7 +67,6 @@ define(function (require) {
             }
 
             lib.supply(options, BaseButton.defaultOptions);
-
             SuperClass.prototype.initOptions.call(this, options);
         },
 
@@ -82,8 +81,6 @@ define(function (require) {
             // 清掉多余的文本节点
             // note: 有时候模版换行会造成多余的文本节点
             removeExtraTextNode(this.main);
-
-            this.on('click', onclick);
 
             SuperClass.prototype.initStructure.apply(this, arguments);
         },
@@ -109,9 +106,9 @@ define(function (require) {
         },
 
         /**
-         * 获得图标名称
+         * 获得图标
          *
-         * @return {string}
+         * @return {(string | HTMLElement)}
          */
         getIcon: function () {
             return this.icon;
@@ -120,7 +117,7 @@ define(function (require) {
         /**
          * 设置图标
          *
-         * @param {string} icon 图标名称
+         * @param {(string | HTMLElement)} icon 图标
          */
         setIcon: function (icon) {
             this.setProperties({
@@ -144,6 +141,7 @@ define(function (require) {
 
         selected: function (button, selected) {
             var main = button.main;
+
             if (selected) {
                 main.attr('selected', 'selected');
             }
@@ -151,7 +149,7 @@ define(function (require) {
                 main.removeAttr('selected');
             }
 
-            button.fire('ui-change');
+            button.trigger('change.custom');
         },
 
         label: function (button, label) {
@@ -210,7 +208,7 @@ define(function (require) {
     };
 
     /**
-     * icon 和文本的间距
+     * icon 和文本的间距, 单位 px
      *
      * @static
      * @type {number}
@@ -226,12 +224,6 @@ define(function (require) {
         });
     }
 
-    /**
-     * 转发事件
-     */
-    function onclick(e) {
-        this.fire('ui-click');
-    }
     /**
      * 放置文本
      *

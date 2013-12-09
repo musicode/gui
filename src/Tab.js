@@ -5,7 +5,7 @@
 define(function (require) {
 
     'use strict';
-    
+
     var SuperClass = require('./interface/Control');
     var lib = require('./lib/lib');
     var gui = require('./main');
@@ -145,7 +145,7 @@ define(function (require) {
             selectedIndex: lib.getElementIndex(li)
         });
 
-        this.fire('select');
+        this.trigger('select');
     }
 
     var classPrefix = gui.config.uiClassPrefix + '-tab-';

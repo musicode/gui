@@ -5,7 +5,7 @@
 define(function (require) {
 
     'use strict';
-    
+
     var SuperClass = require('./interface/BaseButton');
     var lib = require('./lib/lib');
 
@@ -85,9 +85,7 @@ define(function (require) {
         }
     };
 
-
     lib.inherits(Button, SuperClass);
-
 
     return Button;
 

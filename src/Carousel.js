@@ -5,7 +5,7 @@
 define(function (require) {
 
     'use strict';
-    
+
     var SuperClass = require('./interface/Control');
     var lib = require('./lib/lib');
 
@@ -104,7 +104,7 @@ define(function (require) {
             var to = -1 * page * pageWidth;
 
             if (to !== from) {
-                carousel.fire('ui-change');
+                carousel.trigger('ui-change');
 
                 viewportWrapper.animate({
                     left: to

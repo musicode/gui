@@ -5,7 +5,7 @@
 define(function (require) {
 
     'use strict';
-    
+
     var SuperClass = require('./interface/Control');
     var Button = require('./Button');
 
@@ -359,7 +359,7 @@ define(function (require) {
 
         setStatusText(this, text, Uploader.CLASS_SUCCESS);
 
-        this.fire(
+        this.trigger(
             'success',
             {
                 response: response
@@ -377,7 +377,7 @@ define(function (require) {
 
         setStatusText(this, text, Uploader.CLASS_ERROR);
 
-        this.fire('error');
+        this.trigger('error');
     }
 
     function beforeDispose() {

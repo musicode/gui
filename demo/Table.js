@@ -6,8 +6,8 @@ require(
     function (Table, lib) {
 
         var datasource = [ ];
-        for (var i = 0, len = 20; i < len; i++) {
-            datasource.push({ title: '标题' + i, index: i, id: lib.random() });
+        for (var i = 0, len = 100; i < len; i++) {
+            datasource.push({ title: '标题' + i, index: i, id: i });
         }
 
         var table = new Table({
@@ -48,7 +48,7 @@ require(
             datasource: datasource,
             selectMode: 'box',
             multiple: true,
-            maxBodyHeight: 300
+            bodyMaxHeight: 300
         });
 
         var start = new Date();

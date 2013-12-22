@@ -5,7 +5,7 @@
 define(function (require) {
 
     'use strict';
-    
+
     var SuperClass = require('./interface/BaseButton');
     var lib = require('./lib/lib');
 
@@ -14,7 +14,7 @@ define(function (require) {
      *
      * @constructor
      * @param {Object} options
-     * @param {(HTMLElement | jQuery)=} options.main 主元素
+     * @param {jQuery} options.main 主元素
      * @param {boolean=} options.hidden 是否隐藏
      * @param {boolean=} options.disabled 是否置灰
      * @param {boolean=} options.selected 是否选中
@@ -42,21 +42,8 @@ define(function (require) {
          * @param {Object} options
          */
         initOptions: function (options) {
-            
-            lib.supply(options, CheckBox.defaultOptions);
             options.icon = lib.createElement(lib.getCheckbox());
-
             SuperClass.prototype.initOptions.call(this, options);
-        },
-
-        /**
-         * 初始化 DOM 结构
-         *
-         * @protected
-         * @override
-         */
-        initStructure: function () {
-            SuperClass.prototype.initStructure.apply(this, arguments);
         },
 
         /**
@@ -82,10 +69,7 @@ define(function (require) {
         labelPlacement: 'right'
     };
 
-    CheckBox.painter = {
-
-    };
-
+    CheckBox.painters = [ ];
 
     lib.inherits(CheckBox, SuperClass);
 

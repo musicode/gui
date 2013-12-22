@@ -28,9 +28,12 @@ define(function (require, exports) {
      *
      * @param {Object} e 事件对象
      */
-    function startDrag(e) {
+    function startDrag(e, options) {
 
-        var options = e.data;
+        if (options._dragging) {
+            stopDrag(e, options);
+        }
+
         var element = options.element;
 
         // 判断是否点击在 cancel 区域
@@ -77,9 +80,16 @@ define(function (require, exports) {
 
         isChild = lib.contains(containment[0], element[0]);
 
+        options._dragging = function (e) {
+            dragging(e, options);
+        };
+        options._stopDrag = function (e) {
+            stopDrag(e, options);
+        };
+
         var doc = lib.getDocument();
-        doc.on('mousemove', options, dragging);
-        doc.on('mouseup', options, stopDrag);
+        doc.on('mousemove', options._dragging);
+        doc.on('mouseup', options._stopDrag);
 
         // 避免出现选区
         lib.getBody().attr('unselectable', 'unselectable');
@@ -90,9 +100,7 @@ define(function (require, exports) {
      *
      * @param {Object} e 事件对象
      */
-    function dragging(e) {
-
-        var options = e.data;
+    function dragging(e, options) {
 
         var x = e.pageX - container.x - localX;
         var y = e.pageY - container.y - localY;
@@ -145,11 +153,18 @@ define(function (require, exports) {
     /**
      * 停止拖拽
      */
-    function stopDrag() {
+    function stopDrag(e, options) {
 
         var doc = lib.getDocument();
-        doc.off('mousemove', dragging);
-        doc.off('mouseup', stopDrag);
+
+        if (options._dragging) {
+            doc.off('mousemove', options._dragging);
+            delete options._dragging;
+        }
+        if (options._stopDrag) {
+            doc.off('mouseup', options._stopDrag);
+            delete options._stopDrag;
+        }
 
         container = target = null;
 
@@ -170,19 +185,26 @@ define(function (require, exports) {
     exports.enable = function (options) {
 
         var element = options.element;
+        options._startDrag = function (e) {
+            startDrag(e, options);
+        };
 
         element.attr('draggable', 'draggable');
-        element.on('mousedown', options, startDrag);
+        element.on('mousedown', options._startDrag);
     };
 
     /**
      * 禁用拖拽
      *
-     * @param {jQuery} element 停止拖拽的元素
+     * @param {Object} options 传入 enable 的配置对象
      */
-    exports.disable = function (element) {
+    exports.disable = function (options) {
+        var element = options.element;
         element.removeAttr('draggable');
-        element.off('mousedown', startDrag);
+        if (options._startDrag) {
+            element.off('mousedown', startDrag);
+            delete options._startDrag;
+        }
     };
 
 });

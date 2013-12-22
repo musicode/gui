@@ -39,18 +39,6 @@ define(function (require) {
         type: 'AutoComplete',
 
         /**
-         * 初始化控件参数
-         *
-         * @protected
-         * @override
-         * @param {Object} options
-         */
-        initOptions: function (options) {
-            lib.supply(options, AutoComplete.defaultOptions);
-            SuperClass.prototype.initOptions.call(this, options);
-        },
-
-        /**
          * 初始化控件 DOM 结构
          *
          * @protected
@@ -191,49 +179,47 @@ define(function (require) {
         closed: true
     };
 
-    AutoComplete.painter = {
+    AutoComplete.painters = [
+        {
+            name: 'closed',
+            painter: function (autoComplete, closed) {
+                var iteratorConfig = autoComplete.iteratorConfig;
+                var list = autoComplete.list;
 
-        closed: function (autoComplete, closed) {
-
-            var iteratorConfig = autoComplete.iteratorConfig;
-            var list = autoComplete.list;
-
-            if (!closed
-                && (list.datasource && list.datasource.length > 0)
-            ) {
-                iteratorConfig.index = 0;
-                iteratorConfig.max = list.datasource.length;
-                iterator.enable(iteratorConfig);
-                list.show();
+                if (!closed
+                    && (list.datasource && list.datasource.length > 0)
+                ) {
+                    iteratorConfig.index = 0;
+                    iteratorConfig.max = list.datasource.length;
+                    iterator.enable(iteratorConfig);
+                    list.show();
+                }
+                else {
+                    iterator.disable(iteratorConfig);
+                    list.hide();
+                }
             }
-            else {
-                iterator.disable(iteratorConfig);
-                list.hide();
+        },
+        {
+            name: 'value',
+            painter: function (autoComplete, value) {
+                var textBox = autoComplete.textBox;
+
+                textBox.setProperties({
+                    value: value
+                });
             }
         },
-
-        value: function (autoComplete, value) {
-            var textBox = autoComplete.textBox;
-
-            textBox.setProperties({
-                value: value
-            });
-        },
-
-        placeholder: function (autoComplete, placeholder) {
-            var textBox = autoComplete.textBox;
-            textBox.setProperties({
-                placeholder: placeholder
-            });
-        },
-
-        width: function (autoComplete, width) {
-            var textBox = autoComplete.textBox;
-            textBox.setProperties({
-                width: width
-            });
+        {
+            name: 'placeholder',
+            painter: function (autoComplete, placeholder) {
+                var textBox = autoComplete.textBox;
+                textBox.setProperties({
+                    placeholder: placeholder
+                });
+            }
         }
-    };
+    ];
 
     function createIteratorConfig(autoComplete) {
         return {

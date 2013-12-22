@@ -5,7 +5,7 @@
 define(function (require) {
 
     'use strict';
-    
+
     var Item = require('./Item');
     var thread = require('../lib/thread');
     var lib = require('../lib/lib');
@@ -47,18 +47,6 @@ define(function (require) {
          * @type {string}
          */
         type: 'Collection',
-
-        /**
-         * 初始化参数
-         *
-         * @protected
-         * @override
-         * @param {Object} options
-         */
-        initOptions: function (options) {
-            lib.supply(options, Collection.defaultOptions);
-            Item.prototype.initOptions.call(this, options);
-        },
 
         /**
          * 初始化 DOM 结构
@@ -418,40 +406,54 @@ define(function (require) {
         }
     };
 
-    Collection.painter = {
+    Collection.painters = [
 
-        asyncStep: function (collection, asyncStep) {
-            var config = {
-                unit: 20,
-                interval: collection.async ? asyncStep : 0
-            };
+        {
+            name: 'asyncStep',
+            painter: function (collection, asyncStep) {
+                var config = {
+                    unit: 20,
+                    interval: collection.async ? asyncStep : 0
+                };
 
-            collection.renderThread = config;
-            collection.selectThread = $.extend(true, config);
-        },
-
-        raw: function (collection, raw) {
-
-            var items = collection.items;
-            if (items.length > 0) {
-                $.each (items, function (index, item) {
-                    item.dispose();
-                });
-                items.length = 0;
+                collection.renderThread = config;
+                collection.selectThread = $.extend(true, { }, config);
             }
-
-            var element = collection.getItemContainer();
-            element.innerHTML = '';
-
-            items = raw.children ? raw.children : raw;
-            collection.insertItems(0, items);
         },
 
-        selected: function (collection, selected) {
-            Item.painter.selected(collection, selected);
-            collection.startSelectThread(collection.items, { selected: selected });
+        {
+            name: 'raw',
+            painter: function (collection, raw) {
+
+                var items = collection.items;
+                if (items.length > 0) {
+                    $.each (items, function (index, item) {
+                        item.dispose();
+                    });
+                    items.length = 0;
+                }
+
+                var element = collection.getItemContainer();
+                element.innerHTML = '';
+
+                items = raw.children ? raw.children : raw;
+                collection.insertItems(0, items);
+            }
+        },
+
+        {
+            name: 'selected',
+            painter: function (collection, selected) {
+                var map = lib.array2Object(Item.painters, 'name');
+                map.selected.painter(collection, selected);
+
+                collection.startSelectThread(
+                    collection.items,
+                    { selected: selected }
+                );
+            }
         }
-    };
+    ];
 
 
     function beforeDispose() {

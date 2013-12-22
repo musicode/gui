@@ -14,9 +14,9 @@
 
     <body>
         <header>Button</header>
-        <div id="ui-button" tabindex="1">按钮</div>
-        <div id="ui-button-disabled" tabindex="2">置灰的按钮</div>
-        <div id="ui-button-toggle" tabindex="3">toggle button</div>
+        <b id="ui-button" tabindex="1">按钮</b>
+        <strong id="ui-button-disabled" tabindex="2">置灰的按钮</strong>
+        <a id="ui-button-toggle" tabindex="3">toggle button</a>
         <div id="ui-button-icon" tabindex="4">icon button</div>
         <div id="ui-button-icon-user" tabindex="5">
             icon button
@@ -28,40 +28,53 @@
         <script>
             require(
                 [
-                    'gui/Button'
+                    'gui/Button',
+                    'gui/lib/string'
                 ],
-                function (Button) {
+                function (Button, string) {
 
-                    var buttons = [
-                        new Button({
-                            main: $('#ui-button-disabled'),
-                            disabled: true
-                        }),
-                        new Button({
-                            main: $('#ui-button-toggle'),
-                            selected: true,
-                            toggle: true
-                        }),
-                        new Button({
-                            main: $('#ui-button-icon'),
-                            icon: 'cloud-upload',
-                            labelPlacement: 'right'
-                        }),
-                        new Button({
-                            main: $('#ui-button-icon-user'),
-                            labelPlacement: 'right'
-                        }),
-                        new Button({
-                            main: $('#ui-button-icon-only'),
-                            icon: 'cloud-upload'
-                        })
-                    ];
+                    var btn1 = new Button({
+                        main: $('#ui-button-disabled'),
+                        disabled: true,
+                        height: 32
+                    });
+                    btn1.render();
 
-                    $.each(buttons, function (index, btn) {
-                        btn.render();
+                    var btn2 = new Button({
+                        main: $('#ui-button-toggle'),
+                        selected: true,
+                        toggle: true
+                    });
+                    btn2.render();
+
+                    var btn3 = new Button({
+                        main: $('#ui-button-icon'),
+                        icon: 'cloud-upload',
+                        labelPlacement: 'right'
+                    });
+                    btn3.render();
+
+                    var btn4 = new Button({
+                        main: $('#ui-button-icon-user'),
+                        labelPlacement: 'right'
+                    });
+                    btn4.render();
+
+                    var btn5 = new Button({
+                        main: $('#ui-button-icon-only'),
+                        icon: 'cloud-upload'
+                    });
+                    btn5.render();
+
+
+                    btn4.setLabel('用户');
+                    btn4.setLabel('');
+                    btn2.on('propertyChange', function (e, data) {
+                        p(data);
                     });
 
-                    buttons[3].setLabel('用户');
+                    p(string.getUTF8Length('喔喔h12，'));
+                    p(string.truncate('我是谁', 5));
                 }
             );
         </script>

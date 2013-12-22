@@ -12,8 +12,5 @@ require(
         button.on('click', function (e) {
             p('click');
         });
-        button.on('change', function (e) {
-            p('change');
-        });
     }
 );

@@ -131,23 +131,22 @@
         background-color: @table-body-row-hover-bgcolor;
         color: @table-body-row-hover-color;
     }
-}
 
-.@{ui-class-prefix}-table-row-odd {
-    background-color: @table-body-row-odd-bgcolor;
+    &:nth-child(odd) {
+        background-color: @table-body-row-odd-bgcolor;
 
-    &[selected] {
-        background-color: @table-body-row-odd-selected-bgcolor;
-        color: @table-body-row-odd-selected-color;
+        &[selected] {
+            background-color: @table-body-row-odd-selected-bgcolor;
+            color: @table-body-row-odd-selected-color;
+        }
     }
-}
+    &:nth-child(even) {
+        background-color: @table-body-row-even-bgcolor;
 
-.@{ui-class-prefix}-table-row-even {
-    background-color: @table-body-row-even-bgcolor;
-
-    &[selected] {
-        background-color: @table-body-row-even-selected-bgcolor;
-        color: @table-body-row-even-selected-color;
+        &[selected] {
+            background-color: @table-body-row-even-selected-bgcolor;
+            color: @table-body-row-even-selected-color;
+        }
     }
 }
 

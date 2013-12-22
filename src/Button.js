@@ -14,7 +14,7 @@ define(function (require) {
      *
      * @constructor
      * @param {Object} options
-     * @param {(HTMLElement | jQuery)=} options.main 主元素
+     * @param {jQuery=} options.main 主元素
      * @param {number=} options.width 按钮宽度, 一般不用设置, 由样式 padding 负责
      * @param {number=} options.height 按钮高度, 一般不用设置, 由样式 height 负责
      * @param {boolean=} options.hidden 是否隐藏
@@ -39,18 +39,6 @@ define(function (require) {
         type: 'Button',
 
         /**
-         * 初始化控件参数
-         *
-         * @protected
-         * @override
-         * @param {Object} options
-         */
-        initOptions: function (options) {
-            lib.supply(options, Button.defaultOptions);
-            SuperClass.prototype.initOptions.call(this, options);
-        },
-
-        /**
          * 创建控件主元素
          *
          * @protected
@@ -65,25 +53,31 @@ define(function (require) {
     /**
      * 默认配置
      *
+     * @static
      * @type {Object}
      */
     Button.defaultOptions = { };
 
-    Button.painter = {
-
-        height: function (button, height) {
-            if (typeof height === 'number') {
-                var main = button.main;
-                var offset = main.outerHeight() - main.height();
-                var value = (height - offset) + 'px';
-
-                main.css({
-                    height: value,
-                    'line-height': value
-                });
+    /**
+     * 属性渲染器
+     *
+     * @static
+     * @type {Array}
+     */
+    Button.painters = [
+        {
+            name: 'height',
+            painter: function (button, height) {
+                if ($.isNumeric(height)) {
+                    height = height + 'px';
+                    button.main.css({
+                        height: height,
+                        'line-height': height
+                    });
+                }
             }
         }
-    };
+    ];
 
     lib.inherits(Button, SuperClass);
 

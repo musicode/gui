@@ -43,18 +43,6 @@ define(function (require) {
         type: 'Table',
 
         /**
-         * 初始化控件参数
-         *
-         * @protected
-         * @override
-         * @param {Object} options
-         */
-        initOptions: function (options) {
-            lib.supply(options, Table.defaultOptions);
-            SuperClass.prototype.initOptions.call(this, options);
-        },
-
-        /**
          * 初始化 DOM 结构
          *
          * @protected
@@ -65,7 +53,7 @@ define(function (require) {
             this.main.html(this.template);
 
             this.scrollPanel = new ScrollPanel({
-                main: this.getBody()
+                main: this.main.find('.' + Table.CLASS_BODY)
             });
             this.scrollPanel.render();
 
@@ -80,17 +68,6 @@ define(function (require) {
 
 
             SuperClass.prototype.initStructure.apply(this, arguments);
-        },
-
-        /**
-         * 创建控件主元素
-         *
-         * @protected
-         * @override
-         * @return {HTMLElement}
-         */
-        createMain: function () {
-            return document.createElement('div');
         },
 
         /**
@@ -118,7 +95,7 @@ define(function (require) {
          * @return {jQuery}
          */
         getBody: function () {
-            return this.main.find('.' + Table.CLASS_BODY);
+            return this.scrollPanel.getContentArea();
         }
     };
 
@@ -189,104 +166,119 @@ define(function (require) {
                 + '<div class="' + Table.CLASS_BODY + '"></div>'
     };
 
-    Table.painter = {
+    Table.painters = [
 
-        breakLine: function (table, newValue, oldValue) {
-            var main = table.main;
-            if (newValue) {
-                main.attr('breakline', 'breakline');
+        {
+            name: 'breakLine',
+            painter: function (table, newValue, oldValue) {
+                var main = table.main;
+                if (newValue) {
+                    main.attr('breakline', 'breakline');
 
-                if (oldValue === false) {
-                    main.removeAttr('overflow');
-                }
-            }
-            else {
-                main.attr('overflow', 'overflow');
-
-                if (oldValue === true) {
-                    main.removeAttr('breakline');
-                }
-            }
-        },
-
-        bodyHeight: function (table, bodyHeight) {
-            table.scrollPanel.setProperties({
-                height: bodyHeight
-            });
-        },
-
-        bodyMaxHeight: function (table, bodyMaxHeight) {
-            table.scrollPanel.setProperties({
-                height: bodyMaxHeight
-            });
-        },
-
-        fields: function (table, fields) {
-            var html = '';
-
-            var styles = getFieldsStyle(table);
-
-            if (table.selectMode === 'box') {
-                html += getHeaderSelectBox(table.multiple);
-            }
-
-            for (var i = 0, len = fields.length; i < len; i++) {
-                html += headerTemplate(fields[i], styles[i]);
-            }
-
-            html = '<table><tr>' + html + '</tr></table>';
-
-            var header = table.getHeader();
-            header.html(html);
-        },
-
-        datasource: function (table, datasource) {
-
-            var main = table.main;
-
-            // 通过排序标识来判断
-            if (!table.sorting) {
-                // 去掉排序状态
-                var element = main.find('th[data-sort-type]');
-                element.removeAttr('data-sort-type');
-            }
-            else {
-                delete table.sorting;
-            }
-
-            if (datasource.length === 0) {
-
-                var isInited = table.stage === lib.LifeCycle.INITED;
-                var body = table.getBody();
-
-                if (isInited) {
-                    setBodyHTML(table, table.defaultText);
-                    main.addClass(Table.CLASS_DEFAULT);
+                    if (oldValue === false) {
+                        main.removeAttr('overflow');
+                    }
                 }
                 else {
-                    setBodyHTML(table, table.emptyText);
-                    main.addClass(Table.CLASS_EMPTY);
+                    main.attr('overflow', 'overflow');
+
+                    if (oldValue === true) {
+                        main.removeAttr('breakline');
+                    }
                 }
             }
-            else {
+        },
 
-                main.removeClass(Table.CLASS_DEFAULT);
-                main.removeClass(Table.CLASS_EMPTY);
-                main.removeClass(Table.CLASS_LOADING);
-
-                var helper = table.helper;
-                // 清掉 helper 的 raw
-                // 以防 setProperties 时判断出相等的情况
-                helper.raw = null;
-
-                helper.stopThreads();
-                helper.setProperties({
-                    raw: datasource
+        {
+            name: 'bodyHeight',
+            painter: function (table, bodyHeight) {
+                table.scrollPanel.setProperties({
+                    height: bodyHeight
                 });
             }
+        },
 
+        {
+            name: 'bodyMaxHeight',
+            painter: function (table, bodyMaxHeight) {
+                table.scrollPanel.setProperties({
+                    height: bodyMaxHeight
+                });
+            }
+        },
+
+        {
+            name: 'fields',
+            painter: function (table, fields) {
+                var html = '';
+
+                var styles = getFieldsStyle(table);
+
+                if (table.selectMode === 'box') {
+                    html += getHeaderSelectBox(table.multiple);
+                }
+
+                for (var i = 0, len = fields.length; i < len; i++) {
+                    html += headerTemplate(fields[i], styles[i]);
+                }
+
+                html = '<table><tr>' + html + '</tr></table>';
+
+                var header = table.getHeader();
+                header.html(html);
+            }
+        },
+
+        {
+            name: 'datasource',
+            painter: function (table, datasource) {
+
+                var main = table.main;
+
+                // 通过排序标识来判断
+                if (!table.sorting) {
+                    // 去掉排序状态
+                    var element = main.find('th[data-sort-type]');
+                    element.removeAttr('data-sort-type');
+                }
+                else {
+                    delete table.sorting;
+                }
+
+                if (datasource.length === 0) {
+
+                    var isInited = table.stage === lib.LifeCycle.INITED;
+                    var body = table.getBody();
+
+                    if (isInited) {
+                        setBodyHTML(table, table.defaultText);
+                        main.addClass(Table.CLASS_DEFAULT);
+                    }
+                    else {
+                        setBodyHTML(table, table.emptyText);
+                        main.addClass(Table.CLASS_EMPTY);
+                    }
+                }
+                else {
+
+                    main.removeClass(Table.CLASS_DEFAULT);
+                    main.removeClass(Table.CLASS_EMPTY);
+                    main.removeClass(Table.CLASS_LOADING);
+
+                    var helper = table.helper;
+                    // 清掉 helper 的 raw
+                    // 以防 setProperties 时判断出相等的情况
+                    helper.raw = null;
+
+                    helper.stopThreads();
+                    helper.setProperties({
+                        raw: datasource
+                    });
+                }
+
+            }
         }
-    };
+    ];
 
 
     /**
@@ -301,11 +293,11 @@ define(function (require) {
 
         var TableClass = table.constructor;
         var scrollPanel = table.scrollPanel;
-
+        var contentArea = scrollPanel.getContentArea();
         var styles;
 
         var options = {
-            main: scrollPanel.main.find('.' + ScrollPanel.CLASS_CONTENT),
+            main: contentArea,
             multiple: table.multiple,
             itemTemplate: function (data) {
 
@@ -332,7 +324,12 @@ define(function (require) {
             },
             insertStepHandler: function (items, data) {
                 Collection.defaultOptions.insertStepHandler(items, data);
-                scrollPanel.trigger('contentChange');
+                scrollPanel.trigger(
+                    'propertyChange',
+                    {
+                        content: contentArea.html()
+                    }
+                );
             },
             insertCompleteHandler: function () {
                 // 清掉, 以便下次渲染会计算最新的样式
@@ -344,7 +341,12 @@ define(function (require) {
                     header.css('padding-right', gui.config.scrollbarWidth);
                 }
 
-                scrollPanel.trigger('contentChange');
+                scrollPanel.trigger(
+                    'propertyChange',
+                    {
+                        content: contentArea.html()
+                    }
+                );
 
                 /**
                  * @event Table#render-complete

@@ -56,18 +56,6 @@ define(function (require) {
         type: 'Uploader',
 
         /**
-         * 初始化控件参数
-         *
-         * @protected
-         * @override
-         * @param {Object} options
-         */
-        initOptions: function (options) {
-            lib.supply(options, Uploader.defaultOptions);
-            SuperClass.prototype.initOptions.call(this, options);
-        },
-
-        /**
          * 初始化控件 DOM 结构
          *
          * @protected
@@ -103,17 +91,6 @@ define(function (require) {
             this.one('beforedispose', beforeDispose);
 
             SuperClass.prototype.initStructure.apply(this, arguments);
-        },
-
-        /**
-         * 创建控件主元素
-         *
-         * @protected
-         * @override
-         * @return {HTMLElement}
-         */
-        createMain: function () {
-            return document.createElement('div');
         },
 
         /**
@@ -177,18 +154,24 @@ define(function (require) {
         stopButtonText: '停止'
     };
 
-    Uploader.painter = {
+    Uploader.painters = [
 
-        emptyText: function (uploader, emptyText) {
-            setStatusText(uploader, emptyText);
+        {
+            name: 'emptyText',
+            painter: function (uploader, emptyText) {
+                setStatusText(uploader, emptyText);
+          　}
         },
 
-        width: function (uploader, width) {
-            var main = uploader.main;
-            main.css('width', width);
+        {
+            name: 'width',
+            painter: function (uploader, width) {
+                var main = uploader.main;
+                main.css('width', width);
+            }
         }
 
-    };
+    ];
 
     function createHelper(uploader) {
 

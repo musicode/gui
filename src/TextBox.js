@@ -7,8 +7,9 @@ define(function (require) {
     'use strict';
 
     var SuperClass = require('./interface/Control');
-    var Range = require('./lib/Range');
     var lib = require('./lib/lib');
+    var input = require('./lib/input');
+    var Range = require('./lib/Range');
     var gui = require('./main');
 
     /**
@@ -56,8 +57,6 @@ define(function (require) {
                 options.value = this.main.val();
             }
 
-            lib.supply(options, TextBox.defaultOptions);
-
             SuperClass.prototype.initOptions.call(this, options);
         },
 
@@ -73,16 +72,15 @@ define(function (require) {
 
             this.on('focus', onfocus);
             this.on('blur', onblur);
-            this.on('keydown', onkeydown);
             this.on('keyup', onkeyup);
 
-            if (lib.supportInputEvent) {
-                this.on('input', oninput);
-            }
-            else {
-                this.on('propertychange', onpropertychange);
-            }
+            this.inputHelper = {
+                element: this.main
+            };
+            input.enable(this.inputHelper);
+            this.on('input', oninput);
 
+            this.on('beforedispose', onBeforeDispose);
 
             SuperClass.prototype.initStructure.apply(this, arguments);
         },
@@ -249,67 +247,75 @@ define(function (require) {
 
     };
 
-
+    /**
+     * TextBox 默认配置
+     *
+     * @type {Object}
+     */
     TextBox.defaultOptions = {
         placeholder: '',
         value: '',
         mode: 'text'
     };
 
-    TextBox.painter = {
+    TextBox.painters = [
 
-        value: function(textBox, value) {
-            var main = textBox.main;
+        {
+            name: 'value',
+            painter: function(textBox, value) {
+                var main = textBox.main;
 
-            // 避免赋值触发 input 事件
-            textBox.byManual = true;
-
-            if (!textBox.hasFocus()) {
-                if (value) {
-                    main.val(value);
-                    if (textBox.placeholder) {
-                        main.removeClass(TextBox.CLASS_PLACEHOLDER);
+                if (!textBox.hasFocus()) {
+                    if (value) {
+                        main.val(value);
+                        if (textBox.placeholder) {
+                            main.removeClass(TextBox.CLASS_PLACEHOLDER);
+                        }
                     }
                 }
-            }
-            else {
-                main.val(value);
-            }
-        },
-
-        placeholder: function(textBox, placeholder) {
-
-            var main = textBox.main;
-
-            if (placeholder) {
-                main.data('placeholder', placeholder);
-            }
-            else if (main.data('placeholder')) {
-                main.removeData('placeholder');
-            }
-
-            if (!textBox.hasFocus()
-                && textBox.value === ''
-                && placeholder
-            ) {
-                // 避免赋值触发 input 事件
-                textBox.byManual = true;
-
-                main.val(placeholder);
-                main.addClass(TextBox.CLASS_PLACEHOLDER);
+                else {
+                    main.val(value);
+                }
             }
         },
 
-        disabled: function (textBox, disabled) {
-            var main = textBox.main;
-            if (disabled) {
-                main.attr('disabled', 'disabled');
+        {
+            name: 'placeholder',
+            painter: function(textBox, placeholder) {
+
+                var main = textBox.main;
+
+                if (placeholder) {
+                    main.data('placeholder', placeholder);
+                }
+                else if (main.data('placeholder')) {
+                    main.removeData('placeholder');
+                }
+
+                if (!textBox.hasFocus()
+                    && textBox.value === ''
+                    && placeholder
+                ) {
+                    main.val(placeholder);
+                    main.addClass(TextBox.CLASS_PLACEHOLDER);
+                }
             }
-            else {
-                main.removeAttr('disabled');
+        },
+
+        {
+            name: 'disabled',
+            painter: function (textBox, disabled) {
+                var main = textBox.main;
+                if (disabled) {
+                    main.attr('disabled', 'disabled');
+                }
+                else {
+                    main.removeAttr('disabled');
+                }
             }
         }
-    };
+
+    ];
 
     var classPrefix = gui.config.uiClassPrefix + '-textbox-';
 
@@ -324,23 +330,16 @@ define(function (require) {
     function onfocus(e) {
         if (this.value === '' && this.placeholder) {
             this.main.removeClass(TextBox.CLASS_PLACEHOLDER);
-            TextBox.painter.value(this, '');
+            var map = lib.array2Object(TextBox.painters, 'name');
+            map.value.painter(this, '');
         }
-        this.trigger('ui-focus');
     }
 
     function onblur(e) {
         if (this.value === '' && this.placeholder) {
             this.main.addClass(TextBox.CLASS_PLACEHOLDER);
-            TextBox.painter.placeholder(this, this.placeholder);
-        }
-        this.trigger('ui-blur');
-    }
-
-    function onkeydown(e) {
-        // 清掉标识
-        if (this.byManual) {
-            delete this.byManual;
+            var map = lib.array2Object(TextBox.painters, 'name');
+            map.placeholder.painter(this, this.placeholder);
         }
     }
 
@@ -349,7 +348,7 @@ define(function (require) {
         if (e.keyCode === 13) {
 
             /**
-             * @event Inputable#submit
+             * @event TextBox#submit
              */
             this.trigger('submit');
         }
@@ -359,27 +358,8 @@ define(function (require) {
         this.value = this.main.val();
     }
 
-    /**
-     * 纠正低版本 IE
-     */
-    function onpropertychange(e) {
-        var name = e.originalEvent.propertyName;
-        if (name === 'value') {
-            // 手动触发需要过滤掉
-            if (this.byManual) {
-                delete this.byManual;
-                return false;
-            }
-            else {
-
-                this.value = this.main.val();
-
-                /**
-                 * @event Inputable#input
-                 */
-                this.trigger('input');
-            }
-        }
+    function onBeforeDispose() {
+        input.disable(this.inputHelper);
     }
 
     lib.inherits(TextBox, SuperClass);

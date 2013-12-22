@@ -5,7 +5,7 @@
 define(function(require) {
 
     'use strict';
-    
+
     var SuperClass = require('./Item');
     var lib = require('../lib/lib');
     var gui = require('../main');
@@ -41,22 +41,6 @@ define(function(require) {
      * @type {string}
      */
     TableRow.CLASS_ITEM = classPrefix + 'table-row';
-
-    /**
-     * 奇数表格行 class
-     *
-     * @static
-     * @type {string}
-     */
-    TableRow.CLASS_ODD = classPrefix + 'table-row-odd';
-
-    /**
-     * 偶数表格行 class
-     *
-     * @static
-     * @type {string}
-     */
-    TableRow.CLASS_EVEN = classPrefix + 'table-row-even';
 
     /**
      * 表格行中的选择框

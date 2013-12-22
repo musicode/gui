@@ -16,10 +16,13 @@ define(function (require, exports) {
      * 向下滚动统一为正数
      * 向上滚动统一为负数
      * 滚动幅度取自 delta 属性
+     *
+     * @private
+     * @param {Object} e
      */
     function scrollWheel(e) {
         var event = e.originalEvent;
-        var element = e.data;
+        var options = e.data;
         var value;
 
         if (event.wheelDelta) {
@@ -30,30 +33,37 @@ define(function (require, exports) {
         }
 
         /**
-         * @event wheelscroll#wheelscroll
+         * @event wheelscroll#wheelScroll
          */
-        element.trigger('wheelscroll', {
+        options.element.trigger('wheelScroll', {
             delta: value
         });
 
         // 避免让外层的原生滚动条滚动
-        e.preventDefault();
+        if (!options.isOutside()) {
+            e.preventDefault();
+        }
     }
 
     /**
      * 监听 element 的鼠标滚轮
      *
-     * @param {jQuery} element
+     * @param {Object} options
+     * @param {jQuery} options.element
+     * @param {Function} options.isOutside 是否滚动出了自身边界
+     *                                     即 < 0 或 > scrollHeight
      */
-    exports.enable = function (element) {
-        element.on(type, element, scrollWheel);
+    exports.enable = function (options) {
+        options.element.on(type, options, scrollWheel);
     };
 
     /**
      * 取消监听 element 的鼠标滚轮
+     *
+     * @param {Object} options 传入 enable 的配置对象
      */
-    exports.disable = function (element) {
-        element.off(type);
+    exports.disable = function (options) {
+        options.element.off(type, scrollWheel);
     };
 
 });

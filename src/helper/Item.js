@@ -33,19 +33,6 @@ define(function (require) {
     Item.prototype = {
 
         /**
-         * 初始化参数
-         *
-         * @protected
-         * @override
-         * @param {Object} options
-         */
-        initOptions: function (options) {
-            var Class = this.constructor;
-            lib.supply(options, Class.defaultOptions);
-            SuperClass.prototype.initOptions.call(this, options);
-        },
-
-        /**
          * 覆盖父类方法, 避免加上多余 class
          *
          * @protected
@@ -81,10 +68,6 @@ define(function (require) {
 
             var classList = [ ItemClass.CLASS_ITEM ];
             var attr = '';
-
-            classList.push( options.index % 2
-                            ? ItemClass.CLASS_ODD
-                            : ItemClass.CLASS_EVEN );
 
             if (options.selected) {
                 attr = ' selected="selected"';
@@ -124,28 +107,31 @@ define(function (require) {
      * 画笔
      *
      * @static
-     * @type {Object}
+     * @type {Array}
      */
-    Item.painter = {
+    Item.painters = [
 
-        selected: function (item, selected) {
+        {
+            name: 'selected',
+            painter: function (item, selected) {
 
-            var checkbox = item.getSelectBox();
+                var checkbox = item.getSelectBox();
 
-            if (checkbox) {
-                lib.setCheckboxChecked(checkbox, selected);
-            }
+                if (checkbox) {
+                    lib.setCheckboxChecked(checkbox, selected);
+                }
 
-            var main = item.main;
-            if (selected) {
-                main.attr('selected', 'selected');
-            }
-            else {
-                main.removeAttr('selected');
+                var main = item.main;
+                if (selected) {
+                    main.attr('selected', 'selected');
+                }
+                else {
+                    main.removeAttr('selected');
+                }
             }
         }
 
-    };
+    ];
 
     var classPrefix = gui.config.uiClassPrefix + '-';
 
@@ -156,22 +142,6 @@ define(function (require) {
      * @type {string}
      */
     Item.CLASS_ITEM = classPrefix + 'item';
-
-    /**
-     * 奇数集合项 class
-     *
-     * @static
-     * @type {string}
-     */
-    Item.CLASS_ODD = classPrefix + 'item-odd';
-
-    /**
-     * 偶数集合项 class
-     *
-     * @static
-     * @type {string}
-     */
-    Item.CLASS_EVEN = classPrefix + 'item-even';
 
     /**
      * 用于选中集合项的勾选框

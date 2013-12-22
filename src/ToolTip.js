@@ -5,7 +5,7 @@
 define(function (require) {
 
     'use strict';
-    
+
     var SuperClass = require('./interface/Control');
     var Overlay = require('./interface/Overlay');
     var popup = require('./lib/popup');
@@ -46,18 +46,6 @@ define(function (require) {
         type: 'ToolTip',
 
         /**
-         * 初始化控件参数
-         *
-         * @protected
-         * @override
-         * @param {Object} options
-         */
-        initOptions: function (options) {
-            lib.supply(options, ToolTip.defaultOptions);
-            SuperClass.prototype.initOptions.call(this, options);
-        },
-
-        /**
          * 初始化 DOM 结构
          *
          * @protected
@@ -92,12 +80,13 @@ define(function (require) {
         hideBy: 'out'
     };
 
-    ToolTip.painter = {
-        width: function () {
-            // 只是覆盖父类的方法
-            // 因为这里的　width 用于浮层
+    ToolTip.painters = [
+
+        {
+            name: 'width',
+            painter: function () {}
         }
-    }
+    ];
 
     var overlay;
 

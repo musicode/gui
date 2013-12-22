@@ -36,18 +36,6 @@ define(function (require) {
         type: 'TextEditor',
 
         /**
-         * 初始化控件参数
-         *
-         * @protected
-         * @override
-         * @param {Object} options
-         */
-        initOptions: function (options) {
-            lib.supply(options, TextEditor.defaultOptions);
-            SuperClass.prototype.initOptions.call(this, options);
-        },
-
-        /**
          * 初始化控件结构
          *
          * @protected
@@ -83,16 +71,6 @@ define(function (require) {
             });
 
             SuperClass.prototype.initStructure.apply(this, arguments);
-        },
-
-        /**
-         * 创建控件主元素
-         *
-         * @protected
-         * @return {HTMLElement}
-         */
-        createMain: function () {
-            return document.createElement('div');
         },
 
         /**
@@ -154,13 +132,16 @@ define(function (require) {
         wordWrap: true
     };
 
-    TextEditor.painter = {
+    TextEditor.painters = [
 
-        placeholder: function (textEditor, placeholder) {
-            return;
-            textEditor.lineText.setPlaceholder(placeholder);
+        {
+            name: 'placeholder',
+            painter: function (textEditor, placeholder) {
+                return;
+                textEditor.lineText.setPlaceholder(placeholder);
+            }
         }
-    };
+    ];
 
     lib.inherits(TextEditor, SuperClass);
 

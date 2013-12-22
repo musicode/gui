@@ -5,7 +5,7 @@
 define(function (require) {
 
     'use strict';
-    
+
     var SuperClass = require('./interface/Overlay');
 
     var draggable = require('./lib/draggable');
@@ -50,18 +50,21 @@ define(function (require) {
          * @param {Object} options
          */
         initOptions: function (options) {
-            lib.supply(options, Dialog.defaultOptions);
 
             options.global = true;
+
+            var x = options.x || Dialog.defaultOptions.x;
+            var y = options.y || Dialog.defaultOptions.y;
+
             options.align = {
-                baseElement: document.body,
+                baseElement: lib.getBody(),
                 base: {
-                    x: options.x,
-                    y: options.y
+                    x: x,
+                    y: y
                 },
                 self: {
-                    x: options.x === '50%' ? '50%' : '0',
-                    y: options.y === '50%' ? '50%' : '0'
+                    x: x === '50%' ? '50%' : '0',
+                    y: y === '50%' ? '50%' : '0'
                 }
             };
 
@@ -90,21 +93,15 @@ define(function (require) {
                 Class.buttonTemplate(this, footer);
             }
 
+            this.draggableOptions = {
+                element: main,
+                handle: '.' + Class.CLASS_HEADER
+            };
+
             this.on('click', '.' + Class.CLASS_CLOSE, this.hide);
             this.on('beforedispose', beforeDispose);
 
             SuperClass.prototype.initStructure.apply(this, arguments);
-        },
-
-        /**
-         * 创建控件主元素
-         *
-         * @protected
-         * @override
-         * @return {HTMLElement}
-         */
-        createMain: function () {
-            return document.createElement('div');
         },
 
         /**
@@ -208,68 +205,75 @@ define(function (require) {
         }
     };
 
-    Dialog.painter = {
+    Dialog.painters = [
 
-        hidden: function (dialog, hidden) {
-            if (hidden) {
-                if (dialog.stage > lib.LifeCycle.RENDERED) {
-                    if (dialog.closeOnHide) {
-                        dialog.dispose();
-                        return;
-                    }
-                    else if (dialog.modal) {
-                        Mask.remove(dialog);
+        {
+            name: 'hidden',
+            painter: function (dialog, hidden) {
+                if (hidden) {
+                    if (dialog.stage > lib.LifeCycle.RENDERED) {
+                        if (dialog.closeOnHide) {
+                            dialog.dispose();
+                            return;
+                        }
+                        else if (dialog.modal) {
+                            Mask.remove(dialog);
+                        }
                     }
                 }
-            }
-            SuperClass.painter.hidden(dialog, hidden);
-        },
 
-        draggable: function (dialog, value) {
-
-            if (value) {
-                var Class = dialog.constructor;
-
-                draggable.enable({
-                    element: dialog.main,
-                    handle: '.' + Class.CLASS_HEADER
-                });
-            }
-            else {
-                draggable.disable(dialog.main);
+                var map = lib.array2Object(SuperClass.painters, 'name');
+                map.hidden.painter(dialog, hidden);
             }
         },
 
-        title: function (dialog, title) {
-            var Class = dialog.constructor;
-            var header = $('.' + Class.CLASS_HEADER, dialog.main);
-            var hasHeader = header.length !== 0;
-            var hiddenClass = gui.CLASS.HIDDEN;
-
-            if (title) {
-                if (hasHeader) {
-                    header.removeClass(hiddenClass);
-                    header.find('.' + Class.CLASS_TITLE).html(title);
+        {
+            name: 'draggable',
+            painter: function (dialog, value) {
+                if (value) {
+                    draggable.enable(dialog.draggableOptions);
                 }
                 else {
-                    var html = Class.headerTemplate(title);
-                    header = $(html);
-                    header.prependTo(dialog.main);
+                    draggable.disable(dialog.draggableOptions);
                 }
-            }
-            else if (hasHeader) {
-                header.addClass(hiddenClass);
             }
         },
 
-        content: function (dialog, content) {
-            var Class = dialog.constructor;
-            var body = $('.' + Class.CLASS_BODY, dialog.main);
+        {
+            name: 'title',
+            painter: function (dialog, title) {
+                var Class = dialog.constructor;
+                var header = $('.' + Class.CLASS_HEADER, dialog.main);
+                var hasHeader = header.length !== 0;
+                var hiddenClass = gui.CLASS.HIDDEN;
 
-            body.html(content);
+                if (title) {
+                    if (hasHeader) {
+                        header.removeClass(hiddenClass);
+                        header.find('.' + Class.CLASS_TITLE).html(title);
+                    }
+                    else {
+                        var html = Class.headerTemplate(title);
+                        header = $(html);
+                        header.prependTo(dialog.main);
+                    }
+                }
+                else if (hasHeader) {
+                    header.addClass(hiddenClass);
+                }
+            }
+        },
+
+        {
+            name: 'content',
+            painter: function (dialog, content) {
+                var Class = dialog.constructor;
+                var body = $('.' + Class.CLASS_BODY, dialog.main);
+
+                body.html(content);
+            }
         }
-
-    };
+    ];
 
     /**
      * 响应 onbeforeshow 事件
@@ -297,9 +301,8 @@ define(function (require) {
             }
         }
 
-        var main = this.main;
-        draggable.disable(main);
-        main.remove();
+        draggable.disable(this.draggableOptions);
+        this.main.remove();
     }
 
     var classPrefix = gui.config.uiClassPrefix + '-dialog-';

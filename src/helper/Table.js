@@ -8,7 +8,7 @@
 define(function (require) {
 
     'use strict';
-    
+
     var Item = require('./Item');
     var Collection = require('./Collection');
 
@@ -23,14 +23,12 @@ define(function (require) {
         Collection.apply(this, arguments);
     }
 
-    Table.painter = {
-
-        datasource: function (table, datasource) {
-
-
+    Table.painters = [
+        {
+            name: 'datasource',
+            painter: function () {}
         }
-
-    };
+    ];
 
 
     Table.ItemClass = TableRow;

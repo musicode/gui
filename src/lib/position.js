@@ -17,9 +17,8 @@ define(function (require, exports) {
     // 或者 100% + 10 这样的相对位置
 
     /**
-     * 获得 pin 点的坐标
+     * 定位一个元素
      *
-     * @private
      * @param {Object} options
      *
      * @param {Object} options.pinObject
@@ -31,20 +30,6 @@ define(function (require, exports) {
      * @param {jQuery} options.baseObject.element
      * @param {string} options.baseObject.x 定位点 x 坐标
      * @param {string} options.baseObject.y 定位点 y 坐标
-     */
-    function getPinPosition(pinObject, baseObject) {
-
-        var global = getGlobal(baseObject);
-        var local = getLocal(pinObject);
-
-        return {
-            top: Math.ceil(global.y - local.y),
-            left: Math.ceil(global.x - local.x)
-        };
-    }
-
-    /**
-     * 定位一个元素
      */
     function pin(pinObject, baseObject) {
 
@@ -71,8 +56,8 @@ define(function (require, exports) {
     /**
      * 居中定位
      *
-     * @param {(HTMLElement | jQuery)} pinElement
-     * @param {(HTMLElement | jQuery)=} baseElement 可选, 默认以 body 为基准
+     * @param {(HTMLElement|jQuery)} pinElement
+     * @param {(HTMLElement|jQuery)=} baseElement 可选, 默认以 body 为基准
      */
     function center(pinElement, baseElement) {
 
@@ -88,6 +73,33 @@ define(function (require, exports) {
         };
 
         pin(pinObject, baseObject);
+    }
+
+    /**
+     * 获得 pin 点的坐标
+     *
+     * @private
+     * @param {Object} options
+     *
+     * @param {Object} options.pinObject
+     * @param {jQuery} options.pinObject.element 这个元素必须是 body 下面的
+     * @param {string} options.pinObject.x 定位点 x 坐标
+     * @param {string} options.pinObject.y 定位点 y 坐标
+     *
+     * @param {Object} options.baseObject
+     * @param {jQuery} options.baseObject.element
+     * @param {string} options.baseObject.x 定位点 x 坐标
+     * @param {string} options.baseObject.y 定位点 y 坐标
+     */
+    function getPinPosition(pinObject, baseObject) {
+
+        var global = getGlobal(baseObject);
+        var local = getLocal(pinObject);
+
+        return {
+            top: Math.ceil(global.y - local.y),
+            left: Math.ceil(global.x - local.x)
+        };
     }
 
     /**
@@ -174,15 +186,34 @@ define(function (require, exports) {
         return Number(ret);
     }
 
-    var percentExpr = /(\d+)%$/;
-    var percentAndNumberExpr = /(\d+)%\s?([+-])\s?(\d+)/;
-
+    /**
+     * 确保 element 是 jQuery 对象
+     *
+     * @param {HTMLElement|jQuery} element
+     * @return {jQuery}
+     */
     function toJquery(element) {
         if (element.jquery == null) {
             element = $(element);
         }
         return element;
     }
+
+    /**
+     * 提取百分比的正则
+     *
+     * @private
+     * @type {RegExp}
+     */
+    var percentExpr = /(\d+)%$/;
+
+    /**
+     * 提取百分比和偏移量的正则
+     *
+     * @private
+     * @type {RegExp}
+     */
+    var percentAndNumberExpr = /(\d+)%\s?([+-])\s?(\d+)/;
 
 
     exports.pin = pin;

@@ -40,18 +40,6 @@ define(function (require) {
         type: 'Tab',
 
         /**
-         * 初始化控件参数
-         *
-         * @protected
-         * @override
-         * @param {Object} options
-         */
-        initOptions: function (options) {
-            lib.supply(options, Tab.defaultOptions);
-            SuperClass.prototype.initOptions.call(this, options);
-        },
-
-        /**
          * 初始化控件 DOM 结构
          *
          * @protected
@@ -67,17 +55,6 @@ define(function (require) {
 
             this.on('click', '.' + Tab.CLASS_NAV + ' li', onclick);
             SuperClass.prototype.initStructure.apply(this, arguments);
-        },
-
-        /**
-         * 创建控件主元素
-         *
-         * @protected
-         * @override
-         * @return {HTMLElement}
-         */
-        createMain: function () {
-            return document.createElement('div');
         }
 
     };
@@ -87,48 +64,55 @@ define(function (require) {
         selectedIndex: 0
     };
 
-    Tab.painter = {
+    Tab.painters = [
 
-        datasource: function (tab, datasource) {
+        {
+            name: 'datasource',
+            painter: function (tab, datasource) {
 
-            var navHTML = '';
-            var contentHTML = '';
+                var navHTML = '';
+                var contentHTML = '';
 
-            $.each(datasource, function (index, item) {
+                $.each(datasource, function (index, item) {
 
-                var aExtra = item.id ? ' href="#' + item.id + '"' : '';
-                var divExtra = item.id ? ' id="' + item.id + '"' : '';
+                    var aExtra = item.id ? ' href="#' + item.id + '"' : '';
+                    var divExtra = item.id ? ' id="' + item.id + '"' : '';
 
-                navHTML += '<li><a' + aExtra + '>' + item.title + '</a></li>';
-                contentHTML += '<div class="' + Tab.CLASS_PANEL + '"' + divExtra + '>'
-                             + item.content
-                             + '</div>';
-            });
+                    navHTML += '<li><a' + aExtra + '>' + item.title + '</a></li>';
+                    contentHTML += '<div class="' + Tab.CLASS_PANEL + '"' + divExtra + '>'
+                                 + item.content
+                                 + '</div>';
+                });
 
-            navHTML = '<ul>' + navHTML + '</ul>';
+                navHTML = '<ul>' + navHTML + '</ul>';
 
-            var nav = $('.' + Tab.CLASS_NAV, tab.main);
-            nav.html(navHTML);
-            nav.next().html(contentHTML);
+                var nav = $('.' + Tab.CLASS_NAV, tab.main);
+                nav.html(navHTML);
+                nav.next().html(contentHTML);
+            }
         },
 
-        selectedIndex: function (tab, currentIndex, prevIndex) {
+        {
+            name: 'selectedIndex',
+            painter: function (tab, currentIndex, prevIndex) {
 
-            var nav = $('.' + Tab.CLASS_NAV, tab.main);
-            var content = nav.next();
-            var activeClass = gui.CLASS.ACTIVE;
-            var panelSelector = '.' + Tab.CLASS_PANEL;
+                var nav = $('.' + Tab.CLASS_NAV, tab.main);
+                var content = nav.next();
+                var activeClass = gui.CLASS.ACTIVE;
+                var panelSelector = '.' + Tab.CLASS_PANEL;
 
-            if (prevIndex != null) {
-                // 取消上次选中的
-                nav.find('li:eq(' + prevIndex + ')').removeClass(activeClass);
-                content.find(panelSelector + ':eq(' + prevIndex + ')').removeClass(activeClass);
+                if (prevIndex != null) {
+                    // 取消上次选中的
+                    nav.find('li:eq(' + prevIndex + ')').removeClass(activeClass);
+                    content.find(panelSelector + ':eq(' + prevIndex + ')').removeClass(activeClass);
+                }
+
+                nav.find('li:eq(' + currentIndex + ')').addClass(activeClass);
+                content.find(panelSelector + ':eq(' + currentIndex + ')').addClass(activeClass);
             }
-
-            nav.find('li:eq(' + currentIndex + ')').addClass(activeClass);
-            content.find(panelSelector + ':eq(' + currentIndex + ')').addClass(activeClass);
         }
-    };
+
+    ];
 
     /**
      * 切换 tab 的事件处理函数

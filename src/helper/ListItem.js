@@ -5,7 +5,7 @@
 define(function (require) {
 
     'use strict';
-    
+
     var SuperClass = require('./Item');
     var lib = require('../lib/lib');
     var gui = require('../main');
@@ -37,22 +37,6 @@ define(function (require) {
      * @type {string}
      */
     ListItem.CLASS_ITEM = classPrefix + 'list-item';
-
-    /**
-     * 奇数列表项 class
-     *
-     * @static
-     * @type {string}
-     */
-    ListItem.CLASS_ODD = classPrefix + 'list-item-odd';
-
-    /**
-     * 偶数列表项 class
-     *
-     * @static
-     * @type {string}
-     */
-    ListItem.CLASS_EVEN = classPrefix + 'list-item-even';
 
     /**
      * 列表项的 selectbox

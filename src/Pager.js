@@ -41,18 +41,6 @@ define(function (require) {
         type: 'Pager',
 
         /**
-         * 初始化控件参数
-         *
-         * @protected
-         * @override
-         * @param {Object} options
-         */
-        initOptions: function (options) {
-            lib.supply(options, Pager.defaultOptions);
-            SuperClass.prototype.initOptions.call(this, options);
-        },
-
-        /**
          * 初始化控件 DOM 结构
          *
          * @protected
@@ -103,14 +91,22 @@ define(function (require) {
         }
     };
 
-    Pager.painter = {
-        page: function (pager, page) {
-            createPagination(pager);
+    Pager.painters = [
+
+        {
+            name:　'page',
+            painter: function (pager, page) {
+                createPagination(pager);
+            }
         },
-        align: function (pager, align) {
-            pager.main.css('text-align', align);
+
+        {
+            name: 'align',
+            painter: function (pager, align) {
+                pager.main.css('text-align', align);
+            }
         }
-    };
+    ];
 
     var classPrefix = gui.config.uiClassPrefix + '-pager-';
 

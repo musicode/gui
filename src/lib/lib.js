@@ -12,7 +12,6 @@ define(function (require, exports, module) {
         console.log(s);
     };
 
-
     // ==================================================================
     // 特性检测
     // ==================================================================
@@ -74,33 +73,39 @@ define(function (require, exports, module) {
     };
 
     /**
+     * 遍历子元素
+     *
+     * @param {HTMLElement} element
+     * @param {Function=} callback
+     */
+    exports.traverseChildren = function (element, callback) {
+        var current = element.firstChild;
+        while (current) {
+            callback(current);
+            current = current.nextSibling;
+        }
+    };
+
+    /**
      * 获得元素在同级元素中的索引
      *
      * @param {HTMLElement} element
      * @return {number}
      */
     exports.getElementIndex = function (element) {
-        var parentNode = element.parentNode;
         var index = -1;
+        var result = -1;
 
-        if (!parentNode) {
-            return index;
-        }
-
-        var current = parentNode.firstChild;
-        // 如果是元素节点，才 + 1
-        while (current) {
+        exports.traverseChildren(element.parentNode, function (current) {
             if (current.nodeType === 1) {
                 index++;
-
                 if (current === element) {
-                    return index;
+                    result = index;
                 }
             }
-            current = current.nextSibling;
-        }
+        });
 
-        return -1;
+        return result;
     };
 
     /**
@@ -156,6 +161,57 @@ define(function (require, exports, module) {
             body = $(document.body);
         }
         return body;
+    };
+
+    /**
+     * 获得元素当前 style 属性的快照
+     *
+     * @param {HTMLElement} element
+     * @return {Object}
+     */
+    exports.copyStyle = function (element) {
+        var style = element.style;
+        var result = { };
+
+        if (style) {
+            for (var key in style) {
+                if (typeof style[key] === 'string') {
+                    result[key] = style[key];
+                }
+            }
+        }
+
+        return result;
+    };
+
+    /**
+     * 获得容器元素中 element 的高度
+     *
+     * @param  {jQuery} container
+     * @param  {jQuery} element
+     * @return {number}
+     */
+    exports.getHeight = function (container, element) {
+        var height = element.height();
+
+        // 如果是隐藏状态，必须先显示出来再取值
+        if (height === 0
+            && container.css('display') === 'none'
+        ) {
+
+            var style = exports.copyStyle(container[0]);
+            container.css({
+                display: 'block',
+                position: 'absolute',
+                left: -10000,
+                top: -10000
+            });
+
+            height = element.height();
+            container.css(style);
+        }
+
+        return height;
     };
 
     // ===========================================================
@@ -255,6 +311,22 @@ define(function (require, exports, module) {
     };
 
     var splice = Array.prototype.splice;
+
+    /**
+     * 把数组转成对象，便于快速查找
+     *
+     * @param {Array} array
+     * @param {string} key
+     * @param {string=} value
+     * @return {Object}
+     */
+    exports.array2Object = function (array, key, value) {
+        var result = { };
+        $.each(array, function (index, item) {
+            result[item[key]] = value ? item[value] : item;
+        });
+        return result;
+    };
 
     /**
      * 扩展数组的 splice 方法
@@ -432,37 +504,56 @@ define(function (require, exports, module) {
      */
     exports.inherits = function (subClass, superClass) {
 
+        // 创建一个空构造函数
+        // 避免执行控件构造函数里的复杂逻辑
         var Class = new Function();
         Class.prototype = superClass.prototype;
 
-        var extend = subClass.prototype;
+        var overRide = subClass.prototype;
         // 原型继承
         var proto = subClass.prototype = new Class();
 
-        for (var key in extend) {
-            proto[key] = extend[key];
+        // 原型覆盖
+        for (var key in overRide) {
+            proto[key] = overRide[key];
         }
 
+        // 指定构造函数
         subClass.prototype.constructor = subClass;
+        // 指定父类，不然只能通过 __proto__ 访问
+        subClass.prototype.superClass = superClass;
 
         // 最后继承一下画笔
-        var superPainter = superClass.painter;
-        var subPainter = subClass.painter;
+        var superPainters = superClass.painters;
+        var subPainters = subClass.painters;
 
-        if (superPainter) {
-
-            // 保证父类的 painter 定义在前面
-            var temp = subPainter;
-            subPainter = { };
-
-            for (var key in superPainter) {
-                subPainter[key] = superPainter[key];
-            }
-            $.extend(subPainter, temp);
-
-            subClass.painter = subPainter;
+        if (superPainters) {
+            subClass.painters = inheritsPainter(
+                subPainters,
+                superPainters
+            );
         }
 
         return subClass;
     };
+
+    /**
+     * 继承画笔
+     */
+    function inheritsPainter(subPainters, superPainters) {
+        var result = $.extend(true, [], superPainters);
+
+        if (subPainters) {
+            var map = exports.array2Object(result, 'name');
+            $.each(subPainters, function (index, item) {
+                if (map[item.name]) {
+                    delete map[item.name];
+                }
+                result.push(item);
+            });
+        }
+
+        return result;
+    }
+
 });

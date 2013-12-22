@@ -5,7 +5,7 @@
 define(function (require) {
 
     'use strict';
-    
+
     var SuperClass = require('./interface/Control');
     var lib = require('./lib/lib');
 
@@ -27,26 +27,20 @@ define(function (require) {
          *
          * @type {string}
          */
-        type: 'Panel',
+        type: 'Panel'
 
-        /**
-         * 创建控件主元素
-         *
-         * @protected
-         * @override
-         * @return {HTMLElement}
-         */
-        createMain: function () {
-            return document.createElement('div');
-        }
     };
 
-    Panel.painter = {
+    Panel.painters = [
 
-        content: function (panel, content) {
-            panel.main.html(content);
+        {
+
+            name: 'content',
+            painter: function (panel, content) {
+                panel.main.html(content);
+            }
         }
-    };
+    ];
 
 
     lib.inherits(Panel, SuperClass);

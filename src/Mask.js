@@ -27,30 +27,7 @@ define(function (require) {
          *
          * @type {string}
          */
-        type: 'Mask',
-
-        /**
-         * 初始化控件参数
-         *
-         * @protected
-         * @override
-         * @param {Object} options
-         */
-        initOptions: function (options) {
-            lib.supply(options, Mask.defaultOptions);
-            SuperClass.prototype.initOptions.call(this, options);
-        },
-
-        /**
-         * 创建控件主元素
-         *
-         * @protected
-         * @override
-         * @return {HTMLElement}
-         */
-        createMain: function () {
-            return document.createElement('div');
-        }
+        type: 'Mask'
 
     };
 

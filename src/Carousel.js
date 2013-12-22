@@ -37,18 +37,6 @@ define(function (require) {
         type: 'Carousel',
 
         /**
-         * 初始化控件配置
-         *
-         * @protected
-         * @override
-         * @param {Object} options
-         */
-        initOptions: function (options) {
-            lib.supply(options, Carousel.defaultOptions);
-            SuperClass.prototype.initOptions.call(this, options);
-        },
-
-        /**
          * 初始化 DOM 结构和事件
          *
          * @protected
@@ -63,18 +51,6 @@ define(function (require) {
             this.on('click', next, nextPage);
 
             SuperClass.prototype.initStructure.apply(this, arguments);
-        },
-
-        /**
-         * 创建主元素
-         *
-         * @protected
-         * @override
-         * @param {Object} options
-         * @return {HTMLElement}
-         */
-        createMain: function (options) {
-            return document.createElement('div');
         }
     };
 
@@ -87,32 +63,35 @@ define(function (require) {
         page: 0
     };
 
-    Carousel.painter = {
-        page: function (carousel, page) {
+    Carousel.painters = [
+        {
+            name: 'page',
+            painter: function (carousel, page) {
 
-            var role = Carousel.role;
-            var viewport = '*[data-role="' + role.viewport + '"]';
-            var viewportWrapper = '*[data-role="' + role.viewportWrapper + '"]';
+                var role = Carousel.role;
+                var viewport = '*[data-role="' + role.viewport + '"]';
+                var viewportWrapper = '*[data-role="' + role.viewportWrapper + '"]';
 
-            var main = carousel.main;
-            viewport = main.find(viewport);
-            viewportWrapper = main.find(viewportWrapper);
+                var main = carousel.main;
+                viewport = main.find(viewport);
+                viewportWrapper = main.find(viewportWrapper);
 
-            var pageWidth = viewport.outerWidth();
+                var pageWidth = viewport.outerWidth();
 
-            var from = parseFloat(viewportWrapper.css('left'), 10);
-            var to = -1 * page * pageWidth;
+                var from = parseFloat(viewportWrapper.css('left'), 10);
+                var to = -1 * page * pageWidth;
 
-            if (to !== from) {
-                carousel.trigger('ui-change');
+                if (to !== from) {
+                    carousel.trigger('ui-change');
 
-                viewportWrapper.animate({
-                    left: to
-                }, 300);
+                    viewportWrapper.animate({
+                        left: to
+                    }, 300);
+                }
+
             }
-
         }
-    };
+    ];
 
     /**
      * 模板里的 data-role 值

@@ -46,10 +46,11 @@
                 }
 
                 list = new List({
-                    main: $('#group-list')[0],
+                    main: $('#group-list'),
                     datasource: datasource,
                     toggle: true,
-                    multiple: true
+                    multiple: true,
+                    height: 300
                 });
 
                 list.render();

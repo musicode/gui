@@ -8,6 +8,7 @@ define(function (require) {
 
     var SuperClass = require('./interface/Control');
     var ListHelper = require('./helper/List');
+    var ScrollPanel = require('./ScrollPanel');
     var lib = require('./lib/lib');
     var gui = require('./main');
 
@@ -44,18 +45,6 @@ define(function (require) {
         type: 'List',
 
         /**
-         * 初始化控件参数
-         *
-         * @protected
-         * @override
-         * @param {Object} options
-         */
-        initOptions: function (options) {
-            lib.supply(options, List.defaultOptions);
-            SuperClass.prototype.initOptions.call(this, options);
-        },
-
-        /**
          * 初始化 DOM 结构
          *
          * @protected
@@ -63,33 +52,32 @@ define(function (require) {
          */
         initStructure: function () {
 
-            var options = {
-                main: this.main,
+            SuperClass.prototype.initStructure.apply(this, arguments);
+
+            var scrollPanel = new ScrollPanel({
+                main: this.main
+            });
+            scrollPanel.render();
+            this.scrollPanel = scrollPanel;
+
+            var contentArea = scrollPanel.getContentArea();
+            this.helper = new ListHelper({
+                main: contentArea,
                 multiple: this.multiple,
                 itemTemplate: this.itemTemplate,
-                groupHeaderTemplate: this.groupHeaderTemplate
-            };
-
-            this.helper = new ListHelper(options);
+                groupHeaderTemplate: this.groupHeaderTemplate,
+                insertCompleteHandler: function () {
+                    scrollPanel.trigger('propertyChange', {
+                        content: contentArea.html()
+                    });
+                }
+            });
             this.helper.render();
 
             this.on('click', onclick);
             this.on('mouseover', onmouseover);
             this.on('mouseout', onmouseout);
             this.one('beforedispose', beforeDispose);
-
-            SuperClass.prototype.initStructure.apply(this, arguments);
-        },
-
-        /**
-         * 创建控件主元素
-         *
-         * @protected
-         * @override
-         * @return {HTMLlement}
-         */
-        createMain: function () {
-            return document.createElement('div');
         },
 
         /**
@@ -263,60 +251,71 @@ define(function (require) {
         }
     };
 
-    List.painter = {
+    List.painters = [
 
-        datasource: function (list, datasource) {
+        {
+            name: 'datasource',
+            painter: function (list, datasource) {
 
-            var main = list.main;
+                var main = list.main;
+                var scrollPanel = list.scrollPanel;
 
-            if (datasource.length === 0) {
+                if (datasource.length === 0) {
 
-                var isInited = list.stage === lib.LifeCycle.INITED;
+                    var isInited = list.stage === lib.LifeCycle.INITED;
 
-                if (isInited) {
-                    main.html(list.defaultText);
-                    main.addClass(List.CLASS_DEFAULT);
+                    if (isInited) {
+                        scrollPanel.setContent(list.defaultText);
+                        main.addClass(List.CLASS_DEFAULT);
+                    }
+                    else {
+                        scrollPanel.setContent(list.emptyText);
+                        main.addClass(List.CLASS_EMPTY);
+                    }
                 }
                 else {
-                    main.html(list.emptyText);
-                    main.addClass(List.CLASS_EMPTY);
+
+                    main.removeClass(List.CLASS_DEFAULT);
+                    main.removeClass(List.CLASS_EMPTY);
+                    main.removeClass(List.CLASS_LOADING);
+
+                    var helper = list.helper;
+                    helper.raw = null;
+
+                    helper.stopThreads();
+                    helper.setProperties({
+                        raw: datasource
+                    });
                 }
             }
-            else {
+        },
 
-                main.removeClass(List.CLASS_DEFAULT);
-                main.removeClass(List.CLASS_EMPTY);
-                main.removeClass(List.CLASS_LOADING);
-
-                var helper = list.helper;
-                helper.raw = null;
-
-                helper.stopThreads();
-                helper.setProperties({
-                    raw: datasource
+        {
+            name: ['height', 'maxHeight'],
+            painter: function (list, height, maxHeight) {
+                list.scrollPanel.setProperties({
+                    height: height,
+                    maxHeight: maxHeight
                 });
             }
         },
 
-        maxHeight: function (list, maxHeight) {
-
-            list.main.css({
-                'max-height': maxHeight
-            });
-        },
-
-        overflow: function (list, newValue, oldValue) {
-            var main = list.main;
-            if (newValue) {
-                main.attr('overflow', 'overflow');
-            }
-            else if (oldValue) {
-                main.removeAttr('overflow');
+        {
+            name: 'overflow',
+            painter: function (list, newValue, oldValue) {
+                var main = list.main;
+                if (newValue) {
+                    main.attr('overflow', 'overflow');
+                }
+                else if (oldValue) {
+                    main.removeAttr('overflow');
+                }
             }
         }
-    };
 
-    var classPrefix = gui.config.uiClassPrefix + 'list-';
+    ];
+
+    var classPrefix = gui.config.uiClassPrefix + '-list-';
 
     /**
      * 列表初始化完成且未填充数据状态的 class

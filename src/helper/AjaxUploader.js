@@ -128,6 +128,9 @@ define(function (require) {
             this.xhr = xhr;
         },
 
+        /**
+         * 停止上传
+         */
         stopUpload: function () {
             if (this.xhr) {
                 this.xhr.abort();

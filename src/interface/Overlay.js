@@ -5,7 +5,7 @@
 define(function (require) {
 
     'use strict';
-    
+
     var SuperClass = require('./Control');
     var position = require('../lib/position');
     var lib = require('../lib/lib');
@@ -51,18 +51,6 @@ define(function (require) {
         type: 'Overlay',
 
         /**
-         * 初始化控件配置
-         *
-         * @protected
-         * @override
-         * @param {Object} options
-         */
-        initOptions: function (options) {
-            lib.supply(options, Overlay.defaultOptions);
-            SuperClass.prototype.initOptions.call(this, options);
-        },
-
-        /**
          * 初始化 DOM 结构和事件
          *
          * @protected
@@ -79,19 +67,8 @@ define(function (require) {
             this.on('afterhide', afterHide);
 
             SuperClass.prototype.initStructure.apply(this, arguments);
-        },
-
-        /**
-         * 创建主元素
-         *
-         * @protected
-         * @override
-         * @param {Object} options
-         * @return {HTMLElement}
-         */
-        createMain: function (options) {
-            return document.createElement('div');
         }
+
     };
 
     /**
@@ -104,24 +81,30 @@ define(function (require) {
         hidden: true
     };
 
-    Overlay.painter = {
+    Overlay.painters = [
 
-        global: function (overlay, global) {
-            if (global) {
-                var main = overlay.main[0];
-                var parentNode = main.parentNode;
-                if (!parentNode || parentNode.tagName !== 'BODY') {
-                    document.body.appendChild(main);
+        {
+            name: 'global',
+            painter: function (overlay, global) {
+                if (global) {
+                    var main = overlay.main[0];
+                    var parentNode = main.parentNode;
+                    if (!parentNode || parentNode.tagName !== 'BODY') {
+                        document.body.appendChild(main);
+                    }
                 }
             }
         },
 
-        align: function (overlay, align) {
-            if (align) {
-                setAlign(overlay);
+        {
+            name: 'align',
+            painter: function (overlay, align) {
+                if (align) {
+                    setAlign(overlay);
+                }
             }
         }
-    };
+    ];
 
     function afterShow() {
         if (this.global) {

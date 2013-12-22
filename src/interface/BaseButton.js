@@ -15,14 +15,15 @@ define(function (require) {
      *
      * @constructor
      * @param {Object} options
-     * @param {(HTMLElement | jQuery)=} options.main 主元素
+     * @param {jQuery=} options.main 主元素
      * @param {boolean=} options.hidden 是否隐藏
      * @param {boolean=} options.disabled 是否置灰
      * @param {boolean=} options.selected 是否选中
      * @param {boolean=} options.toggle 是否可再次单击切换选中状态
      * @param {string=} options.label 按钮的文本
-     * @param {string=} options.icon 按钮的图标
+     * @param {(string|HTMLElement)=} options.icon 按钮的图标
      * @param {string=} options.labelPlacement label 相对于图标的位置, 可选值包括 left, right
+     * @param {number=} options.iconGutter 图标和文本的间距, 单位 px
      */
     function BaseButton(options) {
         SuperClass.apply(this, arguments);
@@ -46,7 +47,6 @@ define(function (require) {
          */
         initOptions: function (options) {
 
-            // 确定按钮文本
             if (typeof options.label !== 'string') {
                 var textNode = getTextNode(this.main);
                 if (textNode) {
@@ -54,8 +54,6 @@ define(function (require) {
                 }
             }
 
-            // icon 可以是字符串
-            // 或是个 HTMLElement
             var icon = options.icon;
             if (typeof icon !== 'string') {
                 if (icon == null || icon.nodeType !== 1) {
@@ -66,7 +64,6 @@ define(function (require) {
                 }
             }
 
-            lib.supply(options, BaseButton.defaultOptions);
             SuperClass.prototype.initOptions.call(this, options);
         },
 
@@ -79,7 +76,7 @@ define(function (require) {
         initStructure: function () {
 
             // 清掉多余的文本节点
-            // note: 有时候模版换行会造成多余的文本节点
+            // [note] 有时候模版换行会造成多余的文本节点
             removeExtraTextNode(this.main);
 
             SuperClass.prototype.initStructure.apply(this, arguments);
@@ -108,7 +105,7 @@ define(function (require) {
         /**
          * 获得图标
          *
-         * @return {(string | HTMLElement)}
+         * @return {(string|HTMLElement)}
          */
         getIcon: function () {
             return this.icon;
@@ -117,7 +114,7 @@ define(function (require) {
         /**
          * 设置图标
          *
-         * @param {(string | HTMLElement)} icon 图标
+         * @param {(string|HTMLElement)} icon 图标
          */
         setIcon: function (icon) {
             this.setProperties({
@@ -127,93 +124,124 @@ define(function (require) {
     };
 
     /**
-     * 默认配置
+     * BaseButton 默认配置
      *
+     * @static
      * @type {Object}
      */
     BaseButton.defaultOptions = {
         selected: false,
         toggle: false,
-        labelPlacement: 'right'
-    };
-
-    BaseButton.painter = {
-
-        selected: function (button, selected) {
-            var main = button.main;
-
-            if (selected) {
-                main.attr('selected', 'selected');
-            }
-            else {
-                main.removeAttr('selected');
-            }
-
-            button.trigger('change.custom');
-        },
-
-        label: function (button, label) {
-            var textNode = getTextNode(button.main);
-
-            if (textNode) {
-                textNode.nodeValue = label;
-            }
-            else if (label) {
-                textNode = document.createTextNode(label);
-                placeText(button, textNode);
-            }
-        },
-
-        labelPlacement: function (button, labelPlacement) {
-            var main = button.main;
-            var textNode = getTextNode(main);
-            var iconElement = getIconElement(main);
-
-            if (textNode && iconElement) {
-                placeIcon(button, iconElement);
-            }
-        },
-
-        icon: function (button, icon) {
-            var iconElement = getIconElement(button.main);
-
-            if (icon) {
-                if (!iconElement) {
-                    if (typeof icon === 'string') {
-                        iconElement = document.createElement('span');
-                        iconElement.className = gui.config.iconClassPrefix + '-' + icon;
-                    }
-                    else {
-                        iconElement = icon;
-                    }
-                    placeIcon(button, iconElement);
-                }
-
-                // 设置边距
-                if (button.label) {
-                    var name = lib.camelize('margin-' + button.labelPlacement);
-                    var value = BaseButton.iconSpace + 'px';
-                    iconElement.style[name] = value;
-                }
-            }
-            else if (iconElement) {
-                iconElement.parentNode.removeChild(iconElement);
-            }
-        },
-
-        toggle: function (button, toggle) {
-            var method = toggle ? 'on' : 'off';
-            button[method]('click', ontoggle);
-        }
+        labelPlacement: 'right',
+        iconGutter: 4
     };
 
     /**
-     * icon 和文本的间距, 单位 px
+     * 属性渲染器
      *
      * @static
-     * @type {number}
+     * @type {Array}
      */
-    BaseButton.iconSpace = 4;
+    BaseButton.painters = [
+
+        {
+            name: 'selected',
+            painter: function (button, selected) {
+                var main = button.main;
+
+                if (selected) {
+                    main.attr('selected', 'selected');
+                }
+                else {
+                    main.removeAttr('selected');
+                }
+            }
+        },
+
+        {
+            name: ['label', 'icon'],
+            painter: function (button, label, icon) {
+
+                if (label !== undefined) {
+                    var textNode = getTextNode(button.main);
+
+                    if (textNode) {
+                        textNode.nodeValue = label;
+                    }
+                    else if (label) {
+                        textNode = document.createTextNode(label);
+                        placeText(button, textNode);
+                    }
+                }
+
+                var iconElement = getIconElement(button.main);
+                if (icon !== undefined) {
+                    if (icon) {
+                        // 有则改之，无则新建
+                        if (iconElement) {
+                            if (typeof icon === 'string') {
+                                iconElement.className = gui.config.iconClassPrefix
+                                                      + '-'
+                                                      + icon;
+                            }
+                            else {
+                                iconElement.parentNode.replaceChild(icon, iconElement);
+                            }
+                        }
+                        else {
+                            if (typeof icon === 'string') {
+                                iconElement = document.createElement('i');
+                                iconElement.className = gui.config.iconClassPrefix
+                                                      + '-'
+                                                      + icon;
+                            }
+                            else {
+                                iconElement = icon;
+                            }
+                            placeIcon(button, iconElement);
+                        }
+                    }
+                    else if (iconElement) {
+                        iconElement.parentNode.removeChild(iconElement);
+                        iconElement = null;
+                    }
+                }
+
+                // 设置边距
+                if (iconElement) {
+                    var name = lib.camelize('margin-' + button.labelPlacement);
+                    if (button.label) {
+                        var value = button.iconGutter + 'px';
+                        iconElement.style[name] = value;
+                    }
+                    else {
+                        iconElement.style[name] = '';
+                    }
+                }
+            }
+        },
+
+        {
+            name: 'labelPlacement',
+            painter: function (button, labelPlacement) {
+                var main = button.main;
+                var textNode = getTextNode(main);
+                var iconElement = getIconElement(main);
+
+                if (textNode && iconElement) {
+                    placeIcon(button, iconElement);
+                }
+            },
+        },
+
+        {
+            name: 'toggle',
+            painter: function (button, toggle) {
+                var method = toggle ? 'on' : 'off';
+                button[method]('click', ontoggle);
+            }
+        }
+    ];
 
     /**
      * 交替选中状态
@@ -262,60 +290,65 @@ define(function (require) {
      * @param {jQuery} element
      */
     function removeExtraTextNode(element) {
-        if (element.jquery) {
-            element = element[0];
-        }
 
         var textNode;
         var text = '';
 
-        var childNodes = element.childNodes;
-        for (var i = childNodes.length - 1, node; i >= 0; i--) {
-            node = childNodes[i];
-            if (node.nodeType === 3) {
-                if (textNode) {
-                    element.removeChild(textNode);
+        element = element[0];
+
+        lib.traverseChildren(element, function (current) {
+            if (current.nodeType === 3) {
+
+                if (!textNode) {
+                    textNode = current;
                 }
-                textNode = node;
-                text += node.nodeValue;
+                else {
+                    element.removeChild(current);
+                }
+
+                text += current.nodeValue;
             }
-        }
+        });
 
         if (textNode) {
             textNode.nodeValue = $.trim(text);
         }
     }
 
+    /**
+     * 获得 element 元素下的文本节点
+     *
+     * @param {jQuery} element
+     * @return {TextNode}
+     */
     function getTextNode(element) {
-        return findChildNode(element, function (node) {
-            return node.nodeType === 3;
-        });
-    }
+        var result;
 
-    function getIconElement(element) {
-        return findChildNode(element, function (node) {
-            return node.nodeType === 1;
+        lib.traverseChildren(element[0], function (current) {
+            if (current.nodeType === 3) {
+                result = current;
+            }
         });
+
+        return result;
     }
 
     /**
-     * 查找子节点
+     * 获得 element 元素下的图标元素
      *
      * @param {jQuery} element
-     * @param {Function} callback 查找条件
-     * @return {(HTMLElement | TextNode)}
+     * @return {HTMLElement}
      */
-    function findChildNode(element, callback) {
+    function getIconElement(element) {
+        var result;
 
-        var childNodes = element.contents();
-
-        for (var i = 0, len = childNodes.length, node, nodeType; i < len; i++) {
-            node = childNodes[i];
-            nodeType = node.nodeType;
-            if (callback(node)) {
-                return node;
+        lib.traverseChildren(element[0], function (current) {
+            if (current.nodeType === 1) {
+                result = current;
             }
-        }
+        });
+
+        return result;
     }
 
     lib.inherits(BaseButton, SuperClass);

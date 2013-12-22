@@ -63,8 +63,6 @@ define(function (require) {
          */
         initOptions: function (options) {
 
-            lib.supply(options, ComboBox.defaultOptions);
-
             // 两者皆有时，以 value 为准
             if (options.selectedIndex != null
                 && options.value != null
@@ -83,23 +81,26 @@ define(function (require) {
          */
         initStructure: function () {
 
+            SuperClass.prototype.initStructure.apply(this, arguments);
+
             var main = this.main;
+            main.html(this.template);
 
             var button = new Button({
+                main: main.find('.' + buttonClass),
                 labelPlacement: 'left',
                 icon: lib.createElement('<span class="i-caret"></span>')
             });
             button.render();
-            button.appendTo(main);
 
             var list = new List({
+                main: main.find('.' + listClass),
                 hidden: true,
                 toggle: false
             });
             list.render();
-            list.appendTo(main);
 
-            popup.enable({
+            this.popupOptions = {
                 trigger: button.main,
                 element: list.main,
                 showBy: 'click',
@@ -110,7 +111,8 @@ define(function (require) {
                 hide: function() {
                     list.hide();
                 }
-            });
+            };
+            popup.enable(this.popupOptions);
 
             /**
              * 触发下拉行为的按钮
@@ -131,19 +133,6 @@ define(function (require) {
             list.on('afterhide', afterListHide, this);
 
             this.one('beforedispose', beforeDispose);
-
-            SuperClass.prototype.initStructure.apply(this, arguments);
-        },
-
-        /**
-         * 创建控件主元素
-         *
-         * @protected
-         * @override
-         * @return {HTMLElement}
-         */
-        createMain: function () {
-            return document.createElement('div');
         },
 
         /**
@@ -167,6 +156,11 @@ define(function (require) {
         }
     };
 
+    var classPrefix = gui.config.uiClassPrefix + '-';
+
+    var buttonClass = classPrefix + 'button';
+    var listClass = classPrefix + 'list';
+
     /**
      * 默认配置
      *
@@ -175,95 +169,108 @@ define(function (require) {
     ComboBox.defaultOptions = {
         emptyText: '',
         width: 100,
-        selectedIndex: -1
+        selectedIndex: -1,
+        template: '<button class="' + buttonClass + '"></button>'
+                + '<div class="' + listClass + '"></div>'
     };
 
-    ComboBox.painter = {
+    ComboBox.painters = [
 
-        datasource: function (combobox, datasource) {
+        {
+            name: 'datasource',
+            painter: function (combobox, datasource) {
 
-            combobox.list.setProperties({
-                datasource: datasource
-            });
+                combobox.list.setProperties({
+                    datasource: datasource
+                });
 
-            combobox.selectedIndex = -1;
-            combobox.value = null;
-        },
-
-        overflow: function (combobox, overflow) {
-            var list = combobox.list;
-
-            list.setProperties({
-                overflow: overflow
-            });
-        },
-
-        width: function (combobox, width) {
-
-            var button = combobox.button;
-            var list = combobox.list;
-
-            var properties = {
-                width: width
-            };
-
-            button.setProperties(properties);
-
-            if (combobox.overflow) {
-                list.setProperties(properties);
+                combobox.selectedIndex = -1;
+                combobox.value = null;
             }
         },
 
-        height: function (combobox, height) {
+        {
+            name: 'overflow',
+            painter: function (combobox, overflow) {
+                var list = combobox.list;
 
-            var button = combobox.button;
-
-            button.setProperties({
-                height: height
-            });
-        },
-
-        maxHeight: function (combobox, maxHeight) {
-            var list = combobox.list;
-            list.setProperties({
-                maxHeight: maxHeight
-            });
-        },
-
-        disabled: function (combobox, disabled) {
-            var button = combobox.button;
-            button.setProperties({
-                disabled: disabled
-            });
-        },
-
-        emptyText: function (combobox, emptyText) {
-            // 只有当前没选中才需要改 DOM
-            if (combobox.selectedIndex === -1) {
-                combobox.button.setLabel(emptyText);
+                list.setProperties({
+                    overflow: overflow
+                });
             }
         },
 
-        selectedIndex: function (combobox, selectedIndex) {
-            selectItem(combobox, selectedIndex);
+        {
+            name: 'height',
+            painter: function (combobox, height) {
+
+                var button = combobox.button;
+                var list = combobox.list;
+
+                button.setProperties({
+                    height: height
+                });
+
+                list.main.css({ top: height + 1 });
+            }
         },
 
-        value: function (combobox, value) {
+        {
+            name: 'maxHeight',
+            painter: function (combobox, maxHeight) {
+                var list = combobox.list;
+                list.setProperties({
+                    maxHeight: maxHeight
+                });
+            }
+        },
 
-            var datasource = combobox.datasource;
+        {
+            name: 'disabled',
+            painter: function (combobox, disabled) {
+                var button = combobox.button;
+                button.setProperties({
+                    disabled: disabled
+                });
+            }
+        },
 
-            for (var i = 0, len = datasource.length; i < len; i++) {
+        {
+            name: 'emptyText',
+            painter: function (combobox, emptyText) {
+                // 只有当前没选中才需要改 DOM
+                if (combobox.selectedIndex === -1) {
+                    combobox.button.setLabel(emptyText);
+                }
+            }
+        },
 
-                var item = datasource[i];
-                var itemValue = $.isPlainObject(item) ? item.value : item;
+        {
+            name: 'selectedIndex',
+            painter: function (combobox, selectedIndex) {
+                selectItem(combobox, selectedIndex);
+            }
+        },
 
-                if (itemValue == value) {
-                    selectItem(combobox, i);
-                    break;
+        {
+            name: 'value',
+            painter: function (combobox, value) {
+
+                var datasource = combobox.datasource;
+
+                for (var i = 0, len = datasource.length; i < len; i++) {
+
+                    var item = datasource[i];
+                    var itemValue = $.isPlainObject(item) ? item.value : item;
+
+                    if (itemValue == value) {
+                        selectItem(combobox, i);
+                        break;
+                    }
                 }
             }
         }
-    };
+    ];
 
     function afterListShow() {
         var button = this.button;
